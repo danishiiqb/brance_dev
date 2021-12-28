@@ -1,7 +1,7 @@
 import React from "react";
 import { BsArrowRight } from "react-icons/bs";
-import TableData from "./TableData";
-import TableHeader from "./TableHeader";
+import OrderTableHeader from "./OrderTableHeader";
+import OrderTableRow from "./OrderTableRow";
 
 function LatestOrders() {
   return (
@@ -15,9 +15,9 @@ function LatestOrders() {
       </div>
       <div className="mt-3">
         <table className="w-full">
-          <TableHeader></TableHeader>
-          <TableData
-            orderData={{
+          <OrderTableHeader></OrderTableHeader>
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -25,9 +25,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>
-          <TableData
-            orderData={{
+          ></OrderTableRow>
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -35,9 +35,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>{" "}
-          <TableData
-            orderData={{
+          ></OrderTableRow>{" "}
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -45,9 +45,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>{" "}
-          <TableData
-            orderData={{
+          ></OrderTableRow>{" "}
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -55,9 +55,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>{" "}
-          <TableData
-            orderData={{
+          ></OrderTableRow>{" "}
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -65,9 +65,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>{" "}
-          <TableData
-            orderData={{
+          ></OrderTableRow>{" "}
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -75,9 +75,9 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>{" "}
-          <TableData
-            orderData={{
+          ></OrderTableRow>{" "}
+          <OrderTableRow
+            tableData={{
               orderId: "#45555",
               user: "John will",
               address: "Jameson Street Freeway",
@@ -85,7 +85,7 @@ function LatestOrders() {
               amount: 789.0,
               status: "pending"
             }}
-          ></TableData>
+          ></OrderTableRow>
         </table>
       </div>
     </div>

@@ -11,7 +11,7 @@ import gsap from "gsap/all";
 import { DateRangePicker } from "react-date-range";
 
 let state = false;
-function Filter() {
+function Filter({ type }) {
   const [openFilters, setFilterStatus] = useState(false);
   const [dropDownMenuItems, showDropdownMenuItems] = useState({
     date: false,
@@ -40,7 +40,7 @@ function Filter() {
     "Jumpers & KnitWear"
   ]);
   const [filterData, setfilterData] = useState({
-    orderType: null,
+    [type !== "products" ? "orderType" : "productType"]: null,
     orderStatus: null
   });
   const [startDate, setStartDate] = useState(new Date());
@@ -67,7 +67,7 @@ function Filter() {
       timeline
         .to(".dropdown", {
           height: "auto",
-          duration: 0.2,
+          duration: 0.1,
           ease: "Power2.easeOut"
         })
         .to(".dropdown-items", {
@@ -146,7 +146,7 @@ function Filter() {
                 }}
                 className="flex p-2.5 items-center "
               >
-                <span>Order Type</span>
+                <span>{type !== "products" ? "Order" : "Product"} Type</span>
                 <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
               </div>
               {dropDownMenuItems.orderType && (
@@ -169,42 +169,45 @@ function Filter() {
                 </div>
               )}
             </div>
-            <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
-              <div
-                onClick={() => {
-                  showDropdownMenuItems((prev) => {
-                    return {
-                      date: false,
-                      orderStatus: !prev.orderStatus,
-                      orderType: false
-                    };
-                  });
-                }}
-                className="flex p-2.5 items-center "
-              >
-                <span>Order Status</span>
-                <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
-              </div>
-              {dropDownMenuItems.orderStatus && (
-                <div className="absolute w-full rounded-b-md h-0 overflow-hidden shadow-sm dropdown bg-gray-100  top-full -left-1 ">
-                  {orderStatusDta.map((type, idx) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          setfilterData((prev) => {
-                            return { ...prev, orderStatus: type };
-                          });
-                        }}
-                        key={idx}
-                        className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
-                      >
-                        {type}
-                      </div>
-                    );
-                  })}
+            {type !== "products" && (
+              <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
+                <div
+                  onClick={() => {
+                    showDropdownMenuItems((prev) => {
+                      return {
+                        date: false,
+                        orderStatus: !prev.orderStatus,
+                        orderType: false
+                      };
+                    });
+                  }}
+                  className="flex p-2.5 items-center "
+                >
+                  <span>Order Status</span>
+                  <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
                 </div>
-              )}
-            </div>
+                {dropDownMenuItems.orderStatus && (
+                  <div className="absolute w-full rounded-b-md h-0 overflow-hidden shadow-sm dropdown bg-gray-100  top-full -left-1 ">
+                    {orderStatusDta.map((type, idx) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            setfilterData((prev) => {
+                              return { ...prev, orderStatus: type };
+                            });
+                          }}
+                          key={idx}
+                          className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
+                        >
+                          {type}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div
               onClick={() => {
                 setfilterData({ orderStatus: "", orderType: "" });

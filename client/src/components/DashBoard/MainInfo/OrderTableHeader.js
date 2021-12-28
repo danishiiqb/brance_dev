@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-function TableHeader() {
+function OrderTableHeader() {
   const [sortStatus, setSortStatus] = useState(false);
   const [sortPrice, setSortPrice] = useState("desc");
   const [sortDate, setSortDate] = useState("desc");
@@ -16,7 +16,7 @@ function TableHeader() {
               return prev === "desc" ? "asc" : "desc";
             });
           }}
-          className="flex items-center  cursor-pointer"
+          className="flex items-center cursor-pointer"
         >
           <div>Date</div>
           {sortDate === "desc" ? (
@@ -82,4 +82,4 @@ function TableHeader() {
   );
 }
 
-export default TableHeader;
+export default OrderTableHeader;
