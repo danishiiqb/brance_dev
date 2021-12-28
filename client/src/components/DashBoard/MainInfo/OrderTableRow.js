@@ -11,7 +11,9 @@ function OrderTableRow({ tableData }) {
       <TableData>{tableData.user}</TableData>
       <TableData>{tableData.address}</TableData>
       <TableData>{tableData.date}</TableData>
-      <TableData>${tableData.amount}</TableData>
+      <TableData>
+        <div className="font-medium">${tableData.amount}.00</div>
+      </TableData>
       <TableData>
         <div className="flex items-center space-x-4">
           <div className="bg-yellow-200 flex-1 py-1.5 text-center text-sm font-semibold  rounded-lg">

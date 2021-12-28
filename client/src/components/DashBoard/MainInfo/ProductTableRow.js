@@ -22,7 +22,9 @@ function ProductTableRow({ tableData }) {
       <TableData>{tableData.price}.00</TableData>
       <TableData>{tableData.inStock}</TableData>
       <TableData>{tableData.sold}</TableData>
-      <TableData>{tableData.revenue}.00</TableData>
+      <TableData>
+        <div className="font-medium">{tableData.revenue}.00</div>
+      </TableData>
       <TableData className="px-1.5 py-2.5">
         <div className="relative flex items-center justify-center">
           <BsThreeDots
