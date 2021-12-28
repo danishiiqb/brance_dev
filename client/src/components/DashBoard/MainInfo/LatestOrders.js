@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
-import OrderTableHeader from "./OrderTableHeader";
 import OrderTableRow from "./OrderTableRow";
+import TableHeaderRow from "./TableHeaderRow";
 
 function LatestOrders() {
+  const [dateOrder, setDateOrder] = useState("desc");
+  const [priceOrder, setPriceOrder] = useState("desc");
+  const [statusBlock, setStatusBlock] = useState("desc");
   return (
     <div className="bg-white  shadow-sm_dark rounded-md mt-6 p-small">
       <div className="flex items-center px-1.5  justify-between">
@@ -15,7 +18,16 @@ function LatestOrders() {
       </div>
       <div className="mt-3">
         <table className="w-full">
-          <OrderTableHeader></OrderTableHeader>
+          <TableHeaderRow
+            headerList={[
+              "Order No",
+              "Name",
+              "Address",
+              { name: "Date", setter: setDateOrder, order: dateOrder },
+              { name: "Price", setter: setPriceOrder, order: priceOrder },
+              { name: "Status", setter: setStatusBlock, order: statusBlock }
+            ]}
+          ></TableHeaderRow>
           <OrderTableRow
             tableData={{
               orderId: "#45555",

@@ -5,6 +5,7 @@ import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import ProductTableHeader from "../../components/DashBoard/MainInfo/ProductTableHeader";
 import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow";
 import Search from "../../components/DashBoard/MainInfo/Search";
+import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
 
 function Products() {
   const [data, setData] = useState([
