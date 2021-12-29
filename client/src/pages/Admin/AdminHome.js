@@ -6,12 +6,14 @@ import Products from "./Products";
 import Dashboard from "./Dashboard";
 import Orders from "./Orders";
 import Transactions from "./Transactions";
+import Reviews from "./Reviews";
+import Customers from "./Customers";
 
 function AdminHome() {
   return (
     <div>
       <SideBar></SideBar>
-      <div className="bg-[#fd3a5e11] ml-marginLeft py-4 px-6">
+      <div className="bg-[#f6f6f6] ml-marginLeft py-4 px-6">
         <NavBar></NavBar>
         <Route exact path="/admin/dashboard">
           <Dashboard></Dashboard>
@@ -24,6 +26,12 @@ function AdminHome() {
         </Route>
         <Route exact path="/admin/transactions">
           <Transactions></Transactions>
+        </Route>
+        <Route exact path="/admin/reviews">
+          <Reviews></Reviews>
+        </Route>
+        <Route exact path="/admin/customers">
+          <Customers></Customers>
         </Route>
       </div>
     </div>

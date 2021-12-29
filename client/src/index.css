@@ -21,3 +21,26 @@
 .rdrStaticRange:hover {
   background-color: #e4e7eb;
 }
+.animplane {
+  animation: fade 0.3s ease-in forwards;
+}
+@keyframes fade {
+  100% {
+    opacity: 1;
+  }
+}
+.rt {
+  transform: rotateY(180deg);
+}
+.rt > * {
+  transform: rotateY(-180deg);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
