@@ -7,8 +7,8 @@ function Graph() {
       <h3 className="font-medium text-lg mb-2">Sale Statistics</h3>
       <div>
         <Line
-          width={"30%"}
-          height={"17%"}
+          width={30}
+          height={17}
           data={{
             labels: ["January", "February", "March", "April", "May", "June"],
             datasets: [

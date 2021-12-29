@@ -5,6 +5,7 @@ import SideBar from "../../components/DashBoard/SideBar/SideBar";
 import Products from "./Products";
 import Dashboard from "./Dashboard";
 import Orders from "./Orders";
+import Transactions from "./Transactions";
 
 function AdminHome() {
   return (
@@ -20,6 +21,9 @@ function AdminHome() {
         </Route>
         <Route exact path="/admin/orders">
           <Orders></Orders>
+        </Route>
+        <Route exact path="/admin/transactions">
+          <Transactions></Transactions>
         </Route>
       </div>
     </div>

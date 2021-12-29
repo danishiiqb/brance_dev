@@ -9,7 +9,7 @@ function SideBarElem({ item, activatedElem, activate }) {
     <div
       onClick={() => {
         activate(item.name);
-        history.push(`/admin/${item.name}`);
+        history.push(`/admin/${item.name.toLowerCase()}`);
       }}
       onMouseEnter={() => {
         setHover(true);

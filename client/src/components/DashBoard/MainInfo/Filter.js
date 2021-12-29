@@ -124,7 +124,7 @@ function Filter({ type }) {
               </div>
 
               {dropDownMenuItems.date && (
-                <div className="absolute dropdown h-0 w-max shadow-sm rounded-b-md overflow-hidden top-full -left-1">
+                <div className="absolute z-50 dropdown h-0 w-max shadow-sm rounded-b-md overflow-hidden top-full -left-1">
                   <DateRangePicker
                     color="#ff385d"
                     onChange={handleDateSelect}
@@ -133,43 +133,46 @@ function Filter({ type }) {
                 </div>
               )}
             </div>
-            <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
-              <div
-                onClick={(e) => {
-                  showDropdownMenuItems((prev) => {
-                    return {
-                      date: false,
-                      orderStatus: false,
-                      orderType: !prev.orderType
-                    };
-                  });
-                }}
-                className="flex p-2.5 items-center "
-              >
-                <span>{type !== "products" ? "Order" : "Product"} Type</span>
-                <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
-              </div>
-              {dropDownMenuItems.orderType && (
-                <div className="absolute w-max overflow-hidden h-0 shadow-sm dropdown bg-gray-100 rounded-b-md top-full -left-1 ">
-                  {orderTypes.map((orderType, idx) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          setfilterData((prev) => {
-                            return { ...prev, orderType: orderType };
-                          });
-                        }}
-                        key={idx}
-                        className="p-2.5 dropdown-items opacity-0  hover:bg-gray-200 transition-all duration-150"
-                      >
-                        {orderType.trim()}
-                      </div>
-                    );
-                  })}
+            {type !== "transaction" && (
+              <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
+                <div
+                  onClick={(e) => {
+                    showDropdownMenuItems((prev) => {
+                      return {
+                        date: false,
+                        orderStatus: false,
+                        orderType: !prev.orderType
+                      };
+                    });
+                  }}
+                  className="flex p-2.5 items-center "
+                >
+                  <span>{type !== "products" ? "Order" : "Product"} Type</span>
+                  <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
                 </div>
-              )}
-            </div>
-            {type !== "products" && (
+                {dropDownMenuItems.orderType && (
+                  <div className="absolute w-max overflow-hidden h-0 shadow-sm dropdown bg-gray-100 rounded-b-md top-full -left-1 ">
+                    {orderTypes.map((orderType, idx) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            setfilterData((prev) => {
+                              return { ...prev, orderType: orderType };
+                            });
+                          }}
+                          key={idx}
+                          className="p-2.5 dropdown-items opacity-0  hover:bg-gray-200 transition-all duration-150"
+                        >
+                          {orderType.trim()}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {type !== "products" && type !== "transaction" && (
               <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
                 <div
                   onClick={() => {

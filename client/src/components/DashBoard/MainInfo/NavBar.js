@@ -10,7 +10,7 @@ function NavBar() {
   return (
     <div>
       <div className="flex justify-between items-center ">
-        <div className="text-nav font-semibold ">
+        <div className="text-nav font-semibold  capitalize">
           {location.pathname.split("/")[2]}
         </div>
         <div className="flex items-center text-[#4e4e4e] space-x-3">

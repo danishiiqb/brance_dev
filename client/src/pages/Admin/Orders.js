@@ -11,6 +11,9 @@ function Orders() {
   const headerRowStates = useSelector((state) => {
     return state.tableHeaderSorting;
   });
+  function setActionWithId(obj) {
+    console.log(obj);
+  }
   const dispatcher = useDispatch();
   useEffect(() => {
     dispatcher(reset());
@@ -45,6 +48,9 @@ function Orders() {
                 ]}
               ></TableHeaderRow>
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -55,6 +61,9 @@ function Orders() {
                 }}
               ></OrderTableRow>
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -65,6 +74,9 @@ function Orders() {
                 }}
               ></OrderTableRow>{" "}
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -75,6 +87,9 @@ function Orders() {
                 }}
               ></OrderTableRow>{" "}
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -85,6 +100,9 @@ function Orders() {
                 }}
               ></OrderTableRow>{" "}
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -95,6 +113,9 @@ function Orders() {
                 }}
               ></OrderTableRow>{" "}
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",
@@ -105,6 +126,9 @@ function Orders() {
                 }}
               ></OrderTableRow>{" "}
               <OrderTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="order"
                 tableData={{
                   orderId: "#45555",
                   user: "John will",

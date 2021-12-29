@@ -56,6 +56,9 @@ function Products() {
       sold: 34
     }
   ]);
+  function setActionWithId(obj) {
+    console.log(obj);
+  }
   const headerRowStates = useSelector((state) => {
     return state.tableHeaderSorting;
   });
@@ -100,6 +103,9 @@ function Products() {
           {data.map((tableData, idx) => {
             return (
               <ProductTableRow
+                Id="678"
+                setActionWithId={setActionWithId}
+                type="transaction"
                 key={idx}
                 tableData={tableData}
               ></ProductTableRow>

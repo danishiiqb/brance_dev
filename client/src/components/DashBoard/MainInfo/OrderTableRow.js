@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
+import React from "react";
+import Info from "./Info";
 import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
 
-function OrderTableRow({ tableData }) {
-  const [info, showInfo] = useState(false);
+function OrderTableRow({ Id, setActionWithId, tableData, type }) {
+  function setAction(type) {
+    setActionWithId({ type, Id });
+  }
   return (
     <TableRow>
       <TableData>{tableData.orderId}</TableData>
@@ -22,29 +24,7 @@ function OrderTableRow({ tableData }) {
         </div>
       </TableData>
       <TableData className="px-1.5 py-2.5">
-        <div className="relative flex items-center justify-center">
-          <BsThreeDots
-            className="w-6 h-6"
-            onClick={() => {
-              showInfo((prev) => {
-                return !prev;
-              });
-            }}
-          ></BsThreeDots>
-          {info && (
-            <div className="z-50 absolute top-5 font-semibold overflow-hidden text-sm shadow-sm_dark rounded-md right-0 w-32 bg-white">
-              <div className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all">
-                View Detail
-              </div>
-              <div className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all">
-                Edit Info
-              </div>
-              <div className="hover:bg-[#f5f5f5] text-[#ff385d]  py-2 px-4 transition-all">
-                Delete
-              </div>
-            </div>
-          )}
-        </div>
+        <Info clickedAction={setAction} type={type}></Info>
       </TableData>
     </TableRow>
   );
