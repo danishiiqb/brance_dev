@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Search from "../../components/DashBoard/MainInfo/Search";
 import OrderTableRow from "../../components/DashBoard/MainInfo/OrderTableRow";
 import Filter from "../../components/DashBoard/MainInfo/Filter";
 import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow.js";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { reset } from "../../store/tableHeaderSortingReducer";
 
 function Orders() {
-  const [dateOrder, setDateOrder] = useState("desc");
-  const [priceOrder, setPriceOrder] = useState("desc");
-  const [statusBlock, setStatusBlock] = useState("desc");
+  const headerRowStates = useSelector((state) => {
+    return state.tableHeaderSorting;
+  });
+  const dispatcher = useDispatch();
+  useEffect(() => {
+    dispatcher(reset());
+  }, [dispatcher]);
   return (
     <div className="h-screen">
       <div className="bg-white shadow-sm_dark rounded-md mt-6 p-small">
@@ -25,9 +30,18 @@ function Orders() {
                   "Order No",
                   "Name",
                   "Address",
-                  { name: "Date", setter: setDateOrder, order: dateOrder },
-                  { name: "Price", setter: setPriceOrder, order: priceOrder },
-                  { name: "Status", setter: setStatusBlock, order: statusBlock }
+                  {
+                    name: "Date",
+                    order: headerRowStates.date
+                  },
+                  {
+                    name: "Price",
+                    order: headerRowStates.price
+                  },
+                  {
+                    name: "Status",
+                    order: headerRowStates.status
+                  }
                 ]}
               ></TableHeaderRow>
               <OrderTableRow

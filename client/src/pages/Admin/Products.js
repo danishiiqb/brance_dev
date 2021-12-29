@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Filter from "../../components/DashBoard/MainInfo/Filter";
 import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
-import ProductTableHeader from "../../components/DashBoard/MainInfo/ProductTableHeader";
 import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow";
 import Search from "../../components/DashBoard/MainInfo/Search";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
+import { reset } from "../../store/tableHeaderSortingReducer";
 
 function Products() {
   const [data, setData] = useState([
@@ -55,7 +56,13 @@ function Products() {
       sold: 34
     }
   ]);
-
+  const headerRowStates = useSelector((state) => {
+    return state.tableHeaderSorting;
+  });
+  const dispatcher = useDispatch();
+  useEffect(() => {
+    dispatcher(reset());
+  }, [dispatcher]);
   return (
     <div className="h-screen">
       <div className="bg-white shadow-sm_dark rounded-md mt-6 p-small">
@@ -64,7 +71,32 @@ function Products() {
           <Search></Search>
         </div>
         <table className="w-full my-3">
-          <ProductTableHeader></ProductTableHeader>
+          <TableHeaderRow
+            headerList={[
+              "Product Name",
+              "Category",
+              {
+                name: "Date",
+                order: headerRowStates.date
+              },
+              {
+                name: "Price",
+                order: headerRowStates.price
+              },
+              {
+                name: "Stock",
+                order: headerRowStates.stock
+              },
+              {
+                name: "Sold",
+                order: headerRowStates.sold
+              },
+              {
+                name: "Revenue",
+                order: headerRowStates.revenue
+              }
+            ]}
+          ></TableHeaderRow>
           {data.map((tableData, idx) => {
             return (
               <ProductTableRow
