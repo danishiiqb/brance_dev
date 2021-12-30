@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiSmileFill } from "react-icons/bs";
 import { MdAttachFile } from "react-icons/md";
@@ -8,24 +8,44 @@ function SendInput({ messageSubmit }) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [hoverBtn, setHoverBtn] = useState(false);
   const [message, setMessageInp] = useState("");
+  const [tooltip, setToolTip] = useState("");
+  function getSelectedEmoji(_, emojiObj) {
+    setMessageInp((prev) => {
+      return prev.concat(emojiObj.emoji);
+    });
+  }
   return (
     <div className="px-3 mb-3 relative">
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (!message) {
+            setToolTip("Type a Message");
+            return;
+          }
           messageSubmit({
             user: "John Doe",
             time: "4:45 PM",
             message
           });
+          setMessageInp("");
         }}
       >
-        <input
+        {tooltip && (
+          <div className="absolute rounded-sm bg-gray-50 p-2 -top-8 slideup translate-y-7 opacity-0 left-3 shadow-sm_dark text-xs">
+            {tooltip}
+          </div>
+        )}
+        <textarea
+          rows={1}
+          cols={20}
           onChange={(e) => {
             setMessageInp(e.target.value);
+            setToolTip("");
           }}
           type="text"
-          className="rounded-md  transition-all duration-300 border-[.5px] p-2.5 w-full focus:border-[#FF385C] focus:outline-none bg-gray-100 text-sm  border-gray-200"
+          value={message}
+          className="rounded-md   pr-44 transition-all duration-300 border-[.5px] p-2.5 w-full focus:border-[#FF385C] focus:outline-none bg-gray-100 text-sm  border-gray-200"
           placeholder="Type Here"
         />
         <div className="flex  absolute top-[1px] right-[13px] items-center space-x-3">
@@ -64,7 +84,7 @@ function SendInput({ messageSubmit }) {
       </form>
       {showEmoji && (
         <div className="absolute right-0 bottom-full">
-          <Picker />
+          <Picker onEmojiClick={getSelectedEmoji} />
         </div>
       )}
     </div>

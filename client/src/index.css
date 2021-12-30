@@ -32,6 +32,9 @@
 .rt {
   transform: rotateY(180deg);
 }
+.hello {
+  word-wrap: break-word;
+}
 .rt > * {
   transform: rotateY(-180deg);
 }
@@ -39,7 +42,18 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
+@keyframes slide {
+  80% {
+    transform: translateY(-1rem);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.slideup {
+  animation: slide 0.3s ease-in-out forwards;
+}
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SendInput from "./SendInput";
 
 function MessageBox() {
@@ -9,11 +9,21 @@ function MessageBox() {
       message: "Hello How You Doin lorem jghghghh"
     }
   ]);
+  const lastMessage = useRef("");
   function getMessage(message) {
     setMessage((prev) => {
       return [...prev, message];
     });
   }
+  useEffect(() => {
+    if (lastMessage.current !== null) {
+      lastMessage.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "nearest"
+      });
+    }
+  }, [messages]);
+
   return (
     <div className="flex-1 h-full flex flex-col  border-gray-200 rounded-md border-[.5px]">
       <div className="flex items-center p-3 border-gray-200  border-b-[.5px] space-x-2.5 cursor-pointer">
@@ -32,11 +42,12 @@ function MessageBox() {
       </div>
       <div className="no-scrollbar flex-1 overflow-scroll">
         <div className="p-3 flex-1">
-          {messages.map((message) => {
+          {messages.map((message, idx) => {
             return (
               <div
+                ref={lastMessage}
                 className={`flex mb-3 ${
-                  message.user === "John Doe" ? " justify-start  rt" : ""
+                  message.user === "John Doe" ? "rt" : ""
                 }  space-x-3.5`}
               >
                 <img
@@ -50,7 +61,7 @@ function MessageBox() {
                       message.user === "John Doe"
                         ? "before:-right-1"
                         : "before:-left-1"
-                    }  before:h-4 before:bg-gray-100 before:rotate-45 before:z-10 z-30  before:absolute before:top-1  bg-gray-100`}
+                    }  before:h-4 before:bg-gray-100 before:rotate-45 before:z-10 z-30  before:absolute before:top-1 hello  max-w-[450px] whitespace-pre-wrap  bg-gray-100`}
                   >
                     {message.message}
                   </div>
