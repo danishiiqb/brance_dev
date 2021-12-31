@@ -9,6 +9,7 @@ function SendInput({ messageSubmit }) {
   const [hoverBtn, setHoverBtn] = useState(false);
   const [message, setMessageInp] = useState("");
   const [tooltip, setToolTip] = useState("");
+  const [selectedFile, setSelectedFile] = useState("");
   function getSelectedEmoji(_, emojiObj) {
     setMessageInp((prev) => {
       return prev.concat(emojiObj.emoji);
@@ -29,6 +30,7 @@ function SendInput({ messageSubmit }) {
             message
           });
           setMessageInp("");
+          setShowEmoji(false);
         }}
       >
         {tooltip && (
@@ -62,7 +64,34 @@ function SendInput({ messageSubmit }) {
             )}
           </div>
           <div className="cursor-pointer">
-            <MdAttachFile className="w-5 h-5 text-gray-500"></MdAttachFile>
+            <input
+              id="file"
+              type="file"
+              onChange={(e) => {
+                if (
+                  !e.target.files ||
+                  e.target.files.length === 0 ||
+                  e.target.files[0].size > 12312654
+                ) {
+                  console.log("iioo");
+                  return;
+                }
+                console.log(
+                  e.target.files[0],
+                  URL.createObjectURL(e.target.files[0])
+                );
+                const previewFile = URL.createObjectURL(e.target.files[0]);
+                setSelectedFile({
+                  file: previewFile,
+                  type: e.target.files[0].type,
+                  name: e.target.files[0].name
+                });
+              }}
+              className="hidden"
+            />
+            <label htmlFor="file">
+              <MdAttachFile className="w-5  cursor-pointer h-5 text-gray-500"></MdAttachFile>
+            </label>
           </div>
           <button
             onMouseEnter={() => {
@@ -82,9 +111,35 @@ function SendInput({ messageSubmit }) {
           </button>
         </div>
       </form>
+      {selectedFile && selectedFile.type === "application/pdf" ? (
+        <>
+          <a
+            href={selectedFile.file}
+            className="border-0 cursor-pointer w-14 h-14 inline-block border-black"
+            download={selectedFile.name}
+            target="page"
+          >
+            Dwnld
+          </a>
+          <iframe
+            title="pdf"
+            className="w-14 h-14 overflow-hidden object-cover"
+            src={selectedFile.file}
+            name="page"
+          />
+        </>
+      ) : (
+        <a href={selectedFile.file} download={selectedFile.name}>
+          <img className="w-14 h-14 object-cover" src={selectedFile.file} />
+        </a>
+      )}
       {showEmoji && (
         <div className="absolute right-0 bottom-full">
-          <Picker onEmojiClick={getSelectedEmoji} />
+          <Picker
+            disableSearchBar={true}
+            preload={true}
+            onEmojiClick={getSelectedEmoji}
+          />
         </div>
       )}
     </div>
