@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 import React, { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiSmileFill } from "react-icons/bs";
-import { MdAttachFile } from "react-icons/md";
+import { MdAttachFile, MdCancel } from "react-icons/md";
 import { IoMdPaperPlane, IoIosPaperPlane } from "react-icons/io";
 
 function SendInput({ messageSubmit }) {
@@ -9,25 +10,94 @@ function SendInput({ messageSubmit }) {
   const [hoverBtn, setHoverBtn] = useState(false);
   const [message, setMessageInp] = useState("");
   const [tooltip, setToolTip] = useState("");
-  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedFile, setSelectedFile] = useState([]);
   function getSelectedEmoji(_, emojiObj) {
     setMessageInp((prev) => {
       return prev.concat(emojiObj.emoji);
     });
   }
+  function deleteImage(name) {
+    let newFiles = selectedFile.filter((file, _) => {
+      if (file.name === name) {
+        URL.revokeObjectURL(file.url);
+        return false;
+      }
+      return true;
+    });
+    setSelectedFile(newFiles);
+  }
+
   return (
-    <div className="px-3 mb-3 relative">
+    <div
+      className={`px-3 pb-2 ${
+        selectedFile.length > 0 && "border-t-[.5px] "
+      } relative`}
+    >
+      <div className={`${selectedFile.length > 0 && "mb-3 space-x-3"}`}>
+        {selectedFile.map((file, idx) => {
+          return file.type === "application/pdf" ? (
+            <div key={idx} className="relative inline-block">
+              <div
+                onClick={() => {
+                  deleteImage(file.name);
+                }}
+                className="absolute -top-1.5 cursor-pointer -right-1.5"
+              >
+                <MdCancel className="text-gray-500"></MdCancel>
+              </div>
+              <a
+                href={file.url}
+                className="cursor-pointer top-0 left-0 absolute w-16 h-16 inline-block "
+                download={file.name}
+                target="page"
+              ></a>
+              <iframe
+                title="pdf"
+                className="w-16 h-16 rounded-sm overflow-hidden object-cover"
+                src={file.url}
+                name="page"
+              />
+            </div>
+          ) : (
+            <div key={idx} className="inline-block relative">
+              <div
+                onClick={() => {
+                  deleteImage(file.name);
+                }}
+                className="absolute -top-1.5 cursor-pointer -right-1.5"
+              >
+                <MdCancel className="text-gray-500"></MdCancel>
+              </div>
+              <a
+                href={file.url}
+                key={idx}
+                className="cursor-pointer  w-16 h-16 inline-block "
+                download={file.name}
+              >
+                <img
+                  className="w-16 h-16 object-cover rounded-sm"
+                  alt=""
+                  src={file.url}
+                />
+              </a>
+            </div>
+          );
+        })}
+      </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (!message) {
+          if (!message && selectedFile.length === 0) {
             setToolTip("Type a Message");
             return;
           }
           messageSubmit({
             user: "John Doe",
             time: "4:45 PM",
-            message
+            message: {
+              message,
+              selectedFile
+            }
           });
           setMessageInp("");
           setShowEmoji(false);
@@ -50,7 +120,7 @@ function SendInput({ messageSubmit }) {
           className="rounded-md   pr-44 transition-all duration-300 border-[.5px] p-2.5 w-full focus:border-[#FF385C] focus:outline-none bg-gray-100 text-sm  border-gray-200"
           placeholder="Type Here"
         />
-        <div className="flex  absolute top-[1px] right-[13px] items-center space-x-3">
+        <div className="flex  absolute bottom-[16.4px] right-[13px] items-center space-x-3">
           <div
             onClick={() => {
               setShowEmoji((prev) => !prev);
@@ -67,24 +137,26 @@ function SendInput({ messageSubmit }) {
             <input
               id="file"
               type="file"
+              multiple
               onChange={(e) => {
-                if (
-                  !e.target.files ||
-                  e.target.files.length === 0 ||
-                  e.target.files[0].size > 12312654
-                ) {
+                const files = e.target.files;
+                if (!files || files.length === 0 || files.size > 12312654) {
                   console.log("iioo");
                   return;
                 }
-                console.log(
-                  e.target.files[0],
-                  URL.createObjectURL(e.target.files[0])
-                );
-                const previewFile = URL.createObjectURL(e.target.files[0]);
-                setSelectedFile({
-                  file: previewFile,
-                  type: e.target.files[0].type,
-                  name: e.target.files[0].name
+                // selectedFile.forEach((el) => {
+                //   URL.revokeObjectURL(el.url);
+                // });
+                // console.log(files);
+                const previewFile = [...files].map((file) => {
+                  return {
+                    url: URL.createObjectURL(file),
+                    type: file.type,
+                    name: file.name
+                  };
+                });
+                setSelectedFile((prev) => {
+                  return [...prev, ...previewFile];
                 });
               }}
               className="hidden"
@@ -111,30 +183,12 @@ function SendInput({ messageSubmit }) {
           </button>
         </div>
       </form>
-      {selectedFile && selectedFile.type === "application/pdf" ? (
-        <>
-          <a
-            href={selectedFile.file}
-            className="border-0 cursor-pointer w-14 h-14 inline-block border-black"
-            download={selectedFile.name}
-            target="page"
-          >
-            Dwnld
-          </a>
-          <iframe
-            title="pdf"
-            className="w-14 h-14 overflow-hidden object-cover"
-            src={selectedFile.file}
-            name="page"
-          />
-        </>
-      ) : (
-        <a href={selectedFile.file} download={selectedFile.name}>
-          <img className="w-14 h-14 object-cover" src={selectedFile.file} />
-        </a>
-      )}
       {showEmoji && (
-        <div className="absolute right-0 bottom-full">
+        <div
+          className={`absolute right-0 ${
+            selectedFile.length > 0 ? "bottom-16" : "bottom-full"
+          } `}
+        >
           <Picker
             disableSearchBar={true}
             preload={true}
