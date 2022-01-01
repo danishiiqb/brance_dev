@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import Message from "./Message";
+import MessageWImage from "./MessageWImage";
 import SendInput from "./SendInput";
 
 function MessageBox() {
-  const [messages, setMessage] = useState([
+  const [allMessages, setMessage] = useState([
     {
       user: "Jane Albert",
       time: "4:45 PM",
       message: {
-        message: "Hello How You Doin lorem jghghghh",
-        selectedFile: []
+        text: "Hello How You Doin lorem jghghghh",
+        images: []
       }
     }
   ]);
@@ -25,7 +27,7 @@ function MessageBox() {
         inline: "nearest"
       });
     }
-  }, [messages]);
+  }, [allMessages]);
 
   return (
     <div className="flex-1 h-full flex flex-col  border-gray-200 rounded-md border-[.5px]">
@@ -45,62 +47,23 @@ function MessageBox() {
       </div>
       <div className="no-scrollbar flex-1 overflow-scroll">
         <div className="p-3 flex-1 ">
-          {messages.map((message, idx) => {
+          {allMessages.map((individualMessage, idx) => {
             return (
-              <div>
-                <div
-                  className={` items-start flex  space-x-3.5 ${
-                    message.user === "John Doe" ? "rt" : ""
-                  } `}
-                >
-                  <img
-                    src="/img/dashboard/profile.jpeg"
-                    className="w-11 rounded-full object-cover h-11"
-                    alt=""
-                  />
-                  <div>
-                    {message.message.selectedFile.length > 0 &&
-                      message.message.selectedFile.map((item) => {
-                        return (
-                          <>
-                            <div className="mb-3  inline-block cursor-pointer">
-                              <img
-                                src={item.url}
-                                alt=""
-                                className="w-52 h-52 object-cover"
-                              />
-                            </div>
-                            <br />
-                          </>
-                        );
-                      })}
-                  </div>
-                </div>
-                <div
-                  ref={lastMessage}
-                  className={`flex ${
-                    idx === messages.length - 1 ? "" : "mb-3"
-                  }  ${message.user === "John Doe" ? "rt" : ""}  space-x-3.5`}
-                >
-                  <img
-                    src="/img/dashboard/profile.jpeg"
-                    className="w-11 rounded-full object-cover h-11"
-                    alt=""
-                  />
-                  <div className="text-sm space-y-1 text-gray-600">
-                    <div
-                      className={`p-3 rounded-md clip relative before:w-3  ${
-                        message.user === "John Doe"
-                          ? "before:-right-1"
-                          : "before:-left-1"
-                      }  before:h-4 before:bg-gray-100 before:rotate-45 before:z-10 z-30  before:absolute before:top-1 hello  max-w-[450px] whitespace-pre-wrap  bg-gray-100`}
-                    >
-                      {message.message.message}
-                    </div>
-
-                    <div className="text-xs text-right">{message.time}</div>
-                  </div>
-                </div>
+              <div key={idx}>
+                {individualMessage.message.images.length > 0 && (
+                  <MessageWImage
+                    ref={lastMessage}
+                    individualMessage={individualMessage}
+                  ></MessageWImage>
+                )}
+                {individualMessage.message.text && (
+                  <Message
+                    individualMessage={individualMessage}
+                    idx={idx}
+                    allMessages={allMessages}
+                    ref={lastMessage}
+                  ></Message>
+                )}
               </div>
             );
           })}

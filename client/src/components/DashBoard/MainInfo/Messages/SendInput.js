@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Picker from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiSmileFill } from "react-icons/bs";
 import { MdAttachFile, MdCancel } from "react-icons/md";
@@ -15,6 +15,7 @@ function SendInput({ messageSubmit }) {
     setMessageInp((prev) => {
       return prev.concat(emojiObj.emoji);
     });
+    tooltip && setToolTip("");
   }
   function deleteImage(name) {
     let newFiles = selectedFile.filter((file, _) => {
@@ -29,11 +30,11 @@ function SendInput({ messageSubmit }) {
 
   return (
     <div
-      className={`px-3 pb-2 ${
+      className={`px-3 py-2 ${
         selectedFile.length > 0 && "border-t-[.5px] "
       } relative`}
     >
-      <div className={`${selectedFile.length > 0 && "mb-3 space-x-3"}`}>
+      <div className={`${selectedFile.length > 0 && "mb-1 space-x-3"}`}>
         {selectedFile.map((file, idx) => {
           return file.type === "application/pdf" ? (
             <div key={idx} className="relative inline-block">
@@ -95,10 +96,11 @@ function SendInput({ messageSubmit }) {
             user: "John Doe",
             time: "4:45 PM",
             message: {
-              message,
-              selectedFile
+              text: message.trim(),
+              images: selectedFile
             }
           });
+          setSelectedFile([]);
           setMessageInp("");
           setShowEmoji(false);
         }}
@@ -144,10 +146,7 @@ function SendInput({ messageSubmit }) {
                   console.log("iioo");
                   return;
                 }
-                // selectedFile.forEach((el) => {
-                //   URL.revokeObjectURL(el.url);
-                // });
-                // console.log(files);
+
                 const previewFile = [...files].map((file) => {
                   return {
                     url: URL.createObjectURL(file),
@@ -189,11 +188,7 @@ function SendInput({ messageSubmit }) {
             selectedFile.length > 0 ? "bottom-16" : "bottom-full"
           } `}
         >
-          <Picker
-            disableSearchBar={true}
-            preload={true}
-            onEmojiClick={getSelectedEmoji}
-          />
+          <Picker disableSearchBar={true} onEmojiClick={getSelectedEmoji} />
         </div>
       )}
     </div>
