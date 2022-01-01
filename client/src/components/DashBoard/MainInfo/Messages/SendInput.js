@@ -27,6 +27,50 @@ function SendInput({ messageSubmit }) {
     });
     setSelectedFile(newFiles);
   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!message && selectedFile.length === 0) {
+      setToolTip("Type a Message");
+      return;
+    }
+    messageSubmit({
+      user: "John Doe",
+      time: "4:45 PM",
+      message: {
+        text: message.trim(),
+        images: selectedFile
+      }
+    });
+    setSelectedFile([]);
+    setMessageInp("");
+    showEmoji && setShowEmoji(!showEmoji);
+  };
+  function bytesToSize(bytes, seperator = "") {
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "n/a";
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+    if (i === 0) return `${bytes}${seperator}${sizes[i]}`;
+    return `${(bytes / 1024 ** i).toFixed(1)}${seperator}${sizes[i]}`;
+  }
+  const handleChange = (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || files.size > 12312654) {
+      return;
+    }
+    const previewFile = [...files].map((file) => {
+      return {
+        url: URL.createObjectURL(file),
+        type: file.type,
+        name: file.name,
+        size: bytesToSize(file.size)
+      };
+    });
+    setSelectedFile((prev) => {
+      return [...prev, ...previewFile];
+    });
+    tooltip && setToolTip("");
+    showEmoji && setShowEmoji(!showEmoji);
+  };
 
   return (
     <div
@@ -85,26 +129,7 @@ function SendInput({ messageSubmit }) {
           );
         })}
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!message && selectedFile.length === 0) {
-            setToolTip("Type a Message");
-            return;
-          }
-          messageSubmit({
-            user: "John Doe",
-            time: "4:45 PM",
-            message: {
-              text: message.trim(),
-              images: selectedFile
-            }
-          });
-          setSelectedFile([]);
-          setMessageInp("");
-          setShowEmoji(false);
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         {tooltip && (
           <div className="absolute rounded-sm bg-gray-50 p-2 -top-8 slideup translate-y-7 opacity-0 left-3 shadow-sm_dark text-xs">
             {tooltip}
@@ -140,24 +165,7 @@ function SendInput({ messageSubmit }) {
               id="file"
               type="file"
               multiple
-              onChange={(e) => {
-                const files = e.target.files;
-                if (!files || files.length === 0 || files.size > 12312654) {
-                  console.log("iioo");
-                  return;
-                }
-
-                const previewFile = [...files].map((file) => {
-                  return {
-                    url: URL.createObjectURL(file),
-                    type: file.type,
-                    name: file.name
-                  };
-                });
-                setSelectedFile((prev) => {
-                  return [...prev, ...previewFile];
-                });
-              }}
+              onChange={handleChange}
               className="hidden"
             />
             <label htmlFor="file">

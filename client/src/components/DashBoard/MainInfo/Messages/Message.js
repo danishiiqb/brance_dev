@@ -10,7 +10,7 @@ const Message = forwardRef(({ individualMessage, idx, allMessages }, ref) => {
     >
       <img
         src="/img/dashboard/profile.jpeg"
-        className="w-11 rounded-full object-cover h-11"
+        className="w-10  rounded-full object-cover h-10"
         alt=""
       />
       <div className="text-sm space-y-1 text-gray-600">
