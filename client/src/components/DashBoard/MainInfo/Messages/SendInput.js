@@ -11,12 +11,14 @@ function SendInput({ messageSubmit }) {
   const [message, setMessageInp] = useState("");
   const [tooltip, setToolTip] = useState("");
   const [selectedFile, setSelectedFile] = useState([]);
+
   function getSelectedEmoji(_, emojiObj) {
     setMessageInp((prev) => {
       return prev.concat(emojiObj.emoji);
     });
     tooltip && setToolTip("");
   }
+
   function deleteImage(name) {
     let newFiles = selectedFile.filter((file, _) => {
       if (file.name === name) {
@@ -27,6 +29,7 @@ function SendInput({ messageSubmit }) {
     });
     setSelectedFile(newFiles);
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message && selectedFile.length === 0) {
@@ -45,6 +48,7 @@ function SendInput({ messageSubmit }) {
     setMessageInp("");
     showEmoji && setShowEmoji(!showEmoji);
   };
+
   function bytesToSize(bytes, seperator = "") {
     const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
     if (bytes === 0) return "n/a";
@@ -52,6 +56,7 @@ function SendInput({ messageSubmit }) {
     if (i === 0) return `${bytes}${seperator}${sizes[i]}`;
     return `${(bytes / 1024 ** i).toFixed(1)}${seperator}${sizes[i]}`;
   }
+
   const handleChange = (e) => {
     const files = e.target.files;
     if (!files || files.length === 0 || files.size > 12312654) {

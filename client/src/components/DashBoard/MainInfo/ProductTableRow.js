@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
-import { BsThreeDots } from "react-icons/bs";
 import Info from "./Info";
 
 function ProductTableRow({ Id, setActionWithId, tableData, type }) {

@@ -38,7 +38,8 @@ module.exports = {
         large: "90vh",
         sec: "95vh",
         prHeight: "23.5rem",
-        panel: "87.5vh"
+        panel: "87.5vh",
+        h: "84.8%"
       },
       width: { secFull: "96%", w87: "87%" },
       keyframes: {

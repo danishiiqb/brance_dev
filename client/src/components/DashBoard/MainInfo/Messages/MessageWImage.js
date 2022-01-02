@@ -28,7 +28,7 @@ const MessageWImage = forwardRef(({ individualMessage }, ref) => {
                       <AiFillFilePdf className="w-6 h-6"></AiFillFilePdf>
                       <a
                         href={image.url}
-                        className="cursor-pointer  rounded-md items-center text-sm text-blue-600  flex"
+                        className="cursor-pointer  rounded-md items-center text-sm text-blue-500  flex"
                         download={image.name}
                         target="page"
                       >
