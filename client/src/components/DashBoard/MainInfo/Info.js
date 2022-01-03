@@ -5,7 +5,7 @@ function Info({ type, clickedAction }) {
   return (
     <div className="relative flex items-center justify-center">
       <BsThreeDots
-        className="w-6 h-6"
+        className={`${type === "User Reply" ? "w-4 h-4" : "w-6 h-6"}`}
         onClick={() => {
           showInfo((prev) => {
             return !prev;
@@ -13,15 +13,21 @@ function Info({ type, clickedAction }) {
         }}
       ></BsThreeDots>
       {info && (
-        <div className="z-50 absolute top-5 font-semibold overflow-hidden text-sm shadow-sm_dark rounded-md right-0 w-32 bg-white">
-          <div
-            onClick={() => {
-              clickedAction("View-Info");
-            }}
-            className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all"
-          >
-            View Detail
-          </div>
+        <div
+          className={`z-50 absolute  font-semibold overflow-hidden ${
+            type === "User Reply" ? "text-xs top-3" : "text-sm top-4"
+          } shadow-sm_dark rounded-md right-0 w-32 bg-white`}
+        >
+          {type !== "User Reply" && (
+            <div
+              onClick={() => {
+                clickedAction("View-Info");
+              }}
+              className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all"
+            >
+              View Detail
+            </div>
+          )}
           {type !== "transaction" && (
             <div
               onClick={() => {
@@ -32,6 +38,7 @@ function Info({ type, clickedAction }) {
               Edit Info
             </div>
           )}
+
           <div
             onClick={() => {
               clickedAction("Delete");

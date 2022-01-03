@@ -8,11 +8,10 @@ function ReviewsTableRow({
   tableData,
   setCommentReply,
   setActionWithId,
-  type,
-  Id
+  type
 }) {
   function setAction(type) {
-    setActionWithId({ type, Id });
+    setActionWithId({ type, id: tableData.id });
   }
   function setReply(comment) {
     setCommentReply({ comment, id: tableData.id });
@@ -20,7 +19,11 @@ function ReviewsTableRow({
   return (
     <TableRow>
       <TableData type={type}>
-        <Review data={tableData} setReply={setReply}></Review>
+        <Review
+          data={tableData}
+          setAction={setAction}
+          setReply={setReply}
+        ></Review>
       </TableData>
       <TableData>
         <div className="flex space-x-2 duration-300 rounded-md ">

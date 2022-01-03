@@ -40,8 +40,35 @@ function Reviews() {
       }
     }
   ]);
+
+  function deleteOwnerReview(objId) {
+    setReviews((prev) => {
+      const newReview = prev.map((review, _) => {
+        if (objId === review.id) {
+          const { reply, ...comments } = review.comments;
+          return {
+            ...review,
+            product: { ...review.product },
+            comments: { ...comments }
+          };
+        }
+        return {
+          ...review,
+          product: { ...review.product },
+          comments: { ...review.comments }
+        };
+      });
+      return newReview;
+    });
+  }
   function setActionWithId(obj) {
-    console.log(obj);
+    if (obj.type === "Edit") {
+    }
+    if (obj.type === "Delete") {
+      deleteOwnerReview(obj.id);
+      return;
+    }
+    return;
   }
   function setCommentReply(obj) {
     setReviews((prev) => {
@@ -49,10 +76,15 @@ function Reviews() {
         if (review.id === obj.id) {
           return {
             ...review,
+            product: { ...review.product },
             comments: { ...review.comments, reply: obj.comment }
           };
         }
-        return review;
+        return {
+          ...review,
+          product: { ...review.product },
+          comments: { ...review.comments }
+        };
       });
       return newReviews;
     });

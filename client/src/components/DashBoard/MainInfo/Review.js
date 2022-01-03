@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import Info from "./Info";
 import Reply from "./Reply";
 
-function Review({ data, setReply }) {
+function Review({ data, setReply, setAction }) {
   const [replySec, setReplySec] = useState(false);
   return (
     <div className="flex items-center">
@@ -38,26 +39,29 @@ function Review({ data, setReply }) {
               <Reply closeReply={setReplySec} setReply={setReply}></Reply>
             )}
             {data.comments.reply && (
-              <div className="flex mt-3 relative after:absolute after:top-1/2 after:-left-7 after:w-8 after:h-[.5px]  after:z-20 after:bg-gray-300 space-x-2 ">
-                <img
-                  className="w-10 z-30 h-10 rounded-full object-cover"
-                  src={data.comments.img}
-                  alt=""
-                />
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <div className="font-medium capitalize">
-                      {data.comments.name}
+              <div className="flex items-center justify-between">
+                <div className="flex mt-3 relative after:absolute after:top-1/2 after:-left-7 after:w-8 after:h-[.5px]  after:z-20 after:bg-gray-300 space-x-2 ">
+                  <img
+                    className="w-10 z-30 h-10 rounded-full object-cover"
+                    src={data.comments.img}
+                    alt=""
+                  />
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <div className="font-medium capitalize">
+                        {data.comments.name}
+                      </div>
+                      <div className="text-xs">{data.comments.time}</div>
                     </div>
-                    <div className="text-xs">{data.comments.time}</div>
-                  </div>
-                  <div className="text-sm inline-block">
-                    <span className="text-blue-500">
-                      @{data.comments.name}{" "}
-                    </span>
-                    {data.comments.reply}
+                    <div className="text-sm inline-block">
+                      <span className="text-blue-500">
+                        @{data.comments.name}{" "}
+                      </span>
+                      {data.comments.reply}
+                    </div>
                   </div>
                 </div>
+                <Info type="User Reply" clickedAction={setAction}></Info>
               </div>
             )}
           </div>
