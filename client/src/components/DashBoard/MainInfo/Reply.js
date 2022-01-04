@@ -1,7 +1,14 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
-function Reply({ closeReply, setReply }) {
+function Reply({ closeReply, setReply, setEdit, editMode, prevValue }) {
   const inputRef = useRef("");
+
+  useEffect(() => {
+    if (editMode) {
+      inputRef.current.value = prevValue;
+    }
+  }, [editMode, prevValue]);
+
   return (
     <div className="flex space-x-2 items-center mt-2">
       <div>
@@ -21,6 +28,7 @@ function Reply({ closeReply, setReply }) {
         <button
           onClick={() => {
             closeReply(false);
+            setEdit(false);
           }}
         >
           Cancel
@@ -29,6 +37,7 @@ function Reply({ closeReply, setReply }) {
           onClick={() => {
             setReply(inputRef.current.value);
             closeReply(false);
+            setEdit(false);
           }}
           className="p-1 text-white rounded-sm bg-[#FF385C]"
         >

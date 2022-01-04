@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-function Info({ type, clickedAction }) {
+
+function Info({ type, clickedAction, setEditPhase = null }) {
   const [info, showInfo] = useState(false);
   return (
     <div className="relative flex items-center justify-center">
@@ -22,23 +23,24 @@ function Info({ type, clickedAction }) {
             <div
               onClick={() => {
                 clickedAction("View-Info");
+                if (type === "User Reply") {
+                }
               }}
               className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all"
             >
               View Detail
             </div>
           )}
-          {type !== "transaction" && (
+          {type !== "transaction" && type !== "reviews" && (
             <div
               onClick={() => {
-                clickedAction("Edit");
+                setEditPhase && setEditPhase(true);
               }}
               className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all"
             >
               Edit Info
             </div>
           )}
-
           <div
             onClick={() => {
               clickedAction("Delete");

@@ -8,6 +8,7 @@ function ReviewsTableRow({
   tableData,
   setCommentReply,
   setActionWithId,
+  incDecEngagement,
   type
 }) {
   function setAction(type) {
@@ -16,6 +17,12 @@ function ReviewsTableRow({
   function setReply(comment) {
     setCommentReply({ comment, id: tableData.id });
   }
+  function setEngagement({ type }) {
+    incDecEngagement({
+      engageInfo: { type, user: { name: "Simon" } },
+      id: tableData.id
+    });
+  }
   return (
     <TableRow>
       <TableData type={type}>
@@ -23,6 +30,7 @@ function ReviewsTableRow({
           data={tableData}
           setAction={setAction}
           setReply={setReply}
+          setEngagement={setEngagement}
         ></Review>
       </TableData>
       <TableData>
