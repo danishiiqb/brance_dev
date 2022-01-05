@@ -11,7 +11,7 @@ function EditInputField({ label, value }) {
         <div>{label}</div>
         <div className="text-base font-medium">{value}</div>
       </div>
-      <FaPen className="w-3 text-[#4e4e4e81] cursor-pointer h-3"></FaPen>
+      <FaPen className="w-2.5 text-[#4e4e4e81] cursor-pointer h-2.5"></FaPen>
     </div>
   );
 }
