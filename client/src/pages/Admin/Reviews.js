@@ -96,16 +96,28 @@ function Reviews() {
       return newReviews;
     });
   }
-  function checkExistingLikes(user, likesArray) {
-    let alreadyLiked = likesArray.findIndex((likes) => {
+  function checkAlreadyClicked(user, array) {
+    let indexFound = array.findIndex((likes) => {
       return likes.name === user.name;
     });
-    if (alreadyLiked !== -1) {
-      return likesArray.filter((_, idx) => {
-        return idx !== alreadyLiked;
+    if (indexFound !== -1) {
+      return array.filter((_, idx) => {
+        return idx !== indexFound;
       });
     }
-    return [...likesArray, user];
+    return [...array];
+  }
+
+  function checkExisting(user, array) {
+    let indexFound = array.findIndex((likes) => {
+      return likes.name === user.name;
+    });
+    if (indexFound !== -1) {
+      return array.filter((_, idx) => {
+        return idx !== indexFound;
+      });
+    }
+    return [...array, user];
   }
   function incDecEngagement(obj) {
     setReviews((prev) => {
@@ -119,9 +131,13 @@ function Reviews() {
                   ...review.comments,
                   engageMent: {
                     ...review.comments.engageMent,
-                    likes: checkExistingLikes(
+                    likes: checkExisting(
                       obj.engageInfo.user,
                       review.comments.engageMent.likes
+                    ),
+                    dislikes: checkAlreadyClicked(
+                      obj.engageInfo.user,
+                      review.comments.engageMent.dislikes
                     )
                   }
                 }
@@ -131,7 +147,17 @@ function Reviews() {
                 product: { ...review.product },
                 comments: {
                   ...review.comments,
-                  dislikes: review.comments.dislikes + 1
+                  engageMent: {
+                    ...review.comments.engageMent,
+                    likes: checkAlreadyClicked(
+                      obj.engageInfo.user,
+                      review.comments.engageMent.likes
+                    ),
+                    dislikes: checkExisting(
+                      obj.engageInfo.user,
+                      review.comments.engageMent.dislikes
+                    )
+                  }
                 }
               };
         }

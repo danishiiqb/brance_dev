@@ -32,7 +32,11 @@ function LikeDislike({ setEngagement, engageMent }) {
         onClick={() => {
           setEngagement({ type: "Like" });
           setClicked((prev) => {
-            return { ...prev, liked: prev.liked ? false : true };
+            return {
+              ...prev,
+              disliked: prev.disliked ? false : prev.disliked,
+              liked: prev.liked ? false : true
+            };
           });
         }}
       >
@@ -62,7 +66,11 @@ function LikeDislike({ setEngagement, engageMent }) {
         onClick={() => {
           setEngagement({ type: "Dislike" });
           setClicked((prev) => {
-            return { ...prev, disliked: prev.disliked ? false : true };
+            return {
+              ...prev,
+              //   liked: prev.liked ? false : prev.liked,
+              disliked: prev.disliked ? false : true
+            };
           });
         }}
       >
