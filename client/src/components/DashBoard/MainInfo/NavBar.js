@@ -7,11 +7,14 @@ import { useLocation } from "react-router-dom";
 
 function NavBar() {
   const location = useLocation();
+
   return (
     <div>
       <div className="flex justify-between items-center ">
         <div className="text-nav font-semibold  capitalize">
-          {location.pathname.split("/")[2]}
+          {location.pathname.split("/")[2] === "settings"
+            ? "Profile Setting"
+            : location.pathname.split("/")[2]}
         </div>
         <div className="flex items-center text-[#4e4e4e] space-x-3">
           <Search section="nav"></Search>

@@ -8,6 +8,7 @@ import Orders from "./Orders";
 import Transactions from "./Transactions";
 import Reviews from "./Reviews";
 import Customers from "./Customers";
+import Settings from "./Settings";
 
 function AdminHome() {
   return (
@@ -32,6 +33,9 @@ function AdminHome() {
         </Route>
         <Route exact path="/admin/customers">
           <Customers></Customers>
+        </Route>
+        <Route exact path="/admin/settings">
+          <Settings></Settings>
         </Route>
       </div>
     </div>

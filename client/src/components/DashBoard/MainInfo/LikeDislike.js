@@ -68,7 +68,7 @@ function LikeDislike({ setEngagement, engageMent }) {
           setClicked((prev) => {
             return {
               ...prev,
-              //   liked: prev.liked ? false : prev.liked,
+              liked: prev.liked ? false : prev.liked,
               disliked: prev.disliked ? false : true
             };
           });
