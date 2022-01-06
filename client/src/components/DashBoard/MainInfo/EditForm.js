@@ -4,7 +4,7 @@ import EditPhoto from "./EditPhoto";
 
 function EditForm() {
   return (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex pl-small flex-col h-full justify-between">
       <div className="flex py-4 items-start ">
         <div className="flex-1 grid grid-cols-2 mr-8 gap-x-8 gap-y-8">
           <EditInputField label="First Name" value="Danish"></EditInputField>
