@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 function SideBarElem({ item, activatedElem, activate }) {
   const [hover, setHover] = useState(false);
   const history = useHistory();
+
   return (
     <div
       onClick={() => {

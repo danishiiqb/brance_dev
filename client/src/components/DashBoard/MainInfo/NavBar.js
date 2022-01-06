@@ -14,6 +14,8 @@ function NavBar() {
         <div className="text-nav font-semibold  capitalize">
           {location.pathname.split("/")[2] === "settings"
             ? "Profile Setting"
+            : location.pathname.split("/")[2] === "create-product"
+            ? "Create Product"
             : location.pathname.split("/")[2]}
         </div>
         <div className="flex items-center text-[#4e4e4e] space-x-3">

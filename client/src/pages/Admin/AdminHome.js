@@ -9,6 +9,7 @@ import Transactions from "./Transactions";
 import Reviews from "./Reviews";
 import Customers from "./Customers";
 import Settings from "./Settings";
+import AddNewProduct from "./AddNewProduct";
 
 function AdminHome() {
   return (
@@ -16,6 +17,9 @@ function AdminHome() {
       <SideBar></SideBar>
       <div className="bg-[#f6f6f6] ml-marginLeft py-4 px-6">
         <NavBar></NavBar>
+        <Route exact path="/admin/create-product">
+          <AddNewProduct></AddNewProduct>
+        </Route>
         <Route exact path="/admin/dashboard">
           <Dashboard></Dashboard>
         </Route>
