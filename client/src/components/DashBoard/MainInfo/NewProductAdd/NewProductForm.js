@@ -23,7 +23,7 @@ function NewProductForm() {
         </label>
         <input
           type="text"
-          className="block w-96 border-gray-300 border-[.5px] focus:border-[#FF385C] mt-2 focus:outline-none transition-all duration-200 text-small rounded-sm py-2 px-2"
+          className="block w-96 border-gray-300 border-[.5px] focus:border-[#FF385C] mt-2 focus:outline-none transition-all duration-200 text-small rounded-md py-2 px-2"
           id="title"
           placeholder="Name"
         />
@@ -36,6 +36,25 @@ function NewProductForm() {
         <div className="w-24">
           <div className="font-medium text-small">For</div>
           <DropDown dropdownList={["Mens", "Boys"]}></DropDown>
+        </div>
+      </div>
+      <div>
+        <div className="mt-4">
+          <div className="font-medium text-small">Brand</div>
+          <DropDown
+            dropdownList={[
+              "Nike",
+              "Tommy Hilfiger",
+              "H&M",
+              "Adidas",
+              "Hype",
+              "North Face",
+              "Levis",
+              "Lego",
+              "Next",
+              "Custom"
+            ]}
+          ></DropDown>
         </div>
       </div>
     </div>
