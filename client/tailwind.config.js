@@ -39,9 +39,10 @@ module.exports = {
         sec: "95vh",
         prHeight: "23.5rem",
         panel: "87.5vh",
-        h: "84.8%"
+        h: "84.8%",
+        heightImg: "13.5rem"
       },
-      width: { secFull: "96%", w87: "87%" },
+      width: { secFull: "96%", w87: "87%", widthImg: "13.5rem" },
       keyframes: {
         slide: {
           "0%": {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-function DropDown({ dropdownList, notifyParentOfSelected = null }) {
+function DropDown({ dropdownList, notifyParentForDetailDropDown = null }) {
   const [dropdown, expandDropDown] = useState(false);
   const [selected, setSelected] = useState(dropdownList[0]);
 
@@ -28,7 +28,8 @@ function DropDown({ dropdownList, notifyParentOfSelected = null }) {
               <li
                 onClick={() => {
                   setSelected(elem);
-                  notifyParentOfSelected && notifyParentOfSelected(elem);
+                  notifyParentForDetailDropDown &&
+                    notifyParentForDetailDropDown(elem);
                   expandDropDown(false);
                 }}
                 key={idx}
