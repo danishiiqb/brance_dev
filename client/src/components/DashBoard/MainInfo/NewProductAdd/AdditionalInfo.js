@@ -2,7 +2,7 @@ import React from "react";
 import DropDown from "./DropDown";
 import Input from "./Input";
 
-function AdditionalInfo() {
+function AdditionalInfo({ getAllValues }) {
   return (
     <div className="mt-4">
       <div className="flex space-x-3">
@@ -10,14 +10,23 @@ function AdditionalInfo() {
           <label htmlFor="colour" className="font-medium text-small">
             Colour
           </label>
-          <Input placeholder="Colour" id="colour"></Input>
+          <Input
+            placeholder="Colour"
+            getAllValues={getAllValues}
+            id="colour"
+          ></Input>
         </div>
         <div>
           <label htmlFor="inStock" className="font-medium text-small">
             In Stock
           </label>
           <div className="w-32">
-            <Input type="Number" placeholder="In Stock" id="inStock"></Input>
+            <Input
+              getAllValues={getAllValues}
+              type="Number"
+              placeholder="In Stock"
+              id="inStock"
+            ></Input>
           </div>
         </div>
       </div>
@@ -26,9 +35,18 @@ function AdditionalInfo() {
           Prize
         </label>
         <div className="flex space-x-3">
-          <Input type="Number" placeholder="Prize" id="prize"></Input>
+          <Input
+            type="Number"
+            getAllValues={getAllValues}
+            placeholder="Prize"
+            id="prize"
+          ></Input>
           <div className="">
-            <DropDown dropdownList={["USD", "EUR", "GBP", "INR"]}></DropDown>
+            <DropDown
+              title="currency"
+              getAllValues={getAllValues}
+              dropdownList={["USD", "EUR", "GBP", "INR"]}
+            ></DropDown>
           </div>
         </div>
       </div>

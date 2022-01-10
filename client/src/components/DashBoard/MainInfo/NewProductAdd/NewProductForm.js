@@ -1,11 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DropDown from "./DropDown";
 import { v4 as uuidv4 } from "uuid";
 import AdditionalInfo from "./AdditionalInfo";
 import Input from "./Input";
-import WrapperDropdown from "./WrapperDropdown";
 
-function NewProductForm() {
+function NewProductForm({ collectValues }) {
   const { current: dropdownList } = useRef([
     {
       id: uuidv4(),
@@ -167,9 +166,36 @@ function NewProductForm() {
     }
   ]);
   let [detailDropDown, setDetailDropDown] = useState("");
-  function notifyParentForDetailDropDown(element) {
+  let [selectedValues, setSelectedValues] = useState({
+    title: "",
+    category: "",
+    for: "",
+    brand: "",
+    size: "",
+    madewith: "",
+    colour: "",
+    inStock: "",
+    prize: "",
+    currency: ""
+  });
+
+  useEffect(() => {
+    let formVals = Object.keys(selectedValues);
+    let val = formVals.some((values) => {
+      return !selectedValues[values];
+    });
+    !val && collectValues(selectedValues, "formData");
+  }, [selectedValues, collectValues]);
+
+  function getAllValues(val, type) {
+    setSelectedValues((prev) => {
+      return { ...prev, [type]: val };
+    });
+  }
+
+  useEffect(() => {
     let foundStyle = dropdownList.find((elem) => {
-      return elem.name === element;
+      return elem.name === selectedValues.category;
     });
     if (foundStyle) {
       setDetailDropDown({
@@ -178,96 +204,108 @@ function NewProductForm() {
         pattern: foundStyle.pattern
       });
     }
-  }
+  }, [selectedValues.category, dropdownList]);
+
   return (
     <div className="flex-1">
       <div>
         <label htmlFor="title" className="font-medium text-small">
           Product Name
         </label>
-        <Input id="title" placeholder="Name"></Input>
+        <Input
+          id="title"
+          getAllValues={getAllValues}
+          placeholder="Name"
+        ></Input>
       </div>
       <div className="flex mt-4 space-x-3">
         <div className="flex-1">
-          <WrapperDropdown title="Category">
-            <DropDown
-              dropdownList={dropdownList.map((elem) => elem.name)}
-              notifyParentForDetailDropDown={notifyParentForDetailDropDown}
-            ></DropDown>
-          </WrapperDropdown>
+          <DropDown
+            title="category"
+            getAllValues={getAllValues}
+            dropdownList={dropdownList.map((elem) => elem.name)}
+          ></DropDown>
         </div>
         <div className="w-32">
-          <WrapperDropdown title="For">
-            <DropDown dropdownList={["Mens", "Boys"]}></DropDown>
-          </WrapperDropdown>
+          <DropDown
+            title="for"
+            getAllValues={getAllValues}
+            dropdownList={["Mens", "Boys"]}
+          ></DropDown>
         </div>
       </div>
 
       <div className="mt-4">
-        <WrapperDropdown title="Brand">
-          <DropDown
-            dropdownList={[
-              "Nike",
-              "Tommy Hilfiger",
-              "H&M",
-              "Adidas",
-              "Hype",
-              "North Face",
-              "Levis",
-              "Lego",
-              "Next",
-              "Custom"
-            ]}
-          ></DropDown>
-        </WrapperDropdown>
+        <DropDown
+          title="brand"
+          getAllValues={getAllValues}
+          dropdownList={[
+            "Nike",
+            "Tommy Hilfiger",
+            "H&M",
+            "Adidas",
+            "Hype",
+            "North Face",
+            "Levis",
+            "Lego",
+            "Next",
+            "Custom"
+          ]}
+        ></DropDown>
       </div>
-      {detailDropDown && (
-        <div className="flex mt-4 space-x-3">
+
+      <div className="flex mt-4 space-x-3">
+        {detailDropDown && (
           <div className="flex-1">
-            <WrapperDropdown title="Style">
-              <DropDown
-                key={detailDropDown.id}
-                dropdownList={detailDropDown.style}
-              ></DropDown>
-            </WrapperDropdown>
+            <DropDown
+              getAllValues={getAllValues}
+              key={detailDropDown.id}
+              dropdownList={detailDropDown.style}
+              title="style"
+            ></DropDown>
           </div>
-          {detailDropDown.pattern && (
-            <div className="w-32">
-              <WrapperDropdown title="Pattern">
-                <DropDown
-                  key={detailDropDown.id}
-                  dropdownList={detailDropDown.pattern}
-                ></DropDown>
-              </WrapperDropdown>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+        {detailDropDown.pattern && (
+          <div className="w-32">
+            <DropDown
+              title="pattern"
+              getAllValues={getAllValues}
+              key={detailDropDown.id}
+              dropdownList={detailDropDown.pattern}
+            ></DropDown>
+          </div>
+        )}
+      </div>
+
       <div className="flex mt-4 space-x-3">
         <div className="flex-1">
-          <WrapperDropdown title="Size">
-            <DropDown
-              dropdownList={[
-                "x-small",
-                "small",
-                "medium",
-                "large",
-                "X-Large",
-                "XX-Large",
-                "3X-Large",
-                "4X-Large"
-              ]}
-            ></DropDown>
-          </WrapperDropdown>{" "}
+          <DropDown
+            title="size"
+            getAllValues={getAllValues}
+            dropdownList={[
+              "x-small",
+              "small",
+              "medium",
+              "large",
+              "X-Large",
+              "XX-Large",
+              "3X-Large",
+              "4X-Large"
+            ]}
+          ></DropDown>
         </div>
         <div className="w-32">
           <label htmlFor="madewith" className="font-medium text-small">
             Material
           </label>
-          <Input id="madewith" placeholder="Made With"></Input>
+          <Input
+            id="madewith"
+            getAllValues={getAllValues}
+            placeholder="Made With"
+          ></Input>
         </div>
       </div>
-      <AdditionalInfo></AdditionalInfo>
+      <AdditionalInfo getAllValues={getAllValues}></AdditionalInfo>
     </div>
   );
 }
