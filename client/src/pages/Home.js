@@ -15,7 +15,6 @@ function Home() {
   const modal = useSelector((state) => {
     return state.modal;
   });
-  console.log(modal);
   const dispatch = useDispatch();
   return (
     <>
