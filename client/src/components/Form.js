@@ -3,7 +3,7 @@ import Input from "./DashBoard/MainInfo/NewProductAdd/Input";
 
 function Form() {
   return (
-    <form>
+    <form className="">
       <div>
         <label className="font-medium text-small" htmlFor="email">
           Email Address
@@ -21,7 +21,7 @@ function Form() {
         ></Input>
       </div>
       <button
-        className=" mt-4 bg-[#FF385C] hover:shadow-sm_dark transition-all duration-300 block w-full font-bold rounded-md text-white text-small  p-2"
+        className="mt-4 bg-[#FF385C] hover:shadow-sm_dark transition-all duration-300 block hover:border-[#ffc1cc] border-[#ff385d00] border-2 w-full font-bold rounded-md text-white text-small  p-2"
         type="submit"
       >
         Login

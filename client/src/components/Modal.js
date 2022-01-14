@@ -1,11 +1,55 @@
 import React from "react";
 import Form from "./Form";
+import { IoMdClose } from "react-icons/io";
+import { closeModal } from "../store/modal";
+import { useDispatch } from "react-redux";
 
 function Modal() {
+  const dispatch = useDispatch();
+  const triggerModal = () => {
+    dispatch(closeModal());
+  };
   return (
-    <div className="fixed w-3/12 rounded-md bg-white z-50 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 p-3">
-      <div></div>
-      <Form></Form>
+    <div className="fixed animplane opacity-20 w-1/2 overflow-hidden rounded-md bg-white z-50 top-1/2 left-1/2 -translate-y-1/2 flex -translate-x-1/2 h-3/5 ">
+      <div
+        className="absolute z-50 top-2 cursor-pointer right-3"
+        onClick={() => {
+          triggerModal();
+        }}
+      >
+        <IoMdClose className="w-5 h-5"></IoMdClose>
+      </div>
+      <div className="w-1/2 relative">
+        <h3 className="absolute z-50 text-white p-4  text-4xl font-semibold">
+          Login
+        </h3>
+        <div className="absolute w-full h-full bg-[#0000001c]"></div>
+        <img
+          src="/img/login.jpeg"
+          className="w-full  h-full object-cover"
+          alt=""
+        />
+      </div>
+      <div className="flex-1 relative p-4">
+        <Form></Form>
+        <div className="text-center mt-4">
+          <div className="flex space-x-4 items-center">
+            <div className="h-[1px] w-full  bg-gray-300"></div>
+            <div className="text-small text-gray-700 text-xs my-1">OR</div>
+            <div className="h-[1px] w-full bg-gray-300"></div>
+          </div>
+          <button className="border-2 hover:border-black transition-all duration-300  w-full font-bold flex justify-center items-center space-x-2 rounded-md text-small mt-2 p-2">
+            <img className="w-6 h-5 object-cover" src="/img/glogo.png" alt="" />
+            <div>Login with Google</div>
+          </button>
+        </div>
+        <div className="text-xs text-gray-700 absolute bottom-4 left-1/2 -translate-x-1/2">
+          New to Brance?{" "}
+          <button className="text-[#FF385C] hover:text-[#ff0835]">
+            Sign up
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
