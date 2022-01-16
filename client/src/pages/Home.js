@@ -25,7 +25,7 @@ function Home() {
               onClick={() => {
                 dispatch(closeModal());
               }}
-              className=" fixed cursor-pointer w-full h-full z-50  bg-[#000000bb]"
+              className=" fixed cursor-pointer w-full h-full z-50  bg-[#000000c2]"
             ></div>
             <Modal></Modal>
           </>
