@@ -58,3 +58,7 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.card-rt {
+  transform: rotateX(360deg);
+}

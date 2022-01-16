@@ -16,6 +16,7 @@ function Home() {
     return state.modal;
   });
   const dispatch = useDispatch();
+
   return (
     <>
       <div className={`relative overflow-hidden`}>
@@ -31,7 +32,7 @@ function Home() {
           </>
         )}
         <HeaderSec></HeaderSec>
-        <Hero></Hero>
+        <Hero modalOpen={modal.modal}></Hero>
         <Banner></Banner>
         <ProductSection
           type="Trending Products"
