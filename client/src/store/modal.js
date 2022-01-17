@@ -1,9 +1,9 @@
 const OPEN_MODAL = "OPEN_MODAL";
 const CLOSE_MODAL = "CLOSE_MODAL";
 
-function modal(state = { modal: false }, action) {
+function modal(state = { modal: false, admin: false }, action) {
   if (action.type === OPEN_MODAL) {
-    return { ...state, modal: true };
+    return { ...state, modal: true, admin: action.payload };
   }
   if (action.type === CLOSE_MODAL) {
     return { ...state, modal: false };
@@ -11,8 +11,8 @@ function modal(state = { modal: false }, action) {
   return state;
 }
 
-function openModal() {
-  return { type: OPEN_MODAL };
+function openModal(data) {
+  return { type: OPEN_MODAL, payload: data };
 }
 
 function closeModal() {

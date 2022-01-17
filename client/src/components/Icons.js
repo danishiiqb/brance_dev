@@ -15,7 +15,7 @@ function Icons(props) {
         });
       }}
       onClick={() => {
-        props.openModal && props.openModal(true);
+        props.openDropDown && props.openDropDown(true);
       }}
     >
       {filledIcon ? (

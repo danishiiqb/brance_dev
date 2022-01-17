@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "./Form";
 import { IoMdClose } from "react-icons/io";
 import { closeModal } from "../store/modal";
 import { useDispatch } from "react-redux";
 import SignUpForm from "./SignUpForm";
 
-function Modal() {
+function Modal({ asAdmin }) {
   const dispatch = useDispatch();
   const [signUpForm, switchToSignUp] = useState(false);
   const triggerModal = () => {
     dispatch(closeModal());
   };
+
+  useEffect(() => {
+    asAdmin && switchToSignUp(true);
+  }, [asAdmin]);
+
   return (
-    <div className="fixed animplane opacity-20 w-1/2 overflow-hidden rounded-md bg-white z-50 top-1/2 left-1/2 -translate-y-1/2 flex -translate-x-1/2 h-3/5 ">
+    <div
+      className={`fixed animplane opacity-20 w-1/2 overflow-hidden rounded-md bg-white z-50 top-1/2  left-1/2 -translate-y-1/2 flex -translate-x-1/2 ${
+        asAdmin ? "h-max" : "h-3/5"
+      }`}
+    >
       <div
         className="absolute z-50 top-2 cursor-pointer right-3"
         onClick={() => {
@@ -21,17 +30,23 @@ function Modal() {
       >
         <IoMdClose className="w-5 h-5"></IoMdClose>
       </div>
-      <div className="w-1/2 relative">
-        <h3 className="absolute z-50  text-white p-3 bg-[#FF385C]  rounded-br-md text-3xl font-semibold">
-          {!signUpForm ? "Login" : "SignUp"}
-        </h3>
-        <div className="absolute w-full h-full bg-[#0000001c]"></div>
-        <img
-          src="/img/login.jpeg"
-          className="w-full  h-full object-cover"
-          alt=""
-        />
-      </div>
+      {asAdmin ? (
+        ""
+      ) : (
+        <div className="w-1/2 relative">
+          <h3 className="absolute z-50  text-white p-3 bg-[#FF385C]  rounded-br-md text-3xl font-semibold">
+            {!signUpForm ? "Login" : "SignUp"}
+          </h3>
+          <div className="absolute w-full h-full bg-[#0000001c]"></div>
+
+          <img
+            src="/img/login.jpeg"
+            className="w-full  h-full object-cover"
+            alt=""
+          />
+        </div>
+      )}
+
       <div className="flex-1 relative p-4">
         {!signUpForm ? (
           <>
@@ -54,23 +69,26 @@ function Modal() {
           </>
         ) : (
           <div>
-            <SignUpForm></SignUpForm>
+            <SignUpForm asAdmin></SignUpForm>
           </div>
         )}
-
-        <div className="text-xs text-gray-700 absolute bottom-4 left-1/2 -translate-x-1/2">
-          {!signUpForm ? "New to Brance? " : "Already a customer? "}
-          <button
-            onClick={() => {
-              switchToSignUp(() => {
-                return !signUpForm;
-              });
-            }}
-            className="text-[#FF385C] hover:text-[#ff0835]"
-          >
-            {!signUpForm ? "Sign up" : "Login"}
-          </button>
-        </div>
+        {asAdmin ? (
+          ""
+        ) : (
+          <div className="text-xs text-gray-700 absolute bottom-4 left-1/2 -translate-x-1/2">
+            {!signUpForm ? "New to Brance? " : "Already a customer? "}
+            <button
+              onClick={() => {
+                switchToSignUp(() => {
+                  return !signUpForm;
+                });
+              }}
+              className="text-[#FF385C] hover:text-[#ff0835]"
+            >
+              {!signUpForm ? "Sign up" : "Login"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

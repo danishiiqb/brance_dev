@@ -15,9 +15,12 @@ import { openModal } from "../store/modal";
 
 function Nav({ items, openSide, selectTab }) {
   const [width] = useWindow();
+  const [dropDown, setDropdown] = useState(false);
   const dispatch = useDispatch();
-  const triggerModal = () => {
-    dispatch(openModal());
+  const triggerDropDown = () => {
+    setDropdown((prev) => {
+      return !prev;
+    });
   };
   return (
     <>
@@ -67,11 +70,36 @@ function Nav({ items, openSide, selectTab }) {
                 id=""
               />
             </li>
-            <Icons
-              filledicon={RiUser3Fill}
-              openModal={triggerModal}
-              icon={RiUser3Line}
-            ></Icons>
+            <div className="relative">
+              <Icons
+                filledicon={RiUser3Fill}
+                openDropDown={triggerDropDown}
+                icon={RiUser3Line}
+              ></Icons>
+              {dropDown && (
+                <div className="z-50 absolute w-max  font-semibold overflow-hidden text-sm  left-0 shadow-sm_dark rounded-md top-8  bg-white">
+                  <div
+                    onClick={() => {
+                      dispatch(openModal(false));
+                      triggerDropDown();
+                    }}
+                    className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                  >
+                    SignIn/SignUp User
+                  </div>
+                  <div
+                    onClick={() => {
+                      dispatch(openModal(true));
+                      triggerDropDown();
+                    }}
+                    className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                  >
+                    SignUp Admin
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Icons filledicon={RiHeartFill} icon={RiHeartLine}></Icons>
             <Icons filledicon={IoCart} icon={IoCartOutline}></Icons>
           </ul>

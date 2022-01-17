@@ -26,9 +26,9 @@ function Home() {
               onClick={() => {
                 dispatch(closeModal());
               }}
-              className=" fixed cursor-pointer w-full h-full z-50  bg-[#000000c2]"
+              className=" fixed cursor-pointer w-full h-full z-50  bg-[#000000cc]"
             ></div>
-            <Modal></Modal>
+            <Modal asAdmin={modal.admin}></Modal>
           </>
         )}
         <HeaderSec></HeaderSec>
