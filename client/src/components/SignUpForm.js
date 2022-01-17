@@ -1,7 +1,9 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
+import { auth } from "../services/firebase";
 import Input from "./DashBoard/MainInfo/NewProductAdd/Input";
 
-function SignUpForm() {
+function SignUpForm({ asAdmin }) {
   const [formData, setFromData] = useState({
     name: "",
     email: "",
@@ -37,65 +39,102 @@ function SignUpForm() {
       setErr({ type: "Confirm Password", mssg: "Enter Matching Passwords" });
       return;
     }
+    createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    ).then((credential) => {
+      console.log(credential);
+    });
   }
   return (
     <form onSubmit={submitHandler}>
-      {err.type === "Not Entered" && (
-        <div className="text-xs text-[#FF385C] mb-2">{err.mssg}</div>
-      )}
       <div>
-        <label className="font-medium text-small" htmlFor="name">
-          Name
-        </label>
-        <Input
-          value={formData.name}
-          getAllValues={changeFormData}
-          placeholder="Enter Name"
-          id="name"
-        ></Input>
-      </div>
-      <div className="mt-3 block">
-        <label className="font-medium text-small" htmlFor="email">
-          Email Address
-        </label>
-        <Input
-          getAllValues={changeFormData}
-          placeholder="Enter Email"
-          type="email"
-          value={formData.email}
-          id="email"
-        ></Input>
-      </div>
-      <div className="mt-3 block">
-        <label className="font-medium text-small" htmlFor="password">
-          Password
-        </label>
-        <Input
-          getAllValues={changeFormData}
-          placeholder="Enter Password"
-          type="password"
-          value={formData.password}
-          id="password"
-        ></Input>
-        {err.type === "Password Err" && (
-          <div className="text-xs text-[#FF385C] mt-2">{err.mssg}</div>
+        {err.type === "Not Entered" && (
+          <div className="text-xs text-[#FF385C] mb-2">{err.mssg}</div>
         )}
+        <div>
+          <label className="font-medium text-small" htmlFor="name">
+            Name
+          </label>
+          <Input
+            value={formData.name}
+            getAllValues={changeFormData}
+            placeholder="Enter Name"
+            id="name"
+          ></Input>
+        </div>
+        <div className="mt-3 block">
+          <label className="font-medium text-small" htmlFor="email">
+            Email Address
+          </label>
+          <Input
+            getAllValues={changeFormData}
+            placeholder="Enter Email"
+            type="email"
+            value={formData.email}
+            id="email"
+          ></Input>
+        </div>
+        <div className="mt-3 block">
+          <label className="font-medium text-small" htmlFor="password">
+            Password
+          </label>
+          <Input
+            getAllValues={changeFormData}
+            placeholder="Enter Password"
+            type="password"
+            value={formData.password}
+            id="password"
+          ></Input>
+          {err.type === "Password Err" && (
+            <div className="text-xs text-[#FF385C] mt-2">{err.mssg}</div>
+          )}
+        </div>
+        <div className="mt-3 block">
+          <label className="font-medium text-small" htmlFor="conPassword">
+            Confirm Password
+          </label>
+          <Input
+            getAllValues={changeFormData}
+            placeholder="Enter Password"
+            type="password"
+            id="conPassword"
+            value={formData.conPassword}
+          ></Input>
+          {err.type === "Confirm Password" && (
+            <div className="text-xs text-[#FF385C] mt-2">{err.mssg}</div>
+          )}
+        </div>
       </div>
-      <div className="mt-3 block">
-        <label className="font-medium text-small" htmlFor="conPassword">
-          Confirm Password
-        </label>
-        <Input
-          getAllValues={changeFormData}
-          placeholder="Enter Password"
-          type="password"
-          id="conPassword"
-          value={formData.conPassword}
-        ></Input>
-        {err.type === "Confirm Password" && (
-          <div className="text-xs text-[#FF385C] mt-2">{err.mssg}</div>
-        )}
-      </div>
+      {asAdmin && (
+        <div>
+          <div className="mt-4">
+            <label className="font-medium text-small" htmlFor="address">
+              Enter Address
+            </label>
+            <Input
+              getAllValues={changeFormData}
+              placeholder="Enter Address"
+              type="text"
+              id="address"
+              value={formData.address}
+            ></Input>
+          </div>
+          <div className="mt-4">
+            <label className="font-medium text-small" htmlFor="storename">
+              Enter Store Name
+            </label>
+            <Input
+              getAllValues={changeFormData}
+              placeholder="Enter Store Name"
+              type="text"
+              id="storename"
+              value={formData.storename}
+            ></Input>
+          </div>
+        </div>
+      )}
       <button
         className="mt-4  bg-[#FF385C] hover:shadow-sm_dark transition-all duration-300 block hover:border-[#ffc1cc] border-[#ff385d00] border-2 w-full font-bold rounded-md text-white text-small  p-2"
         type="submit"
