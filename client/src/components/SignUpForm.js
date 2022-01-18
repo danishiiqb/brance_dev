@@ -4,6 +4,7 @@ import { auth } from "../services/firebase";
 import Input from "./DashBoard/MainInfo/NewProductAdd/Input";
 
 function SignUpForm({ asAdmin }) {
+  console.log(asAdmin);
   const [formData, setFromData] = useState({
     name: "",
     email: "",

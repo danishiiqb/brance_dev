@@ -11,7 +11,6 @@ function Modal({ asAdmin }) {
   const triggerModal = () => {
     dispatch(closeModal());
   };
-
   useEffect(() => {
     asAdmin && switchToSignUp(true);
   }, [asAdmin]);
@@ -69,7 +68,7 @@ function Modal({ asAdmin }) {
           </>
         ) : (
           <div>
-            <SignUpForm asAdmin></SignUpForm>
+            <SignUpForm asAdmin={asAdmin}></SignUpForm>
           </div>
         )}
         {asAdmin ? (
