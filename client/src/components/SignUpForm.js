@@ -1,15 +1,24 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { auth } from "../services/firebase";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { auth, db } from "../services/firebase";
+import { closeModal } from "../store/modal";
 import Input from "./DashBoard/MainInfo/NewProductAdd/Input";
+import { ImSpinner2 } from "react-icons/im";
 
 function SignUpForm({ asAdmin }) {
-  console.log(asAdmin);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [formData, setFromData] = useState({
     name: "",
     email: "",
     password: "",
-    conPassword: ""
+    conPassword: "",
+    storeName: "",
+    address: ""
   });
   const [err, setErr] = useState({ type: "", mssg: "" });
   function changeFormData(val, type) {
@@ -17,6 +26,21 @@ function SignUpForm({ asAdmin }) {
     setFromData((prev) => {
       return { ...prev, [type]: val };
     });
+  }
+  async function signUp() {
+    let { user } = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+    await updateProfile(user, { displayName: formData.name });
+    if (asAdmin) {
+      await setDoc(doc(db, "users", user.uid), {
+        type: "admin",
+        storeName: formData.storeName,
+        address: formData.address
+      });
+    }
   }
   function submitHandler(e) {
     e.preventDefault();
@@ -40,18 +64,24 @@ function SignUpForm({ asAdmin }) {
       setErr({ type: "Confirm Password", mssg: "Enter Matching Passwords" });
       return;
     }
-    createUserWithEmailAndPassword(
-      auth,
-      formData.email,
-      formData.password
-    ).then((credential) => {
-      console.log(credential);
-    });
+    setLoading(true);
+    signUp()
+      .then(() => {
+        dispatch(closeModal());
+        setLoading(false);
+        if (asAdmin) {
+          history.push("/admin/dashboard");
+        }
+      })
+      .catch((err) => {
+        setErr({ type: "Server Error", mssg: `${err.message}` });
+        setLoading(false);
+      });
   }
   return (
     <form onSubmit={submitHandler}>
       <div>
-        {err.type === "Not Entered" && (
+        {(err.type === "Not Entered" || err.type === "Server Error") && (
           <div className="text-xs text-[#FF385C] mb-2">{err.mssg}</div>
         )}
         <div>
@@ -123,24 +153,30 @@ function SignUpForm({ asAdmin }) {
             ></Input>
           </div>
           <div className="mt-4">
-            <label className="font-medium text-small" htmlFor="storename">
+            <label className="font-medium text-small" htmlFor="storeName">
               Enter Store Name
             </label>
             <Input
               getAllValues={changeFormData}
               placeholder="Enter Store Name"
               type="text"
-              id="storename"
-              value={formData.storename}
+              id="storeName"
+              value={formData.storeName}
             ></Input>
           </div>
         </div>
       )}
       <button
-        className="mt-4  bg-[#FF385C] hover:shadow-sm_dark transition-all duration-300 block hover:border-[#ffc1cc] border-[#ff385d00] border-2 w-full font-bold rounded-md text-white text-small  p-2"
+        disabled={loading}
+        className={`mt-4 ${
+          loading ? "bg-[#ff385de0]" : "bg-[#FF385C]"
+        }  hover:shadow-sm_dark transition-all duration-300  hover:border-[#ffc1cc] relative border-[#ff385d00] border-2 w-full font-bold rounded-md text-white text-small  p-2 flex items-center justify-center  space-x-2.5`}
         type="submit"
       >
-        Sign Up
+        {loading && (
+          <ImSpinner2 className="animate-spin w-4 h-4 -ml-2 "></ImSpinner2>
+        )}
+        <span>Sign Up</span>
       </button>
     </form>
   );
