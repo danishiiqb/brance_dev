@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { ReactComponent as Notification } from "../../../icons/notification.svg";
 import { ReactComponent as Message } from "../../../icons/message1.svg";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import Search from "./Search";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../services/firebase";
 
 function NavBar() {
   const location = useLocation();
-
+  const history = useHistory();
+  const [dropDown, setDropDown] = useState();
   return (
     <div>
       <div className="flex justify-between items-center ">
@@ -29,13 +32,48 @@ function NavBar() {
           <div className="cursor-pointer group p-2.5 transition-all duration-200 hover:bg-[#ff385d23] ">
             <Notification className="w-6 group-hover:fill-[#ff385d] group-hover:stroke-[#ff385d] fill-[#4e4e4e00] stroke-[5px] stroke-[#4e4e4e] transition-all  h-6"></Notification>
           </div>
-          <div className="cursor-pointer flex pl-2.5 items-center space-x-1 overflow-hidden">
-            <img
-              className="w-10 rounded-full border-2 transition-all duration-300  hover:border-[#ff385d] object-cover"
-              src="https://d.newsweek.com/en/full/822411/pikachu-640x360-pokemon-anime.jpg?w=1600&h=1600&q=88&f=b65592079ef009b8b80897ddb8660b29"
-              alt=""
-            />
-            <AiOutlineCaretDown></AiOutlineCaretDown>
+          <div className="relative">
+            <div
+              onClick={() => {
+                setDropDown((prev) => {
+                  return !prev;
+                });
+              }}
+              className={`cursor-pointer flex pl-2.5 items-center space-x-1 overflow-hidden pt-[1px] ${
+                dropDown ? "bg-white  drop-shadow-md rounded-t-md  " : ""
+              }   `}
+            >
+              <img
+                className={`w-10 rounded-full border-2 transition-all duration-300  hover:border-[#ff385d] ${
+                  dropDown ? "border-[#ff385d]" : ""
+                }  object-cover`}
+                src="https://d.newsweek.com/en/full/822411/pikachu-640x360-pokemon-anime.jpg?w=1600&h=1600&q=88&f=b65592079ef009b8b80897ddb8660b29"
+                alt=""
+              />
+              <AiOutlineCaretDown></AiOutlineCaretDown>
+            </div>
+            {dropDown && (
+              <div className="z-50  absolute w-max  drop-shadow-md font-semibold overflow-hidden text-sm  right-0 rounded-b-md top-full  bg-white">
+                <div
+                  className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                  onClick={() => {
+                    history.push("/admin/settings");
+                    setDropDown(false);
+                  }}
+                >
+                  Account Info
+                </div>
+                <div
+                  onClick={() => {
+                    signOut(auth);
+                    history.push("/");
+                  }}
+                  className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                >
+                  Log Out
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

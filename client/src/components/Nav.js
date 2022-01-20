@@ -112,26 +112,27 @@ function Nav({ items, openSide, selectTab }) {
                       LogOut
                     </div>
                   ) : (
-                    <div
-                      onClick={() => {
-                        dispatch(openModal(false));
-                        triggerDropDown();
-                      }}
-                      className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
-                    >
-                      SignIn/SignUp User
-                    </div>
+                    <>
+                      <div
+                        onClick={() => {
+                          dispatch(openModal(false));
+                          triggerDropDown();
+                        }}
+                        className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                      >
+                        SignIn/SignUp
+                      </div>
+                      <div
+                        onClick={() => {
+                          dispatch(openModal(true));
+                          triggerDropDown();
+                        }}
+                        className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                      >
+                        SignUp Admin
+                      </div>
+                    </>
                   )}
-
-                  <div
-                    onClick={() => {
-                      dispatch(openModal(true));
-                      triggerDropDown();
-                    }}
-                    className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
-                  >
-                    SignUp Admin
-                  </div>
                 </div>
               )}
             </div>

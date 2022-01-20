@@ -40,6 +40,10 @@ function SignUpForm({ asAdmin }) {
         storeName: formData.storeName,
         address: formData.address
       });
+    } else {
+      await setDoc(doc(db, "users", user.uid), {
+        type: "user"
+      });
     }
   }
   function submitHandler(e) {

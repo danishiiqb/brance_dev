@@ -180,11 +180,11 @@ function NewProductForm({ collectValues }) {
   });
 
   useEffect(() => {
-    let formVals = Object.keys(selectedValues);
-    let val = formVals.some((values) => {
-      return !selectedValues[values];
-    });
-    !val && collectValues(selectedValues, "formData");
+    // let formVals = Object.keys(selectedValues);
+    // let val = formVals.some((values) => {
+    //   return !selectedValues[values];
+    // });
+    collectValues(selectedValues, "formData");
   }, [selectedValues, collectValues]);
 
   function getAllValues(val, type) {
@@ -213,6 +213,7 @@ function NewProductForm({ collectValues }) {
           Product Name
         </label>
         <Input
+          value={selectedValues.title}
           id="title"
           getAllValues={getAllValues}
           placeholder="Name"
@@ -299,13 +300,21 @@ function NewProductForm({ collectValues }) {
             Material
           </label>
           <Input
+            value={selectedValues.madewith}
             id="madewith"
             getAllValues={getAllValues}
             placeholder="Made With"
           ></Input>
         </div>
       </div>
-      <AdditionalInfo getAllValues={getAllValues}></AdditionalInfo>
+      <AdditionalInfo
+        getAllValues={getAllValues}
+        values={{
+          colour: selectedValues.colour,
+          inStock: selectedValues.inStock,
+          prize: selectedValues.prize
+        }}
+      ></AdditionalInfo>
     </div>
   );
 }

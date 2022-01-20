@@ -2,7 +2,7 @@ import React from "react";
 import DropDown from "./DropDown";
 import Input from "./Input";
 
-function AdditionalInfo({ getAllValues }) {
+function AdditionalInfo({ getAllValues, values }) {
   return (
     <div className="mt-4">
       <div className="flex space-x-3">
@@ -11,6 +11,7 @@ function AdditionalInfo({ getAllValues }) {
             Colour
           </label>
           <Input
+            value={values.colour}
             placeholder="Colour"
             getAllValues={getAllValues}
             id="colour"
@@ -22,6 +23,7 @@ function AdditionalInfo({ getAllValues }) {
           </label>
           <div className="w-32">
             <Input
+              value={values.inStock}
               getAllValues={getAllValues}
               type="Number"
               placeholder="In Stock"
@@ -36,6 +38,7 @@ function AdditionalInfo({ getAllValues }) {
         </label>
         <div className="flex space-x-3">
           <Input
+            value={values.prize}
             type="Number"
             getAllValues={getAllValues}
             placeholder="Prize"
