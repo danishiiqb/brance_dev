@@ -9,7 +9,13 @@ function AddNewProduct() {
   const collectValues = useCallback((val, type) => {
     if (type === "IMG_UPLOAD") {
       setFormData((prev) => {
-        return { ...prev, images: [...prev.images, val] };
+        return {
+          ...prev,
+          images: [
+            ...prev.images,
+            new File([val], val.name, { type: val.type })
+          ]
+        };
       });
       return;
     }
