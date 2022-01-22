@@ -16,7 +16,6 @@ function ImageUploadBlock({ midSize, count, collectValues }) {
     if (!file || file.length === 0 || file[0].size > 10524814) {
       return;
     }
-    console.log(file[0]);
     const previewFile = URL.createObjectURL(file[0]);
     setImg(previewFile);
     collectValues(file[0], "IMG_UPLOAD");

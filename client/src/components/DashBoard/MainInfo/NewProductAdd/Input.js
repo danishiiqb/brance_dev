@@ -1,7 +1,6 @@
 import React from "react";
 
 function Input({ getAllValues = null, value, placeholder, id, type = "text" }) {
-  console.log(value);
   return (
     <input
       onChange={(e) => {

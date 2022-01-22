@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { ImSpinner2 } from "react-icons/im";
 
-function SubmitButtons({ formData }) {
+function SubmitButtons({ formData, setMssg }) {
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => {
@@ -24,6 +24,7 @@ function SubmitButtons({ formData }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [save]);
+
   async function addNewItem(link) {
     await setDoc(doc(db, "users", user.uid, "products", uuidv4()), {
       ...formData.formData,
@@ -42,6 +43,7 @@ function SubmitButtons({ formData }) {
     const picUrl = await getDownloadURL(fileRef);
     return picUrl;
   }
+
   return (
     <div className="mt-4  absolute bottom-[17.28px] flex space-x-3 right-[17.28px] ">
       <button
@@ -66,6 +68,12 @@ function SubmitButtons({ formData }) {
               .catch((err) => {
                 console.log(err.message);
               });
+            return;
+          }
+          if (eachVal || !formData.desc) {
+            setMssg("Enter All Fields");
+          } else if (formData.images.length === 0) {
+            setMssg("Select at least one image");
           }
         }}
         className={`bg-[#FF385C] hover:shadow-sm_dark  transition-all duration-300 text-small ${
