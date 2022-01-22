@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 import { db, storage } from "../../../../services/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { ImSpinner2 } from "react-icons/im";
 
 function SubmitButtons({ formData }) {
   const [save, setSave] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => {
     return state.user;
   });
@@ -25,12 +27,12 @@ function SubmitButtons({ formData }) {
   async function addNewItem(link) {
     await setDoc(doc(db, "users", user.uid, "products", uuidv4()), {
       ...formData.formData,
-      productImg: link,
+      productImg: [...link],
       description: formData.desc,
       createdAt: serverTimestamp()
     });
   }
-  async function uploadImageToStorageBucket(file) {
+  async function uploadImageAddItem(file) {
     let name = file.name.split(".");
     const fileRef = ref(
       storage,
@@ -38,10 +40,10 @@ function SubmitButtons({ formData }) {
     );
     const snap = await uploadBytes(fileRef, file);
     const picUrl = await getDownloadURL(fileRef);
-    addNewItem(picUrl);
+    return picUrl;
   }
   return (
-    <div className="mt-4  absolute bottom-[17.28px] right-[17.28px] space-x-3">
+    <div className="mt-4  absolute bottom-[17.28px] flex space-x-3 right-[17.28px] ">
       <button
         onClick={() => {
           let keys = Object.keys(formData.formData);
@@ -49,18 +51,34 @@ function SubmitButtons({ formData }) {
             return !formData.formData[key];
           });
           if (!eachVal && formData.desc && formData.images.length > 0) {
+            setLoading(true);
+            let promiseArr = [];
             formData.images.forEach((file) => {
-              uploadImageToStorageBucket(file);
+              promiseArr.push(uploadImageAddItem(file));
             });
-
-            // addNewItem();
+            Promise.all(promiseArr)
+              .then((res) => {
+                return addNewItem(res);
+              })
+              .then((_) => {
+                setLoading(false);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
           }
         }}
-        className="bg-[#FF385C] hover:shadow-sm_dark  transition-all duration-300 text-small border-[#FF385C] border-[.5px] font-medium text-white p-2 px-3 rounded-sm"
+        className={`bg-[#FF385C] hover:shadow-sm_dark  transition-all duration-300 text-small ${
+          loading ? "bg-[#ff385d8c]" : "bg-[#FF385C]"
+        } border-[#FF385C] border-[.5px] flex items-center justify-center   font-medium text-white p-2 px-3 rounded-sm`}
       >
-        Add Product
+        {loading && (
+          <ImSpinner2 className="animate-spin mr-1.5 w-4 h-4 -ml-2 "></ImSpinner2>
+        )}
+        <div>Add Product</div>
       </button>
       <button
+        disabled={loading}
         className="border-[#FF385C] border-[.5px] hover:shadow-sm_dark  transition-all duration-300 text-small text-[#FF385C] font-medium  p-2 px-3 rounded-sm"
         onClick={() => {
           setSave(true);
