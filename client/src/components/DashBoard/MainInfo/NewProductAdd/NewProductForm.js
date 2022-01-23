@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import AdditionalInfo from "./AdditionalInfo";
 import Input from "./Input";
 
-function NewProductForm({ collectValues }) {
+function NewProductForm({ collectValues, clear }) {
   const { current: dropdownList } = useRef([
     {
       id: uuidv4(),
@@ -166,6 +166,7 @@ function NewProductForm({ collectValues }) {
     }
   ]);
   let [detailDropDown, setDetailDropDown] = useState("");
+  const [def, setDefault] = useState(false);
   let [selectedValues, setSelectedValues] = useState({
     title: "",
     category: "",
@@ -180,10 +181,20 @@ function NewProductForm({ collectValues }) {
   });
 
   useEffect(() => {
-    // let formVals = Object.keys(selectedValues);
-    // let val = formVals.some((values) => {
-    //   return !selectedValues[values];
-    // });
+    if (clear) {
+      let keys = Object.keys(selectedValues);
+      let newSelectedVal = {};
+      keys.forEach((key) => {
+        if (key) newSelectedVal[key] = "";
+      });
+      setSelectedValues({ ...newSelectedVal });
+      setDefault(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clear]);
+
+  useEffect(() => {
+    setDefault(false);
     collectValues(selectedValues, "formData");
   }, [selectedValues, collectValues]);
 
@@ -222,6 +233,7 @@ function NewProductForm({ collectValues }) {
       <div className="flex mt-4 space-x-3">
         <div className="flex-1">
           <DropDown
+            def={def}
             title="category"
             getAllValues={getAllValues}
             dropdownList={dropdownList.map((elem) => elem.name)}
@@ -229,6 +241,7 @@ function NewProductForm({ collectValues }) {
         </div>
         <div className="w-32">
           <DropDown
+            def={def}
             title="for"
             getAllValues={getAllValues}
             dropdownList={["Mens", "Boys"]}
@@ -239,6 +252,7 @@ function NewProductForm({ collectValues }) {
       <div className="mt-4">
         <DropDown
           title="brand"
+          def={def}
           getAllValues={getAllValues}
           dropdownList={[
             "Nike",
@@ -259,6 +273,7 @@ function NewProductForm({ collectValues }) {
         {detailDropDown && (
           <div className="flex-1">
             <DropDown
+              def={def}
               getAllValues={getAllValues}
               key={detailDropDown.id}
               dropdownList={detailDropDown.style}
@@ -269,6 +284,7 @@ function NewProductForm({ collectValues }) {
         {detailDropDown.pattern && (
           <div className="w-32">
             <DropDown
+              def={def}
               title="pattern"
               getAllValues={getAllValues}
               key={detailDropDown.id}
@@ -281,7 +297,9 @@ function NewProductForm({ collectValues }) {
       <div className="flex mt-4 space-x-3">
         <div className="flex-1">
           <DropDown
+            multiple
             title="size"
+            def={def}
             getAllValues={getAllValues}
             dropdownList={[
               "x-small",
@@ -308,6 +326,7 @@ function NewProductForm({ collectValues }) {
         </div>
       </div>
       <AdditionalInfo
+        def={def}
         getAllValues={getAllValues}
         values={{
           colour: selectedValues.colour,

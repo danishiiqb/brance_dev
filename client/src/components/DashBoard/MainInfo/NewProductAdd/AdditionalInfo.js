@@ -2,7 +2,7 @@ import React from "react";
 import DropDown from "./DropDown";
 import Input from "./Input";
 
-function AdditionalInfo({ getAllValues, values }) {
+function AdditionalInfo({ getAllValues, values, def }) {
   return (
     <div className="mt-4">
       <div className="flex space-x-3">
@@ -46,6 +46,7 @@ function AdditionalInfo({ getAllValues, values }) {
           ></Input>
           <div className="">
             <DropDown
+              def={def}
               title="currency"
               getAllValues={getAllValues}
               dropdownList={["USD", "EUR", "GBP", "INR"]}

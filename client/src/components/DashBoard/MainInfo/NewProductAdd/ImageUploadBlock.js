@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoImageOutline } from "react-icons/io5";
 
-function ImageUploadBlock({ midSize, count, collectValues }) {
+function ImageUploadBlock({ setMssg, clear, midSize, count, collectValues }) {
   const [selectedImage, setImg] = useState("");
   useEffect(() => {
     return () => {
@@ -11,9 +11,19 @@ function ImageUploadBlock({ midSize, count, collectValues }) {
     };
   }, [selectedImage]);
 
+  useEffect(() => {
+    if (clear && selectedImage) {
+      URL.revokeObjectURL(selectedImage);
+      setImg("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clear]);
+
   const handleChange = (e) => {
     let file = e.target.files;
+
     if (!file || file.length === 0 || file[0].size > 10524814) {
+      setMssg("File size should not be larger than 10mb");
       return;
     }
     const previewFile = URL.createObjectURL(file[0]);
@@ -29,7 +39,7 @@ function ImageUploadBlock({ midSize, count, collectValues }) {
       ></label>
       {selectedImage && (
         <img
-          className="absolute rounded-md  top-0 z-50 object-cover cursor-pointer left-0 w-full h-full"
+          className="absolute rounded-md top-0 z-50 object-cover cursor-pointer left-0 w-full h-full"
           src={selectedImage}
           alt=""
         />
