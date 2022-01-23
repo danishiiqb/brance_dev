@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { ImSpinner2 } from "react-icons/im";
 
-function SubmitButtons({ formData, setMssg }) {
+function SubmitButtons({ formData, setMssg, clearForm }) {
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => {
@@ -64,6 +64,7 @@ function SubmitButtons({ formData, setMssg }) {
               })
               .then((_) => {
                 setLoading(false);
+                clearForm(true);
               })
               .catch((err) => {
                 console.log(err.message);
