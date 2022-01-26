@@ -1,15 +1,19 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { tableHeaderSortingReducer } from "./tableHeaderSortingReducer";
 import { modal } from "./modal";
 import { userAuthentication } from "./userAuth";
+import { products } from "./products";
+import thunk from "redux-thunk";
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   combineReducers({
     tableHeaderSorting: tableHeaderSortingReducer,
     modal,
-    user: userAuthentication
+    user: userAuthentication,
+    products: products
   }),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;

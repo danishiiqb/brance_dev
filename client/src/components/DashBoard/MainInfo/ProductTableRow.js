@@ -3,9 +3,24 @@ import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
 import Info from "./Info";
 
-function ProductTableRow({ Id, setActionWithId, tableData, type }) {
+function ProductTableRow({ setActionWithId, tableData, type }) {
+  function convertDate(sec) {
+    let date = new Date(sec * 1000);
+    return `${date.getUTCDate()}/${
+      date.getMonth() + 1 > 9
+        ? `${date.getMonth() + 1}`
+        : `0${date.getMonth() + 1}`
+    }/${date.getUTCFullYear()}`;
+  }
+
   function setAction(type) {
-    setActionWithId({ type, Id });
+    setActionWithId({ type, id: tableData.id });
+  }
+  function shortenTitle(title) {
+    if (title.length >= 25) {
+      return `${title.substr(0, 25)}...`;
+    }
+    return title;
   }
   return (
     <TableRow>
@@ -13,17 +28,20 @@ function ProductTableRow({ Id, setActionWithId, tableData, type }) {
         <div className="flex items-center  space-x-3">
           <img
             className="w-12 h-12 object-cover rounded-md"
-            src={tableData.img}
+            src={tableData.productImg[0]}
             alt=""
           />
-          <div>{tableData.name}</div>
+          <div className=" capitalize">{shortenTitle(tableData.title)}</div>
         </div>
       </TableData>
-      <TableData>Hoodies & SweatShirts</TableData>
-      <TableData>08/07/22</TableData>
-      <TableData>{tableData.price}.00</TableData>
+      <TableData>{tableData.category}</TableData>
+      <TableData>{convertDate(tableData.createdAt.seconds)}</TableData>
+      <TableData>
+        {tableData.currency === "USD" ? "$" : ""}
+        {tableData.prize}
+      </TableData>
       <TableData>{tableData.inStock}</TableData>
-      <TableData>{tableData.sold}</TableData>
+      <TableData>{245}</TableData>
       <TableData>
         <div className="font-medium">{tableData.revenue}.00</div>
       </TableData>

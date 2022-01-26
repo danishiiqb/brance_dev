@@ -6,10 +6,14 @@ import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow";
 import Search from "../../components/DashBoard/MainInfo/Search";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
+import { getProductsData } from "../../store/products";
 import { reset } from "../../store/tableHeaderSortingReducer";
 
 function Products() {
-  const [data, setData] = useState([]);
+  const { user, products } = useSelector((state) => {
+    return { user: state.user, products: state.products };
+  });
+  console.log(products);
   function setActionWithId(obj) {
     console.log(obj);
   }
@@ -17,6 +21,12 @@ function Products() {
     return state.tableHeaderSorting;
   });
   const dispatcher = useDispatch();
+
+  useEffect(() => {
+    if (user.user && user.user.type === "admin")
+      dispatcher(getProductsData(user.user.uid));
+  }, [dispatcher, user.user]);
+
   useEffect(() => {
     dispatcher(reset());
   }, [dispatcher]);
@@ -54,12 +64,11 @@ function Products() {
               }
             ]}
           ></TableHeaderRow>
-          {data.map((tableData, idx) => {
+          {products.products.map((tableData, idx) => {
             return (
               <ProductTableRow
-                Id="678"
                 setActionWithId={setActionWithId}
-                type="transaction"
+                type="products"
                 key={idx}
                 tableData={tableData}
               ></ProductTableRow>
