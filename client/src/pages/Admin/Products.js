@@ -9,53 +9,7 @@ import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
 import { reset } from "../../store/tableHeaderSortingReducer";
 
 function Products() {
-  const [data, setData] = useState([
-    {
-      name: "DESIGN oversized sweatshirt in white",
-      img: "/img/product.png",
-      category: "Jackets",
-      price: "$56",
-      revenue: "$3400",
-      inStock: 67,
-      sold: 34
-    },
-    {
-      name: "Air Jordan 5 Retro",
-      img: "/img/product.png",
-      category: "Jackets",
-      price: "$56",
-      revenue: "$3400",
-      inStock: 67,
-      sold: 34
-    },
-    {
-      name: "Air Jordan 5 Retro",
-      img: "/img/product.png",
-      category: "Jackets",
-      price: "$56",
-      revenue: "$3400",
-      inStock: 67,
-      sold: 34
-    },
-    {
-      name: "Air Jordan 5 Retro",
-      img: "/img/product.png",
-      category: "Jackets",
-      price: "$56",
-      revenue: "$3400",
-      inStock: 67,
-      sold: 34
-    },
-    {
-      name: "Air Jordan 5 Retro",
-      img: "/img/product.png",
-      category: "Jackets",
-      price: "$56",
-      revenue: "$3400",
-      inStock: 67,
-      sold: 34
-    }
-  ]);
+  const [data, setData] = useState([]);
   function setActionWithId(obj) {
     console.log(obj);
   }

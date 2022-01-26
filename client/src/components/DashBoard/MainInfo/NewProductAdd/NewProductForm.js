@@ -259,11 +259,12 @@ function NewProductForm({ collectValues, clear }) {
             "Tommy Hilfiger",
             "H&M",
             "Adidas",
-            "Hype",
+            "Gap",
             "North Face",
             "Levis",
-            "Lego",
+            "Zara",
             "Next",
+            "Urban Outfitters",
             "Custom"
           ]}
         ></DropDown>

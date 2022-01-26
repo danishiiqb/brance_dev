@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import useAuth from "./hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { logInUser, logOutUser } from "./store/userAuth";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const [user] = useAuth();
@@ -29,6 +30,9 @@ function App() {
         <Switch>
           <Route path="/" exact>
             <Home></Home>
+          </Route>
+          <Route path="/reset-password">
+            <ResetPassword></ResetPassword>
           </Route>
           <Route path="/admin">
             <AdminHome></AdminHome>

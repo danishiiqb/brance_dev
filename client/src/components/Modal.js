@@ -4,6 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { closeModal } from "../store/modal";
 import { useDispatch } from "react-redux";
 import SignUpForm from "./SignUpForm";
+import { Link } from "react-router-dom";
 
 function Modal({ asAdmin }) {
   const dispatch = useDispatch();
@@ -65,6 +66,12 @@ function Modal({ asAdmin }) {
                 <div>Login with Google</div>
               </button>
             </div>
+            <Link
+              to="/reset-password"
+              className="text-[10px] block text-[#FF385C] cursor-pointer mt-2  text-center"
+            >
+              Forgot Password?
+            </Link>
           </>
         ) : (
           <div>

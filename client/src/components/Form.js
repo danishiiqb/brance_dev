@@ -70,6 +70,7 @@ function Form() {
           id="email"
         ></Input>
       </div>
+
       <div className="mt-3">
         <label className="font-medium text-small" htmlFor="password">
           Password
@@ -82,6 +83,7 @@ function Form() {
           id="password"
         ></Input>
       </div>
+
       <button
         disabled={loading}
         className={`mt-4 ${
