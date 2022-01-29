@@ -31,7 +31,7 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
             src={tableData.productImg[0]}
             alt=""
           />
-          <div className=" capitalize">{shortenTitle(tableData.title)}</div>
+          <div className="capitalize">{shortenTitle(tableData.title)}</div>
         </div>
       </TableData>
       <TableData>{tableData.category}</TableData>
