@@ -1,45 +1,64 @@
-const ASCENDING = "ascending";
-const DESCENDING = "descending";
-const RESET = "reset";
 function tableHeaderSortingReducer(
   state = {
-    date: "desc",
-    price: "desc",
-    status: "desc",
-    stock: "desc",
-    sold: "desc",
-    revenue: "desc"
+    sortElemName: "",
+    order: "",
+    modifiedArr: []
   },
   action
 ) {
-  if (action.type === ASCENDING) {
-    return { ...state, [action.payload]: "asc" };
+  if (action.type === "SORT") {
+    const [sortElemName, order] = action.payload;
+    return { ...state, sortElemName, order };
   }
-  if (action.type === DESCENDING) {
-    return { ...state, [action.payload]: "desc" };
-  }
-  if (action.type === RESET) {
-    let resetState = {};
-    Object.entries(state).forEach(([key, value]) => {
-      resetState[key] = value === "asc" ? "desc" : value;
+  if (action.type === "PRICE") {
+    let sortedProducts = [...action.elements].sort((a, b) => {
+      return state.order === "asc" ? a.prize - b.prize : b.prize - a.prize;
     });
-    return resetState;
+    return { ...state, modifiedArr: sortedProducts };
+  }
+  if (action.type === "STOCK") {
+    let sortedProducts = [...action.elements].sort((a, b) => {
+      return state.order === "asc"
+        ? a.inStock - b.inStock
+        : b.inStock - a.inStock;
+    });
+    return { ...state, modifiedArr: sortedProducts };
+  }
+  if (action.type === "SOLD") {
+    let sortedProducts = [...action.elements].sort((a, b) => {
+      return state.order === "asc" ? a.sold - b.sold : b.sold - a.sold;
+    });
+    return { ...state, modifiedArr: sortedProducts };
+  }
+  if (action.type === "DATE") {
+    let sortedProducts = [...action.elements].sort((a, b) => {
+      return state.order === "asc"
+        ? a.createdAt.seconds - b.createdAt.seconds
+        : b.createdAt.seconds - a.createdAt.seconds;
+    });
+    return { ...state, modifiedArr: sortedProducts };
+  }
+  if (action.type === "RESET") {
+    return { sortElemName: "", order: "", modifiedArr: [] };
   }
   return state;
 }
 
-function activateAscending(key) {
-  return { type: ASCENDING, payload: key };
+const sortBy = (...element) => {
+  return { type: "SORT", payload: element };
+};
+const sortByType = (elements, type) => {
+  return { type, elements };
+};
+
+function resettableHeader() {
+  return { type: "RESET" };
 }
-function activateDescending(key) {
-  return { type: DESCENDING, payload: key };
-}
-function reset() {
-  return { type: RESET };
-}
+function reset() {}
 export {
   tableHeaderSortingReducer,
+  resettableHeader,
   reset,
-  activateAscending,
-  activateDescending
+  sortBy,
+  sortByType
 };
