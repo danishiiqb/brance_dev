@@ -2,10 +2,10 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
 
 function products(state = { products: [], message: "" }, action) {
-  if (action.type === "UPDATE_DATA") {
+  if (action.type === "GET_DATA") {
     return { ...state, message: "", products: [...action.payload] };
   }
-  if (action.type === "UPDATE_SORT") {
+  if (action.type === "UPDATE_PRODUCT") {
     return { ...state, message: "", products: [...action.payload] };
   }
   if (action.type === "ERROR") {
@@ -17,8 +17,8 @@ function products(state = { products: [], message: "" }, action) {
   return state;
 }
 
-const sortedProduct = (elem) => {
-  return { type: "UPDATE_SORT", payload: elem };
+const updateProduct = (elem) => {
+  return { type: "UPDATE_PRODUCT", payload: elem };
 };
 
 const getProductsData = (id) => {
@@ -27,7 +27,7 @@ const getProductsData = (id) => {
       const subCollectionRef = await collection(db, "users", id, "products");
       const docsSnap = await getDocs(subCollectionRef);
       let docs = docsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      dispatch({ type: "UPDATE_DATA", payload: docs });
+      dispatch({ type: "GET_DATA", payload: docs });
     } catch (err) {
       dispatch({ type: "ERROR", payload: err.message });
     }
@@ -38,4 +38,4 @@ const resetProducts = () => {
   return { type: "RESET" };
 };
 
-export { getProductsData, resetProducts, products, sortedProduct };
+export { getProductsData, resetProducts, products, updateProduct };
