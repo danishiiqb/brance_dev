@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,10 +7,11 @@ import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow";
 import Search from "../../components/DashBoard/MainInfo/Search";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
+import { filterCategory } from "../../store/filteredData";
 import {
   getProductsData,
   resetProducts,
-  sortedProduct
+  updateProduct
 } from "../../store/products";
 import {
   resettableHeader,
@@ -18,13 +19,17 @@ import {
 } from "../../store/tableHeaderSortingReducer";
 
 function Products() {
-  const { user, products, tableHeaderSorting } = useSelector((state) => {
-    return {
-      user: state.user,
-      products: state.products,
-      tableHeaderSorting: state.tableHeaderSorting
-    };
-  });
+  const { user, products, tableHeaderSorting, filteredData } = useSelector(
+    (state) => {
+      return {
+        user: state.user,
+        filteredData: state.filteredData,
+        products: state.products,
+        tableHeaderSorting: state.tableHeaderSorting
+      };
+    }
+  );
+  const referProducts = useRef(null);
   const dispatcher = useDispatch();
 
   const [currPage, setCurrPage] = useState(1);
@@ -38,7 +43,7 @@ function Products() {
       return type === "forward" ? prev + 1 : prev - 1;
     });
   }
-  console.log(products);
+
   function pagination(page) {
     let start = (page - 1) * 8;
     let end = 8 * page;
@@ -54,7 +59,7 @@ function Products() {
 
   useEffect(() => {
     if (tableHeaderSorting.modifiedArr.length > 0) {
-      dispatcher(sortedProduct(tableHeaderSorting.modifiedArr));
+      dispatcher(updateProduct(tableHeaderSorting.modifiedArr));
     }
   }, [tableHeaderSorting, dispatcher]);
 
@@ -74,14 +79,36 @@ function Products() {
     if (user.user && user.user.type === "admin")
       dispatcher(getProductsData(user.user.uid));
   }, [dispatcher, user.user]);
+  useEffect(() => {
+    if (products.products.length > 0 && !referProducts.current) {
+      referProducts.current = [...products.products];
+    }
+  }, [products]);
 
+  useEffect(() => {
+    if (filteredData.length > 0) {
+      dispatcher(updateProduct(filteredData));
+    }
+  }, [filteredData, dispatcher]);
+
+  function filterByDate(start, end) {
+    // dispatcher()
+  }
+
+  function filterByCategory(type) {
+    dispatcher(filterCategory({ type, elementsArr: referProducts.current }));
+  }
   return (
     <div className={`h-panel `}>
       <div
-        className={`bg-white  relative h-full shadow-sm_dark rounded-md mt-6 p-small`}
+        className={`bg-white  relative  h-full shadow-sm_dark rounded-md mt-6 p-small`}
       >
         <div className="px-1.5 flex items-center justify-between">
-          <Filter type="products"></Filter>
+          <Filter
+            filterByDate={filterByDate}
+            filterByCategory={filterByCategory}
+            type="products"
+          ></Filter>
           <Search></Search>
         </div>
 
@@ -132,6 +159,7 @@ function Products() {
             <ImSpinner2 className="animate-spin fill-current text-[#FF385C] w-16 h-16"></ImSpinner2>
           </div>
         )}
+
         <PaginationBtns
           forwardDisable={8 * currPage >= products.products.length}
           backBtn={currPage === 1 ? true : false}
