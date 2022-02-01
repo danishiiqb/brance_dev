@@ -11,7 +11,7 @@ import gsap from "gsap/all";
 import { DateRangePicker } from "react-date-range";
 
 let state = false;
-function Filter({ type }) {
+function Filter({ type, filterByDate, filterByCategory }) {
   const [openFilters, setFilterStatus] = useState(false);
   const [dropDownMenuItems, showDropdownMenuItems] = useState({
     date: false,
@@ -26,7 +26,7 @@ function Filter({ type }) {
     "Rejected",
     "On Hold"
   ]);
-  const { current: orderTypes } = useRef([
+  const { current: productTypes } = useRef([
     "Jacket & Coats",
     "Hoodies & SweatShirts",
     "Tshirts & Polos",
@@ -39,10 +39,12 @@ function Filter({ type }) {
     "Sets & OutFits",
     "Jumpers & KnitWear"
   ]);
-  const [filterData, setfilterData] = useState({
-    [type !== "products" ? "orderType" : "productType"]: null,
-    orderStatus: null
-  });
+
+  const [productCat, setProductCat] = useState(null);
+  // const [filterData, setfilterData] = useState({
+  //   [type !== "products" ? "orderType" : "productType"]: null
+  //   // orderStatus: null
+  // });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const selectionRange = {
@@ -50,6 +52,13 @@ function Filter({ type }) {
     endDate: endDate,
     key: "selection"
   };
+
+  useEffect(() => {
+    if (productCat) filterByCategory(productCat);
+  }, [productCat]);
+  useEffect(() => {
+    if (endDate || startDate) filterByDate(startDate, endDate, productCat);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     if (openFilters) {
@@ -124,7 +133,7 @@ function Filter({ type }) {
               </div>
 
               {dropDownMenuItems.date && (
-                <div className="absolute z-50 dropdown h-0 w-max shadow-sm rounded-b-md overflow-hidden top-full -left-1">
+                <div className="absolute z-auto dropdown h-0 w-max shadow-sm rounded-b-md overflow-hidden top-full -left-1">
                   <DateRangePicker
                     color="#ff385d"
                     onChange={handleDateSelect}
@@ -152,18 +161,19 @@ function Filter({ type }) {
                 </div>
                 {dropDownMenuItems.orderType && (
                   <div className="absolute w-max overflow-hidden h-0 shadow-sm dropdown bg-gray-100 rounded-b-md top-full -left-1 ">
-                    {orderTypes.map((orderType, idx) => {
+                    {productTypes.map((productType, idx) => {
                       return (
                         <div
                           onClick={() => {
-                            setfilterData((prev) => {
-                              return { ...prev, orderType: orderType };
+                            setProductCat(productType);
+                            showDropdownMenuItems((prev) => {
+                              return { ...prev, orderType: !prev.orderType };
                             });
                           }}
                           key={idx}
                           className="p-2.5 dropdown-items opacity-0  hover:bg-gray-200 transition-all duration-150"
                         >
-                          {orderType.trim()}
+                          {productType.trim()}
                         </div>
                       );
                     })}
@@ -194,11 +204,11 @@ function Filter({ type }) {
                     {orderStatusDta.map((type, idx) => {
                       return (
                         <div
-                          onClick={() => {
-                            setfilterData((prev) => {
-                              return { ...prev, orderStatus: type };
-                            });
-                          }}
+                          // onClick={() => {
+                          //   setfilterData((prev) => {
+                          //     return { ...prev, orderStatus: type };
+                          //   });
+                          // }}
                           key={idx}
                           className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
                         >
@@ -212,9 +222,9 @@ function Filter({ type }) {
             )}
 
             <div
-              onClick={() => {
-                setfilterData({ orderStatus: "", orderType: "" });
-              }}
+              // onClick={() => {
+              //   setfilterData({ orderStatus: "", orderType: "" });
+              // }}
               className="p-2.5 flex  -translate-x-28  opacity-0 items-animate  items-center text-[#ff385d] space-x-2"
             >
               <IoReload></IoReload>
