@@ -13,6 +13,7 @@ import { DateRangePicker } from "react-date-range";
 let state = false;
 function Filter({ type, filterByDate, filterByCategory }) {
   const [openFilters, setFilterStatus] = useState(false);
+  let firstRender = useRef(false);
   const [dropDownMenuItems, showDropdownMenuItems] = useState({
     date: false,
     orderStatus: false,
@@ -57,7 +58,11 @@ function Filter({ type, filterByDate, filterByCategory }) {
     if (productCat) filterByCategory(productCat);
   }, [productCat]);
   useEffect(() => {
-    if (endDate || startDate) filterByDate(startDate, endDate, productCat);
+    if (firstRender.current) {
+      if (endDate || startDate) filterByDate(startDate, endDate, productCat);
+    }
+    firstRender.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
   useEffect(() => {

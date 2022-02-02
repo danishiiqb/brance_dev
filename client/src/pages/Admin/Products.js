@@ -7,7 +7,7 @@ import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow";
 import Search from "../../components/DashBoard/MainInfo/Search";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
-import { filterCategory } from "../../store/filteredData";
+import { filterCategory, filterDate } from "../../store/filteredData";
 import {
   getProductsData,
   resetProducts,
@@ -79,6 +79,7 @@ function Products() {
     if (user.user && user.user.type === "admin")
       dispatcher(getProductsData(user.user.uid));
   }, [dispatcher, user.user]);
+
   useEffect(() => {
     if (products.products.length > 0 && !referProducts.current) {
       referProducts.current = [...products.products];
@@ -92,7 +93,7 @@ function Products() {
   }, [filteredData, dispatcher]);
 
   function filterByDate(start, end) {
-    // dispatcher()
+    dispatcher(filterDate({ start, end, elementsArr: referProducts.current }));
   }
 
   function filterByCategory(type) {
