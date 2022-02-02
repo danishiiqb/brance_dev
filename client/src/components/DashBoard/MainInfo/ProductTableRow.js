@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
 import Info from "./Info";
 
 function ProductTableRow({ setActionWithId, tableData, type }) {
+  const [load, setLoad] = useState(false);
   function convertDate(sec) {
     let date = new Date(sec * 1000);
     return `${date.getUTCDate()}/${
@@ -27,7 +28,12 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
       <TableData>
         <div className="flex items-center  space-x-3">
           <img
-            className="w-12 h-12 object-cover rounded-md"
+            onLoad={() => {
+              setLoad(true);
+            }}
+            className={`w-12 h-12 ${
+              !load ? "blur-sm bg-[#f3f3f3]" : ""
+            } object-cover rounded-md`}
             src={tableData.productImg[0]}
             alt=""
           />

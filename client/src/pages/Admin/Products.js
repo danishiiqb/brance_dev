@@ -87,8 +87,21 @@ function Products() {
   }, [products]);
 
   useEffect(() => {
-    if (filteredData.length > 0) {
-      dispatcher(updateProduct(filteredData));
+    if (referProducts.current) {
+      setCurrPage(1);
+      if (
+        typeof filteredData === "object" &&
+        !Array.isArray(filteredData) &&
+        filteredData !== null
+      ) {
+        dispatcher(updateProduct(referProducts.current));
+      } else {
+        if (filteredData.length > 0) {
+          dispatcher(updateProduct(filteredData));
+        } else if (filteredData.length === 0) {
+          dispatcher({ type: "ERROR", payload: "No Products found" });
+        }
+      }
     }
   }, [filteredData, dispatcher]);
 
@@ -100,7 +113,7 @@ function Products() {
     dispatcher(filterCategory({ type, elementsArr: referProducts.current }));
   }
   return (
-    <div className={`h-panel `}>
+    <div className={`h-panel`}>
       <div
         className={`bg-white  relative  h-full shadow-sm_dark rounded-md mt-6 p-small`}
       >
@@ -144,7 +157,7 @@ function Products() {
                   <ProductTableRow
                     setActionWithId={setActionWithId}
                     type="products"
-                    key={idx}
+                    key={tableData.id}
                     tableData={tableData}
                   ></ProductTableRow>
                 );

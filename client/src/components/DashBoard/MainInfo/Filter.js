@@ -9,6 +9,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import gsap from "gsap/all";
 import { DateRangePicker } from "react-date-range";
+import { useDispatch } from "react-redux";
+import { resetFilter } from "../../../store/filteredData";
 
 let state = false;
 function Filter({ type, filterByDate, filterByCategory }) {
@@ -40,14 +42,10 @@ function Filter({ type, filterByDate, filterByCategory }) {
     "Sets & OutFits",
     "Jumpers & KnitWear"
   ]);
-
   const [productCat, setProductCat] = useState(null);
-  // const [filterData, setfilterData] = useState({
-  //   [type !== "products" ? "orderType" : "productType"]: null
-  //   // orderStatus: null
-  // });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const dispatch = useDispatch();
   const selectionRange = {
     startDate: startDate,
     endDate: endDate,
@@ -59,7 +57,10 @@ function Filter({ type, filterByDate, filterByCategory }) {
   }, [productCat]);
   useEffect(() => {
     if (firstRender.current) {
-      if (endDate || startDate) filterByDate(startDate, endDate, productCat);
+      if (endDate || startDate) {
+        filterByDate(startDate, endDate, productCat);
+        return;
+      }
     }
     firstRender.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,6 +99,7 @@ function Filter({ type, filterByDate, filterByCategory }) {
     setStartDate(range.selection.startDate);
     setEndDate(range.selection.endDate);
   }
+
   return (
     <div className="mr-6 box flex cursor-pointer">
       <div className="bg-gray-100 rounded-md flex font-semibold text-xs  items-center ">
@@ -225,11 +227,15 @@ function Filter({ type, filterByDate, filterByCategory }) {
                 )}
               </div>
             )}
-
             <div
-              // onClick={() => {
-              //   setfilterData({ orderStatus: "", orderType: "" });
-              // }}
+              onClick={() => {
+                dispatch(resetFilter());
+                showDropdownMenuItems({
+                  date: false,
+                  orderStatus: false,
+                  orderType: false
+                });
+              }}
               className="p-2.5 flex  -translate-x-28  opacity-0 items-animate  items-center text-[#ff385d] space-x-2"
             >
               <IoReload></IoReload>

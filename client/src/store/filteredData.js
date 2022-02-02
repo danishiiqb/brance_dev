@@ -14,10 +14,11 @@ function filteredDataReducer(state = [], action) {
         ? d1 >= d2 && (d1 <= d3 || d1.toDateString() === d3.toDateString())
         : d1.toDateString() === d2.toDateString();
     });
-
     return [...filteredData];
   }
-
+  if (action.type === "RESET") {
+    return {};
+  }
   return state;
 }
 const filterCategory = (data) => {
@@ -26,5 +27,8 @@ const filterCategory = (data) => {
 const filterDate = (data) => {
   return { type: "CATEGORY_DATE", payload: data };
 };
+const resetFilter = () => {
+  return { type: "RESET" };
+};
 
-export { filterCategory, filterDate, filteredDataReducer };
+export { filterCategory, resetFilter, filterDate, filteredDataReducer };
