@@ -1,9 +1,12 @@
 import React from "react";
+import { useRef } from "react";
 import { useState } from "react";
 import { ReactComponent as Dropdown } from "../../icons/dropdown.svg";
 
 function FilterType({ type }) {
   const [dropdown, setDropdown] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  let show = useRef(false);
   function expandDeepDropdown() {
     if (type.type !== "Style" && type.type !== "Pattern") {
       return type.dropdownItems;
@@ -12,13 +15,16 @@ function FilterType({ type }) {
       "plain",
       "print",
       "stripe",
+      "floral",
       "embroidery",
       "colour block",
       "check",
       "graphic",
       "logo",
       "other",
-      "slim"
+      "slim",
+      "regular",
+      "relaxed"
     ];
     let dropItems = type.dropdownItems
       .map((elem) => {
@@ -31,9 +37,16 @@ function FilterType({ type }) {
         let element = elem.toLowerCase();
         return !excludedItems.includes(element);
       });
-    return type.type === "Pattern"
-      ? dropItems.concat(excludedItems.slice(0, excludedItems.length - 1))
-      : dropItems.concat(excludedItems.slice(-2));
+    let modifiedDropItems =
+      type.type === "Pattern"
+        ? dropItems.concat(excludedItems.slice(0, excludedItems.length - 3))
+        : dropItems.concat(excludedItems.slice(-3));
+    if (modifiedDropItems.length > 12) {
+      show.current = true;
+    }
+    return modifiedDropItems.length > 12 && !showMore
+      ? modifiedDropItems.slice(0, 13)
+      : modifiedDropItems;
   }
   return (
     <div className="py-3 border-b-[1px] border-[#0000002f]">
@@ -62,6 +75,18 @@ function FilterType({ type }) {
               );
             })
           : "ghgh"}
+        {dropdown && show.current && (
+          <div
+            onClick={() => {
+              setShowMore((prev) => {
+                return !prev;
+              });
+            }}
+            className="cursor-pointer py-[4px] font-medium text-sm"
+          >
+            {!showMore ? "Show More" : "Show Less"}
+          </div>
+        )}
       </div>
     </div>
   );
