@@ -3,14 +3,21 @@ import AdminHome from "./pages/Admin/AdminHome";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import useAuth from "./hooks/useAuth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logInUser, logOutUser } from "./store/userAuth";
 import ResetPassword from "./pages/ResetPassword";
+import Shop from "./pages/Shop";
+import HeaderSec from "./components/HeaderSec";
+import { closeModal } from "./store/modal";
+import Modal from "./components/Modal";
 
 function App() {
   const [user] = useAuth();
   const dispatch = useDispatch();
   const firstRender = useRef(false);
+  const modal = useSelector((state) => {
+    return state.modal;
+  });
 
   useEffect(() => {
     if (user) {
@@ -27,9 +34,24 @@ function App() {
   return (
     <>
       <Router>
+        {modal.modal && (
+          <>
+            <div
+              onClick={() => {
+                dispatch(closeModal());
+              }}
+              className=" fixed cursor-pointer w-full h-full z-50  bg-[#000000cc]"
+            ></div>
+            <Modal asAdmin={modal.admin}></Modal>
+          </>
+        )}
+        <HeaderSec></HeaderSec>
         <Switch>
           <Route path="/" exact>
             <Home></Home>
+          </Route>
+          <Route path={`/:type/shop/:id`} exact>
+            <Shop></Shop>
           </Route>
           <Route path="/reset-password">
             <ResetPassword></ResetPassword>
