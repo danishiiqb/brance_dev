@@ -26,11 +26,16 @@ function SubmitButtons({ formData, setMssg, clearForm }) {
   }, [save]);
 
   async function addNewItem(link) {
-    await setDoc(doc(db, "users", user.uid, "products", uuidv4()), {
+    let uniqueId = uuidv4();
+    await setDoc(doc(db, "users", user.uid, "products", uniqueId), {
       ...formData.formData,
       productImg: [...link],
       description: formData.desc,
       createdAt: serverTimestamp()
+    });
+    await setDoc(doc(db, "users", user.uid, "productsAdminInfo", uniqueId), {
+      revenue: 0,
+      sold: 0
     });
   }
   async function uploadImageAddItem(file) {

@@ -7,11 +7,11 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
   const [load, setLoad] = useState(false);
   function convertDate(sec) {
     let date = new Date(sec * 1000);
-    return `${date.getUTCDate()}/${
+    return `${date.getDate()}/${
       date.getMonth() + 1 > 9
         ? `${date.getMonth() + 1}`
         : `0${date.getMonth() + 1}`
-    }/${date.getUTCFullYear()}`;
+    }/${date.getFullYear()}`;
   }
 
   function setAction(type) {
@@ -32,7 +32,7 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
               setLoad(true);
             }}
             className={`w-12 h-12 ${
-              !load ? "blur-sm bg-[#f3f3f3]" : ""
+              !load ? "blur-sm bg-[#f0f0f0]" : ""
             } object-cover rounded-md`}
             src={tableData.productImg[0]}
             alt=""
@@ -47,9 +47,9 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
         {tableData.prize}
       </TableData>
       <TableData>{tableData.inStock}</TableData>
-      <TableData>{245}</TableData>
+      <TableData>{tableData.adminInfo.sold}</TableData>
       <TableData>
-        <div className="font-medium">{tableData.revenue}.00</div>
+        <div className="font-medium">{tableData.adminInfo.revenue}.00</div>
       </TableData>
       <TableData className="px-1.5 py-2.5">
         <Info clickedAction={setAction} type={type}></Info>
