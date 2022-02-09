@@ -2,6 +2,12 @@ import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import { ReactComponent as Dropdown } from "../../icons/dropdown.svg";
+import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 
 function FilterType({ type }) {
   const [dropdown, setDropdown] = useState(false);
@@ -64,17 +70,38 @@ function FilterType({ type }) {
         </div>
       </div>
       <div className={`mt-1.5 ${dropdown ? "visible" : "hidden"}`}>
-        {dropdown && Array.isArray(type.dropdownItems)
-          ? expandDeepDropdown().map((elem) => {
-              return (
-                <div
-                  className={`py-[4px] animplane capitalize font-regular text-sm cursor-pointer`}
-                >
-                  {elem}
-                </div>
-              );
-            })
-          : "ghgh"}
+        {dropdown && Array.isArray(type.dropdownItems) ? (
+          expandDeepDropdown().map((elem) => {
+            return (
+              <div
+                className={`py-[4px] animplane capitalize font-regular text-sm cursor-pointer`}
+              >
+                {elem}
+              </div>
+            );
+          })
+        ) : (
+          <div className="w-11/12">
+            <Range
+              color="red"
+              min={5}
+              max={200}
+              defaultValue={[5, 40]}
+              onChange={(val) => {
+                console.log(val);
+              }}
+              allowCross={false}
+              tipFormatter={(value) => (
+                <span className="tooltip p-1">${value}</span>
+              )}
+              step={15}
+            />
+            <div className="flex mt-1 font-medium text-black text-sm justify-between">
+              <span className="relative right-2">$5</span>
+              <span className="relative left-4">$200</span>
+            </div>
+          </div>
+        )}
         {dropdown && show.current && (
           <div
             onClick={() => {
@@ -82,9 +109,10 @@ function FilterType({ type }) {
                 return !prev;
               });
             }}
-            className="cursor-pointer py-[4px] font-medium text-sm"
+            className="cursor-pointer transition-all duration-200 hover:text-[#ff1a44] text-[#FF385C] flex items-center py-[4px] font-medium text-sm"
           >
-            {!showMore ? "Show More" : "Show Less"}
+            {!showMore ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}
+            <span>{!showMore ? "Show More" : "Show Less"}</span>
           </div>
         )}
       </div>
