@@ -10,12 +10,16 @@ import Elements from "./Elements";
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
-function FilterType({ type, getSelectedVals }) {
+function FilterType({ type, selectedVals, getSelectedVals }) {
   const [dropdown, setDropdown] = useState(false);
   const [showMore, setShowMore] = useState(false);
   let show = useRef(false);
 
-  function expandDeepDropdown() {
+  function modifyVals(value) {
+    getSelectedVals({ value, type: type.type });
+  }
+
+  function expandDeepDropdown(selected) {
     if (type.type !== "Style" && type.type !== "Pattern") {
       return type.dropdownItems;
     }
@@ -36,19 +40,29 @@ function FilterType({ type, getSelectedVals }) {
     ];
     let dropItems = type.dropdownItems
       .map((elem) => {
-        return Array.isArray(elem[type.type.toLowerCase()])
+        let found = selected && selected.find((el) => el.value === elem.name);
+        return (Array.isArray(elem[type.type.toLowerCase()]) &&
+          selected === "") ||
+          (Array.isArray(elem[type.type.toLowerCase()]) && found)
           ? [...elem[type.type.toLowerCase()]]
           : [];
       })
       .flat()
       .filter((elem) => {
         let element = elem.toLowerCase();
-        return !excludedItems.includes(element);
+        return !selected ? !excludedItems.includes(element) : true;
       });
-    let modifiedDropItems =
-      type.type === "Pattern"
-        ? dropItems.concat(excludedItems.slice(0, excludedItems.length - 3))
-        : dropItems.concat(excludedItems.slice(-3));
+
+    let modifiedDropItems = [];
+    if (!selected) {
+      modifiedDropItems =
+        type.type === "Pattern"
+          ? dropItems.concat(excludedItems.slice(0, excludedItems.length - 3))
+          : dropItems.concat(excludedItems.slice(-3));
+    } else {
+      modifiedDropItems = dropItems;
+    }
+
     if (modifiedDropItems.length > 12) {
       show.current = true;
     }
@@ -56,6 +70,7 @@ function FilterType({ type, getSelectedVals }) {
       ? modifiedDropItems.slice(0, 13)
       : modifiedDropItems;
   }
+
   return (
     <div className="py-3 border-b-[1px] border-[#0000002f]">
       <div
@@ -71,11 +86,17 @@ function FilterType({ type, getSelectedVals }) {
           <Dropdown className="w-2.5 h-2.5"></Dropdown>
         </div>
       </div>
-      <div className={`mt-1.5 ${dropdown ? "visible" : "hidden"}`}>
-        {dropdown && Array.isArray(type.dropdownItems) ? (
-          expandDeepDropdown().map((elem) => {
-            return <Elements notifyParent={getSelectedVals}>{elem}</Elements>;
-          })
+      <div
+        className={`mt-1.5 ${
+          dropdown ? "visible h-auto opacity-100" : "hidden opacity-0 h-0"
+        }`}
+      >
+        {Array.isArray(type.dropdownItems) ? (
+          expandDeepDropdown(selectedVals.length <= 0 ? "" : selectedVals).map(
+            (elem) => {
+              return <Elements notifyParent={modifyVals}>{elem}</Elements>;
+            }
+          )
         ) : (
           <div className="w-11/12">
             <Range

@@ -14,19 +14,20 @@ function Shop() {
   let { id, type } = useParams();
   const filterType = useRef(data);
   const [selectedVals, setSelectedVals] = useState([]);
-  function getSelectedVals(value) {
+
+  function getSelectedVals(obj) {
     let elementExists = selectedVals.find((elem) => {
-      return elem === value;
+      return elem.value === obj.value;
     });
     if (elementExists) {
       let filteredValue = selectedVals.filter((el) => {
-        return el !== value;
+        return el.value !== obj.value;
       });
       setSelectedVals([...filteredValue]);
       return;
     }
     setSelectedVals((prev) => {
-      return [...prev, value];
+      return [...prev, obj];
     });
   }
 
@@ -72,7 +73,13 @@ function Shop() {
         </div>
         <div className="mt-2">
           {filterType.current.map((type) => {
-            return <FilterType getSelectedVals={getSelectedVals} type={type} />;
+            return (
+              <FilterType
+                selectedVals={selectedVals}
+                getSelectedVals={getSelectedVals}
+                type={type}
+              />
+            );
           })}
         </div>
       </div>
