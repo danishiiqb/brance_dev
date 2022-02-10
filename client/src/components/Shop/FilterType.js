@@ -5,14 +5,16 @@ import { ReactComponent as Dropdown } from "../../icons/dropdown.svg";
 import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import Elements from "./Elements";
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
-function FilterType({ type }) {
+function FilterType({ type, getSelectedVals }) {
   const [dropdown, setDropdown] = useState(false);
   const [showMore, setShowMore] = useState(false);
   let show = useRef(false);
+
   function expandDeepDropdown() {
     if (type.type !== "Style" && type.type !== "Pattern") {
       return type.dropdownItems;
@@ -72,13 +74,7 @@ function FilterType({ type }) {
       <div className={`mt-1.5 ${dropdown ? "visible" : "hidden"}`}>
         {dropdown && Array.isArray(type.dropdownItems) ? (
           expandDeepDropdown().map((elem) => {
-            return (
-              <div
-                className={`py-[4px] animplane capitalize font-regular text-sm cursor-pointer`}
-              >
-                {elem}
-              </div>
-            );
+            return <Elements notifyParent={getSelectedVals}>{elem}</Elements>;
           })
         ) : (
           <div className="w-11/12">

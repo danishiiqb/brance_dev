@@ -13,6 +13,22 @@ function Shop() {
   const allProducts = useRef([]);
   let { id, type } = useParams();
   const filterType = useRef(data);
+  const [selectedVals, setSelectedVals] = useState([]);
+  function getSelectedVals(value) {
+    let elementExists = selectedVals.find((elem) => {
+      return elem === value;
+    });
+    if (elementExists) {
+      let filteredValue = selectedVals.filter((el) => {
+        return el !== value;
+      });
+      setSelectedVals([...filteredValue]);
+      return;
+    }
+    setSelectedVals((prev) => {
+      return [...prev, value];
+    });
+  }
 
   useEffect(() => {
     async function getAllProducts() {
@@ -56,7 +72,7 @@ function Shop() {
         </div>
         <div className="mt-2">
           {filterType.current.map((type) => {
-            return <FilterType type={type} />;
+            return <FilterType getSelectedVals={getSelectedVals} type={type} />;
           })}
         </div>
       </div>
