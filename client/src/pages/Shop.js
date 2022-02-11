@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import FilterType from "../components/Shop/FilterType";
 import { db } from "../services/firebase";
 import data from "../data/FilterItems.json";
+import { v4 as uuidv4 } from "uuid";
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -72,9 +73,10 @@ function Shop() {
           </div>
         </div>
         <div className="mt-2">
-          {filterType.current.map((type) => {
+          {filterType.current.map((type, idx) => {
             return (
               <FilterType
+                key={idx}
                 selectedVals={selectedVals}
                 getSelectedVals={getSelectedVals}
                 type={type}

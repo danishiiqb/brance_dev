@@ -23,21 +23,6 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
     if (type.type !== "Style" && type.type !== "Pattern") {
       return type.dropdownItems;
     }
-    let excludedItems = [
-      "plain",
-      "print",
-      "stripe",
-      "floral",
-      "embroidery",
-      "colour block",
-      "check",
-      "graphic",
-      "logo",
-      "other",
-      "slim",
-      "regular",
-      "relaxed"
-    ];
     let dropItems = type.dropdownItems
       .map((elem) => {
         let found = selected && selected.find((el) => el.value === elem.name);
@@ -48,21 +33,12 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
           : [];
       })
       .flat()
-      .filter((elem) => {
-        let element = elem.toLowerCase();
-        return !selected ? !excludedItems.includes(element) : true;
+      .map((el) => {
+        return { ...el, element: el.element.toLowerCase() };
       });
-
-    let modifiedDropItems = [];
-    if (!selected) {
-      modifiedDropItems =
-        type.type === "Pattern"
-          ? dropItems.concat(excludedItems.slice(0, excludedItems.length - 3))
-          : dropItems.concat(excludedItems.slice(-3));
-    } else {
-      modifiedDropItems = dropItems;
-    }
-
+    let modifiedDropItems = dropItems.filter((item, idx, array) => {
+      return idx === array.findIndex((el) => el.element === item.element);
+    });
     if (modifiedDropItems.length > 12) {
       show.current = true;
     }
@@ -94,7 +70,11 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
         {Array.isArray(type.dropdownItems) ? (
           expandDeepDropdown(selectedVals.length <= 0 ? "" : selectedVals).map(
             (elem) => {
-              return <Elements notifyParent={modifyVals}>{elem}</Elements>;
+              return (
+                <Elements key={elem.id} notifyParent={modifyVals}>
+                  {elem.element}
+                </Elements>
+              );
             }
           )
         ) : (

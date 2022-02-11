@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 
 function Elements({ children, notifyParent }) {
   const [clickedVal, setClicked] = useState(false);
+  const isUnmounting = useRef(false);
+  useEffect(() => {
+    return () => {
+      isUnmounting.current = true;
+    };
+  }, []);
+  useEffect(() => {
+    return () => {
+      isUnmounting.current && clickedVal && notifyParent(children);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clickedVal]);
   return (
     <div
       onClick={() => {
