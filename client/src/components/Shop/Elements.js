@@ -11,7 +11,9 @@ function Elements({ children, notifyParent }) {
   }, []);
   useEffect(() => {
     return () => {
-      isUnmounting.current && clickedVal && notifyParent(children);
+      if (isUnmounting.current && clickedVal) {
+        notifyParent(children);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedVal]);

@@ -19,18 +19,28 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
     getSelectedVals({ value, type: type.type });
   }
 
+  function valueFilter(categoryIncluded, selected) {
+    if (categoryIncluded) {
+      return type.dropdownItems.filter((elem) => {
+        let found = selected && selected.find((el) => el.value === elem.name);
+        return Array.isArray(elem[type.type.toLowerCase()]) && found;
+      });
+    }
+    return type.dropdownItems.filter((el) => {
+      return Array.isArray(el[type.type.toLowerCase()]);
+    });
+  }
+
   function expandDeepDropdown(selected) {
     if (type.type !== "Style" && type.type !== "Pattern") {
       return type.dropdownItems;
     }
-    let dropItems = type.dropdownItems
-      .map((elem) => {
-        let found = selected && selected.find((el) => el.value === elem.name);
-        return (Array.isArray(elem[type.type.toLowerCase()]) &&
-          selected === "") ||
-          (Array.isArray(elem[type.type.toLowerCase()]) && found)
-          ? [...elem[type.type.toLowerCase()]]
-          : [];
+    let categoryIncluded =
+      selected && selected.find((el) => el.type === "Category");
+
+    let dropItems = valueFilter(categoryIncluded, selected)
+      .map((el) => {
+        return [...el[type.type.toLowerCase()]];
       })
       .flat()
       .map((el) => {

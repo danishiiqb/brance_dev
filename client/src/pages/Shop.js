@@ -15,7 +15,9 @@ function Shop() {
   let { id, type } = useParams();
   const filterType = useRef(data);
   const [selectedVals, setSelectedVals] = useState([]);
-
+  useEffect(() => {
+    console.log(selectedVals);
+  }, [selectedVals]);
   function getSelectedVals(obj) {
     let elementExists = selectedVals.find((elem) => {
       return elem.value === obj.value;
@@ -24,6 +26,8 @@ function Shop() {
       let filteredValue = selectedVals.filter((el) => {
         return el.value !== obj.value;
       });
+
+      console.log(filteredValue);
       setSelectedVals([...filteredValue]);
       return;
     }
