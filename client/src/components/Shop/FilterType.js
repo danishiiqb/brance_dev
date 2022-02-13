@@ -37,10 +37,10 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
     }
     let categoryIncluded =
       selected && selected.find((el) => el.type === "Category");
-
     let dropItems = valueFilter(categoryIncluded, selected)
       .map((el) => {
-        return [...el[type.type.toLowerCase()]];
+        let elements = el[type.type.toLowerCase()];
+        return [...elements];
       })
       .flat()
       .map((el) => {
