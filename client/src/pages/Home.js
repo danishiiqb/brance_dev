@@ -17,15 +17,15 @@ function Home() {
       <div className={`relative overflow-hidden`}>
         <Hero modalOpen={modal.modal}></Hero>
         <Banner></Banner>
-        <ProductSection
+        {/* <ProductSection
           type="Trending Products"
           ImgAlignment="left"
-        ></ProductSection>
+        ></ProductSection> */}
         <StyleBanner></StyleBanner>
-        <ProductSection
+        {/* <ProductSection
           type="Best Selling"
           ImgAlignment="right"
-        ></ProductSection>
+        ></ProductSection> */}
         <Brands></Brands>
         <Section></Section>
         <FeatureSec></FeatureSec>

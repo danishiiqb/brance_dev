@@ -22,7 +22,7 @@
   background-color: #e4e7eb;
 }
 .animplane {
-  animation: fade 0.3s ease-in forwards;
+  animation: fade 0.2s ease-in forwards;
 }
 @keyframes fade {
   100% {
