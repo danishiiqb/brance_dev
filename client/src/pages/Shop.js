@@ -67,7 +67,6 @@ function Shop() {
       } catch (err) {
         console.log(err.message);
       }
-      setLoader(false);
     }
     getAllProducts();
   }, []);
