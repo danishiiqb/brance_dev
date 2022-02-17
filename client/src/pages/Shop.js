@@ -61,11 +61,14 @@ function Shop() {
           .sort((a, b) => {
             return b.createdAt.seconds - a.createdAt.seconds;
           });
+
         console.log(filteredProducts);
         allProducts.current = filteredProducts;
         setProducts(filteredProducts.slice(0, 25));
+        setLoader(false);
       } catch (err) {
-        console.log(err.message);
+        setLoader(false);
+        return err.message;
       }
     }
     getAllProducts();
