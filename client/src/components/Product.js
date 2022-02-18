@@ -14,6 +14,7 @@ function Product({ prodDesc, expandHeight }) {
   let box = useRef(null);
   let stars = useRef(null);
   let colorPallete = useRef(null);
+
   function renderStars() {
     let totalStars = 5;
     let filled = [...Array(Math.floor(prodDesc.rating))].map((_) => {
@@ -40,19 +41,19 @@ function Product({ prodDesc, expandHeight }) {
   useEffect(() => {
     let timer;
     if (detailView) {
-      console.log("iiioooo");
       timer = setTimeout(() => {
         setCurrImg((prev) => {
           return prev >= imgLength - 1 ? 0 : prev + 1;
         });
-      }, 3000);
+      }, 7000);
     }
-    return timer;
+    return () => {
+      clearTimeout(timer);
+    };
   }, [detailView, currImg, imgLength]);
 
   useEffect(() => {
     if (detailView) {
-      console.log("second");
       timeline
         .to(box.current, {
           height: "4.5rem",
@@ -86,6 +87,7 @@ function Product({ prodDesc, expandHeight }) {
     }
     return title;
   }
+
   return (
     <>
       <div
