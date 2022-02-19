@@ -38,9 +38,42 @@ function Product({ prodDesc, expandHeight }) {
     }
     return [...filled, ...empty];
   }
+
+  useEffect(() => {
+    if (detailView) {
+      timeline
+        .to(box.current, {
+          height: "4.5rem",
+          duration: ".33",
+          ease: "power4.out"
+        })
+        .to(stars.current, {
+          opacity: "1",
+          duration: ".33",
+          ease: "power4.out"
+        })
+        .to(colorPallete.current, {
+          opacity: "1",
+          duration: ".33",
+          ease: "power4.out"
+        });
+    } else {
+      box.current &&
+        timeline.to(box.current, {
+          height: "auto",
+          duration: ".33",
+          ease: "power4.out"
+        });
+    }
+    return () => {
+      setCurrImg(0);
+    };
+  }, [detailView, timeline]);
+
   useEffect(() => {
     let timer;
-    if (detailView) {
+    if (detailView && imgLoaded) {
+      console.log("oooooo");
       timer = setTimeout(() => {
         setCurrImg((prev) => {
           return prev >= imgLength - 1 ? 0 : prev + 1;
@@ -50,36 +83,7 @@ function Product({ prodDesc, expandHeight }) {
     return () => {
       clearTimeout(timer);
     };
-  }, [detailView, currImg, imgLength]);
-
-  useEffect(() => {
-    if (detailView) {
-      timeline
-        .to(box.current, {
-          height: "4.5rem",
-          duration: ".3",
-          ease: "power4.out"
-        })
-        .to(stars.current, {
-          opacity: "1",
-          duration: ".46",
-          ease: "power4.out"
-        })
-        .to(colorPallete.current, {
-          opacity: "1",
-          duration: ".46",
-          ease: "power4.out"
-        });
-      return;
-    }
-    box.current &&
-      timeline.to(box.current, {
-        height: "auto",
-        duration: ".3",
-        ease: "power4.out"
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detailView]);
+  }, [detailView, imgLoaded, currImg, imgLength]);
 
   function shortenTitle(title) {
     if (title.length > 39) {
