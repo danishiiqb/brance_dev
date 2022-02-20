@@ -44,24 +44,24 @@ function Product({ prodDesc, expandHeight }) {
       timeline
         .to(box.current, {
           height: "4.5rem",
-          duration: ".33",
+          duration: ".27",
           ease: "power4.out"
         })
         .to(stars.current, {
           opacity: "1",
-          duration: ".33",
+          duration: ".27",
           ease: "power4.out"
         })
         .to(colorPallete.current, {
           opacity: "1",
-          duration: ".33",
+          duration: ".27",
           ease: "power4.out"
         });
     } else {
       box.current &&
         timeline.to(box.current, {
           height: "auto",
-          duration: ".33",
+          duration: ".27",
           ease: "power4.out"
         });
     }
@@ -79,7 +79,7 @@ function Product({ prodDesc, expandHeight }) {
         setCurrImg((prev) => {
           return prev >= imgLength - 1 ? 0 : prev + 1;
         });
-      }, 4500);
+      }, 3500);
     }
     return () => {
       clearTimeout(timer);
@@ -87,8 +87,8 @@ function Product({ prodDesc, expandHeight }) {
   }, [detailView, imgLoaded, currImg, imgLength]);
 
   function shortenTitle(title) {
-    if (title.length > 39) {
-      return `${title.substr(0, 40)}...`;
+    if (title.length > 31) {
+      return `${title.substr(0, 32)}..`;
     }
     return title;
   }
@@ -103,7 +103,7 @@ function Product({ prodDesc, expandHeight }) {
           showDetailed(false);
         }}
         className={`${
-          expandHeight ? "h-[430px]" : "h-prHeight"
+          expandHeight ? "h-[432px]" : "h-prHeight"
         } rounded-md cursor-pointer overflow-hidden relative`}
       >
         <img
@@ -142,7 +142,10 @@ function Product({ prodDesc, expandHeight }) {
                 >
                   <div
                     style={{ backgroundColor: `${prodDesc.colour}` }}
-                    className={`w-[9px] h-[9px] rounded-full border-[1px] border-[#00000093] `}
+                    className={`w-[9px] h-[9px] rounded-full ${
+                      prodDesc.colour === "white" &&
+                      "bg-white border-[1.5px] border-black"
+                    }`}
                   ></div>
                 </div>
               )}

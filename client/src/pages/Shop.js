@@ -9,12 +9,11 @@ import { db } from "../services/firebase";
 import data from "../data/FilterItems.json";
 import Product from "../components/Product";
 import Sort from "../components/Shop/Sort";
-import { ImSpinner2 } from "react-icons/im";
 
 function Shop() {
   const [products, setProducts] = useState([]);
   const allProducts = useRef([]);
-  const { current: itemsQty } = useRef({ idx: 1, qty: 25 });
+  const { current: itemsQty } = useRef({ idx: 1, increment: 25, total: 25 });
   let { id, type } = useParams();
   const filterType = useRef(data);
   const [loader, setLoader] = useState(true);
@@ -63,7 +62,6 @@ function Shop() {
             return b.createdAt.seconds - a.createdAt.seconds;
           });
 
-        console.log(filteredProducts);
         allProducts.current = filteredProducts;
         setProducts(filteredProducts.slice(0, 25));
         setLoader(false);
@@ -73,6 +71,7 @@ function Shop() {
       }
     }
     getAllProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -80,15 +79,15 @@ function Shop() {
       {loader && (
         <div className="fixed w-full top-0  h-full z-50 bg-[#000000cc]"></div>
       )}
-      <div className={`flex space-x-3`}>
-        <div className="w-1/4 p-6">
+      <div className={`flex space-x-2.5`}>
+        <div className="w-[18%] p-6">
           <div className="flex justify-between items-center">
             <div className="text-md font-medium">Filters</div>
             <div className="text-sm relative transition-all duration-200 hover:after:top-[95%] after:top-[90%] after:left-0 after:absolute after:bg-gray-700 after:w-full after:h-[1px] cursor-pointer text-gray-700">
               Clear Filters
             </div>
           </div>
-          <div className="mt-2">
+          <div className="mt-4">
             {filterType.current.map((type, idx) => {
               return (
                 <FilterType
@@ -109,36 +108,62 @@ function Shop() {
               </span>
               <span className="font-medium  text-[1.1rem]">
                 All <span className="capitalize">{type}</span> Clothing{" "}
-                <span>({allProducts.current.length})</span>
+                <span>({allProducts.current.length}) items </span>
               </span>
             </div>
             <Sort></Sort>
           </div>
-          <div className="grid grid-cols-3 mt-3 gap-x-3.5 gap-y-4 ">
-            {products.length > 0 &&
-              products.map((prod) => {
-                return (
-                  <Product
-                    key={prod.id}
-                    expandHeight={true}
-                    prodDesc={prod}
-                  ></Product>
-                );
-              })}
-          </div>
-          <div className="text-center">
-            <button
-              onClick={() => {
-                itemsQty.idx++;
-                setProducts(
-                  allProducts.current.slice(0, itemsQty.idx * itemsQty.qty)
-                );
-              }}
-              class="mt-6 bg-[#FF385C]  hover:shadow-sm_dark transition-all duration-300  hover:border-[#ffc1cc] border-[#ff385d00] border-2  font-bold rounded-md text-white text-small p-2  w-max "
-            >
-              <span>Load More</span>
-            </button>
-          </div>
+          {products.length > 0 && (
+            <>
+              {" "}
+              <div className="grid grid-cols-4 mt-3 gap-3">
+                {products.map((prod) => {
+                  return (
+                    <Product
+                      key={prod.id}
+                      expandHeight={true}
+                      prodDesc={prod}
+                    ></Product>
+                  );
+                })}
+              </div>
+              <div className="text-center mt-6">
+                <div>
+                  <div className="font-bold text-small">
+                    Showing {itemsQty.total} of {allProducts.current.length}{" "}
+                    items
+                  </div>
+                  <div className="h-1.5 relative w-4/12 m-auto my-2.5">
+                    <div
+                      style={{
+                        width: `${
+                          (itemsQty.total / allProducts.current.length) * 100
+                        }%`
+                      }}
+                      className={`absolute rounded-l-sm top-0 h-full left-0 transition-all duration-200 after:h-2.5 after:w-0.5 after:absolute after:-translate-y-1/2  after:top-1/2 after:left-full after:bg-black bg-black`}
+                    ></div>
+                    <div className="bg-gray-300 rounded-sm h-full w-full"></div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    if (products.length < allProducts.current.length) {
+                      itemsQty.idx++;
+                      itemsQty.total =
+                        itemsQty.idx * itemsQty.increment >=
+                        allProducts.current.length
+                          ? allProducts.current.length
+                          : itemsQty.idx * itemsQty.increment;
+                      setProducts(allProducts.current.slice(0, itemsQty.total));
+                    }
+                  }}
+                  class="bg-[#000000] mt-2  hover:shadow-sm_dark transition-all duration-300  font-bold rounded-md px-3 text-white text-small p-2.5 w-max "
+                >
+                  <span>Load More Products</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
