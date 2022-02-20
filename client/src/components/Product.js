@@ -5,9 +5,9 @@ import gsap from "gsap";
 
 function Product({ prodDesc, expandHeight }) {
   const [detailView, showDetailed] = useState(false);
-  const [clickedColor, setClickedColor] = useState(false);
   const [currImg, setCurrImg] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [initLoad, setinitLoad] = useState(false);
   const { current: imgLength } = useRef(prodDesc.productImg.length);
   let { current: timeline } = useRef(gsap.timeline());
   let innerBox = useRef(null);
@@ -73,12 +73,13 @@ function Product({ prodDesc, expandHeight }) {
   useEffect(() => {
     let timer;
     if (detailView && imgLoaded) {
-      console.log("oooooo");
       timer = setTimeout(() => {
+        console.log("oooo");
+        setImgLoaded(false);
         setCurrImg((prev) => {
           return prev >= imgLength - 1 ? 0 : prev + 1;
         });
-      }, 7000);
+      }, 4500);
     }
     return () => {
       clearTimeout(timer);
@@ -102,22 +103,23 @@ function Product({ prodDesc, expandHeight }) {
           showDetailed(false);
         }}
         className={`${
-          expandHeight ? "h-[450px]" : "h-prHeight"
-        } rounded-lg cursor-pointer overflow-hidden relative`}
+          expandHeight ? "h-[430px]" : "h-prHeight"
+        } rounded-md cursor-pointer overflow-hidden relative`}
       >
         <img
           onLoad={() => {
+            if (!currImg) setinitLoad(true);
             setImgLoaded(true);
           }}
           src={prodDesc.productImg[currImg]}
-          className={`w-full ${
-            imgLoaded ? "" : "bg-gray-200 blur-sm"
-          } h-full object-cover`}
+          className={`w-full   ${
+            initLoad ? "" : "bg-gray-200 blur-sm"
+          }  h-full object-cover`}
           alt=""
         />
         <div
           ref={box}
-          className={`box absolute bottom-2 shadow-sm_dark cursor-pointer rounded-lg  bg-white w-secFull -translate-x-1/2 left-1/2 text-[13px] p-1.5 px-2 flex flex-col justify-center`}
+          className={`box absolute bottom-2 shadow-sm_dark cursor-pointer rounded-md  bg-white w-secFull -translate-x-1/2 left-1/2 text-[13px] p-1.5 px-2 flex flex-col justify-center`}
         >
           <div ref={innerBox} className="flex items-center justify-between">
             <div>
@@ -139,13 +141,8 @@ function Product({ prodDesc, expandHeight }) {
                   className="flex space-x-1 mt-1 opacity-0"
                 >
                   <div
-                    onClick={() => {
-                      setClickedColor((prev) => !prev);
-                    }}
                     style={{ backgroundColor: `${prodDesc.colour}` }}
-                    className={`w-[9px] h-[9px] rounded-full ${
-                      clickedColor ? "border-[.5px] border-black" : ""
-                    }`}
+                    className={`w-[9px] h-[9px] rounded-full border-[1px] border-[#00000093] `}
                   ></div>
                 </div>
               )}

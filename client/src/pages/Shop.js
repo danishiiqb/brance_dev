@@ -14,6 +14,7 @@ import { ImSpinner2 } from "react-icons/im";
 function Shop() {
   const [products, setProducts] = useState([]);
   const allProducts = useRef([]);
+  const { current: itemsQty } = useRef({ idx: 1, qty: 25 });
   let { id, type } = useParams();
   const filterType = useRef(data);
   const [loader, setLoader] = useState(true);
@@ -113,7 +114,7 @@ function Shop() {
             </div>
             <Sort></Sort>
           </div>
-          <div className="grid grid-cols-3 mt-3 gap-4 ">
+          <div className="grid grid-cols-3 mt-3 gap-x-3.5 gap-y-4 ">
             {products.length > 0 &&
               products.map((prod) => {
                 return (
@@ -124,6 +125,19 @@ function Shop() {
                   ></Product>
                 );
               })}
+          </div>
+          <div className="text-center">
+            <button
+              onClick={() => {
+                itemsQty.idx++;
+                setProducts(
+                  allProducts.current.slice(0, itemsQty.idx * itemsQty.qty)
+                );
+              }}
+              class="mt-6 bg-[#FF385C]  hover:shadow-sm_dark transition-all duration-300  hover:border-[#ffc1cc] border-[#ff385d00] border-2  font-bold rounded-md text-white text-small p-2  w-max "
+            >
+              <span>Load More</span>
+            </button>
           </div>
         </div>
       </div>
