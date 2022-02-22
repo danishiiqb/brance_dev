@@ -15,26 +15,24 @@ function Product({ prodDesc, expandHeight }) {
   let stars = useRef(null);
   let colorPallete = useRef(null);
 
-  function renderStars() {
+  function renderStars(rating) {
     let totalStars = 5;
-    let filled = [...Array(Math.floor(prodDesc.rating))].map((_) => {
+    let filled = [...Array(Math.floor(rating))].map((_) => {
       return <BsStarFill className="w-3.5 h-3.5 fill-current text-[#FFC107]" />;
     });
     let empty = [];
-    if (prodDesc.rating % 1 === 0) {
-      empty = [...Array(totalStars - prodDesc.rating)].map((_, idx) => (
+    if (rating % 1 === 0) {
+      empty = [...Array(totalStars - rating)].map((_, idx) => (
         <BsStarFill className="w-3.5 h-3.5 fill-current text-[#ECEFF1]" />
       ));
     } else {
-      empty = [...Array(totalStars - Math.floor(prodDesc.rating))].map(
-        (_, idx) => {
-          return idx === 0 ? (
-            <BsStarHalf className="w-3.5 h-3.5 text-[#FFC107]"></BsStarHalf>
-          ) : (
-            <BsStarFill className="w-3.5 h-3.5 fill-current text-[#ECEFF1]" />
-          );
-        }
-      );
+      empty = [...Array(totalStars - Math.floor(rating))].map((_, idx) => {
+        return idx === 0 ? (
+          <BsStarHalf className="w-3.5 h-3.5 text-[#FFC107]"></BsStarHalf>
+        ) : (
+          <BsStarFill className="w-3.5 h-3.5 fill-current text-[#ECEFF1]" />
+        );
+      });
     }
     return [...filled, ...empty];
   }
@@ -103,7 +101,7 @@ function Product({ prodDesc, expandHeight }) {
           showDetailed(false);
         }}
         className={`${
-          expandHeight ? "h-[432px]" : "h-prHeight"
+          expandHeight ? "h-[412px]" : "h-prHeight"
         } rounded-md cursor-pointer overflow-hidden relative`}
       >
         <img
@@ -128,12 +126,20 @@ function Product({ prodDesc, expandHeight }) {
               </div>
               <div className="flex items-center space-x-1.5">
                 <div className="font-semibold">${prodDesc.prize}</div>
-                {/* {detailView && (
+                {detailView && (
                   <div ref={stars} className="flex space-x-1.5 opacity-0">
-                    <div className="flex space-x-0.5">{renderStars()}</div>
-                    <div className="text-[11px]">({prodDesc.reviews})</div>
+                    <div className="flex space-x-0.5">
+                      {renderStars(
+                        prodDesc.reviews.reduce((prev, curr) => {
+                          return prev + curr.rating;
+                        }, 0) / prodDesc.reviews.length
+                      )}
+                    </div>
+                    <div className="text-[11px]">
+                      ({prodDesc.reviews.length})
+                    </div>
                   </div>
-                )} */}
+                )}
               </div>
               {detailView && (
                 <div

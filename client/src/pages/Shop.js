@@ -39,21 +39,33 @@ function Shop() {
       try {
         const collectionRef = await getDocs(collection(db, "users"));
         let productsColl = [];
+        let reviewColl = [];
         collectionRef.forEach((doc) => {
           if (doc.data().type === "admin") {
             productsColl.push(
               getDocs(collection(db, "users", doc.id, "products"))
             );
+            reviewColl.push(
+              getDocs(collection(db, "users", doc.id, "productReviews"))
+            );
           }
         });
         let response = await Promise.all(productsColl);
+        let responseRev = await Promise.all(reviewColl);
         let productsArr = [];
-        response.forEach((elem) => {
-          elem.forEach((doc) => {
-            productsArr.push({ id: doc.id, ...doc.data() });
+
+        response.forEach((elem, idx1) => {
+          elem.docs.forEach((doc, idx2) => {
+            if (doc.id === responseRev[idx1].docs[idx2].id) {
+              productsArr.push({
+                id: doc.id,
+                ...doc.data(),
+                ...responseRev[idx1].docs[idx2].data()
+              });
+            }
           });
         });
-
+        console.log(productsArr);
         let filteredProducts = productsArr
           .filter((product) => {
             return product.for.toLowerCase() === type.toLowerCase();

@@ -1,4 +1,12 @@
-import { doc, collection, getDocs, setDoc } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  getDocs,
+  setDoc,
+  serverTimestamp,
+  updateDoc,
+  arrayUnion
+} from "firebase/firestore";
 import { db } from "../services/firebase";
 
 function products(state = { products: [], message: "" }, action) {
@@ -20,7 +28,7 @@ function products(state = { products: [], message: "" }, action) {
 const updateProduct = (elem) => {
   return { type: "UPDATE_PRODUCT", payload: elem };
 };
-
+let count = 1;
 const getProductsData = (id) => {
   return async (dispatch) => {
     try {
@@ -38,15 +46,23 @@ const getProductsData = (id) => {
         ...doc.data(),
         adminInfo: { ...docSnap2.docs[idx].data(), id: doc.id }
       }));
-      // if (count === 1) {
-      //   docsSnap.docs.forEach(async (docu) => {
-      //     await setDoc(doc(db, "users", id, "productsAdminInfo", docu.id), {
-      //       revenue: 0,
-      //       sold: 0
-      //     });
-      //   });
-      // }
-      // count++;
+      if (count === 1) {
+        console.log("ooos");
+        docsSnap.docs.forEach(async (docu) => {
+          await setDoc(doc(db, "users", id, "productReviews", docu.id), {
+            reviews: arrayUnion({
+              title: "",
+              rating: 0,
+              likes: 0,
+              dislikes: 0,
+              comment: "",
+              createdAt: new Date(),
+              user: ""
+            })
+          });
+        });
+      }
+      count++;
       dispatch({ type: "GET_DATA", payload: docs });
     } catch (err) {
       dispatch({ type: "ERROR", payload: err.message });
