@@ -14,6 +14,7 @@ function Shop() {
   const [products, setProducts] = useState([]);
   const allProducts = useRef([]);
   const { current: itemsQty } = useRef({ idx: 1, increment: 25, total: 25 });
+  let firstRender = useRef(true);
   let { id, type } = useParams();
   const filterType = useRef(data);
   const [loader, setLoader] = useState(true);
@@ -33,6 +34,64 @@ function Shop() {
       return [...prev, obj];
     });
   }
+  useEffect(() => {
+    if (!firstRender.current) {
+      let categFilter = selectedVals.filter((type) => {
+        return type.type === "Category";
+      });
+      let values = allProducts.current.filter((item) => {
+        let defVal = false;
+        categFilter.forEach((el) => {
+          if (
+            item[el.type.toLowerCase()].toLowerCase() === el.value.toLowerCase()
+          ) {
+            defVal = true;
+          }
+        });
+        return defVal;
+      });
+      let brandFilter = selectedVals.filter((type) => {
+        return type.type === "Brand";
+      });
+      setProducts(values);
+      let valuesDependCateg = [];
+      if (brandFilter.length > 0) {
+        valuesDependCateg = values.filter((item) => {
+          let defVal = false;
+          brandFilter.forEach((el) => {
+            if (
+              item[el.type.toLowerCase()].toLowerCase() ===
+              el.value.toLowerCase()
+            ) {
+              defVal = true;
+            }
+          });
+          return defVal;
+        });
+        setProducts(valuesDependCateg);
+      }
+      let styleFilter = selectedVals.filter((type) => {
+        return type.type === "Style";
+      });
+      let valuesDependStyle = [];
+      if (styleFilter.length > 0) {
+        valuesDependStyle = valuesDependCateg.filter((item) => {
+          let defVal = false;
+          styleFilter.forEach((el) => {
+            if (
+              item[el.type.toLowerCase()].toLowerCase() ===
+              el.value.toLowerCase()
+            ) {
+              defVal = true;
+            }
+          });
+          return defVal;
+        });
+        setProducts(valuesDependStyle);
+      }
+    }
+    firstRender.current = false;
+  }, [selectedVals]);
 
   useEffect(() => {
     async function getAllProducts() {
@@ -65,7 +124,6 @@ function Shop() {
             }
           });
         });
-        console.log(productsArr);
         let filteredProducts = productsArr
           .filter((product) => {
             return product.for.toLowerCase() === type.toLowerCase();
@@ -73,7 +131,6 @@ function Shop() {
           .sort((a, b) => {
             return b.createdAt.seconds - a.createdAt.seconds;
           });
-
         allProducts.current = filteredProducts;
         setProducts(filteredProducts.slice(0, 25));
         setLoader(false);
@@ -89,7 +146,7 @@ function Shop() {
   return (
     <>
       {loader && (
-        <div className="fixed w-full top-0  h-full z-50 bg-[#000000cc]"></div>
+        <div className="fixed w-full top-0 h-full z-50 bg-[#000000cc]"></div>
       )}
       <div className={`flex space-x-2.5`}>
         <div className="w-[18%] p-6">
@@ -169,7 +226,7 @@ function Shop() {
                       setProducts(allProducts.current.slice(0, itemsQty.total));
                     }
                   }}
-                  class="bg-[#000000] mt-2  hover:shadow-sm_dark transition-all duration-300  font-bold rounded-md px-3 text-white text-small p-2.5 w-max "
+                  className="bg-[#000000] mt-2  hover:shadow-sm_dark transition-all duration-300  font-bold rounded-md px-3 text-white text-small p-2.5 w-max "
                 >
                   <span>Load More Products</span>
                 </button>
