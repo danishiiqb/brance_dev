@@ -40,7 +40,6 @@ function Shop() {
     filteredDepend,
     alias = undefined
   ) {
-    console.log(alias);
     let values = (
       alreadyFiltered ? filteredDepend : allProducts.current
     ).filter((item) => {
@@ -261,7 +260,7 @@ function Shop() {
               <div className="text-center mt-6">
                 <div>
                   <div className="font-bold text-small">
-                    Showing {itemsQty.total} of {allProducts.current.length}{" "}
+                    Showing {products.length} of {allProducts.current.length}{" "}
                     items
                   </div>
                   <div className="h-1.5 relative w-4/12 m-auto my-2.5">

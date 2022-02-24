@@ -10,6 +10,7 @@ import Shop from "./pages/Shop";
 import HeaderSec from "./components/HeaderSec";
 import { closeModal } from "./store/modal";
 import Modal from "./components/Modal";
+import ProductsDisplay from "./pages/ProductsDisplay";
 
 function App() {
   const [user] = useAuth();
@@ -52,6 +53,9 @@ function App() {
           </Route>
           <Route path={`/:type/shop/:id`} exact>
             <Shop></Shop>
+          </Route>
+          <Route path={`/:brand/:name/:id`} exact>
+            <ProductsDisplay></ProductsDisplay>
           </Route>
           <Route path="/reset-password">
             <ResetPassword></ResetPassword>

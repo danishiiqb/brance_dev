@@ -2,49 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as Bag } from "../icons/bag.svg";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import gsap from "gsap";
+import { useHistory } from "react-router-dom";
+import Rating from "./Rating";
 
 function Product({ prodDesc, expandHeight }) {
   const [detailView, showDetailed] = useState(false);
   const [currImg, setCurrImg] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [initLoad, setinitLoad] = useState(false);
+  const history = useHistory();
   const { current: imgLength } = useRef(prodDesc.productImg.length);
   let { current: timeline } = useRef(gsap.timeline());
   let innerBox = useRef(null);
   let box = useRef(null);
   let stars = useRef(null);
   let colorPallete = useRef(null);
-
-  function renderStars(rating) {
-    let totalStars = 5;
-    let filled = [...Array(Math.floor(rating))].map((_) => {
-      return <BsStarFill className="w-3.5 h-3.5 fill-current text-[#FFC107]" />;
-    });
-    let empty = [];
-    if (rating % 1 === 0) {
-      empty = [...Array(totalStars - rating)].map((_, idx) => (
-        <BsStarFill
-          key={idx}
-          className="w-3.5 h-3.5 fill-current text-[#ECEFF1]"
-        />
-      ));
-    } else {
-      empty = [...Array(totalStars - Math.floor(rating))].map((_, idx) => {
-        return idx === 0 ? (
-          <BsStarHalf
-            key={idx}
-            className="w-3.5 h-3.5 text-[#FFC107]"
-          ></BsStarHalf>
-        ) : (
-          <BsStarFill
-            key={idx}
-            className="w-3.5 h-3.5 fill-current text-[#ECEFF1]"
-          />
-        );
-      });
-    }
-    return [...filled, ...empty];
-  }
 
   useEffect(() => {
     if (detailView) {
@@ -103,6 +75,12 @@ function Product({ prodDesc, expandHeight }) {
   return (
     <>
       <div
+        onClick={() => {
+          let title = prodDesc.title.split(" ").join("-");
+          title = title.includes("/") ? title.replace("/", "-") : title;
+          let brand = prodDesc.brand.split(" ").join("-");
+          history.push(`/${brand}/${title}/${prodDesc.id}`);
+        }}
         onMouseEnter={() => {
           showDetailed(true);
         }}
@@ -136,17 +114,8 @@ function Product({ prodDesc, expandHeight }) {
               <div className="flex items-center space-x-1.5">
                 <div className="font-semibold">${prodDesc.prize}</div>
                 {detailView && (
-                  <div ref={stars} className="flex space-x-1.5 opacity-0">
-                    <div className="flex space-x-0.5">
-                      {renderStars(
-                        prodDesc.reviews.reduce((prev, curr) => {
-                          return prev + curr.rating;
-                        }, 0) / prodDesc.reviews.length
-                      )}
-                    </div>
-                    <div className="text-[11px]">
-                      ({prodDesc.reviews.length})
-                    </div>
+                  <div ref={stars} className="opacity-0">
+                    <Rating reviews={prodDesc.reviews}></Rating>
                   </div>
                 )}
               </div>
