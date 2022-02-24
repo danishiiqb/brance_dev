@@ -34,63 +34,107 @@ function Shop() {
       return [...prev, obj];
     });
   }
+  function filterDynamic(
+    type,
+    alreadyFiltered,
+    filteredDepend,
+    alias = undefined
+  ) {
+    console.log(alias);
+    let values = (
+      alreadyFiltered ? filteredDepend : allProducts.current
+    ).filter((item) => {
+      let defVal = false;
+      type.forEach((el) => {
+        if (
+          item[alias || el.type.toLowerCase()].toLowerCase() ===
+          el.value.toLowerCase()
+        ) {
+          defVal = true;
+        }
+      });
+      return defVal;
+    });
+
+    return values;
+  }
+  function catogExists(val) {
+    return selectedVals.filter((type) => {
+      return type.type === val;
+    });
+  }
   useEffect(() => {
     if (!firstRender.current) {
-      let categFilter = selectedVals.filter((type) => {
-        return type.type === "Category";
-      });
-      let values = allProducts.current.filter((item) => {
-        let defVal = false;
-        categFilter.forEach((el) => {
-          if (
-            item[el.type.toLowerCase()].toLowerCase() === el.value.toLowerCase()
-          ) {
-            defVal = true;
-          }
-        });
-        return defVal;
-      });
-      let brandFilter = selectedVals.filter((type) => {
-        return type.type === "Brand";
-      });
-      setProducts(values);
-      let valuesDependCateg = [];
-      if (brandFilter.length > 0) {
-        valuesDependCateg = values.filter((item) => {
-          let defVal = false;
-          brandFilter.forEach((el) => {
-            if (
-              item[el.type.toLowerCase()].toLowerCase() ===
-              el.value.toLowerCase()
-            ) {
-              defVal = true;
-            }
-          });
-          return defVal;
-        });
-        setProducts(valuesDependCateg);
+      let categFilter = catogExists("Category");
+      let filteredValues = [];
+      if (categFilter.length > 0) {
+        filteredValues = filterDynamic(categFilter, false, []);
       }
-      let styleFilter = selectedVals.filter((type) => {
-        return type.type === "Style";
-      });
-      let valuesDependStyle = [];
-      if (styleFilter.length > 0) {
-        valuesDependStyle = valuesDependCateg.filter((item) => {
-          let defVal = false;
-          styleFilter.forEach((el) => {
-            if (
-              item[el.type.toLowerCase()].toLowerCase() ===
-              el.value.toLowerCase()
-            ) {
-              defVal = true;
-            }
-          });
-          return defVal;
-        });
-        setProducts(valuesDependStyle);
+
+      let brandFilter = catogExists("Brand");
+      if (categFilter.length > 0 && brandFilter.length > 0) {
+        filteredValues = filterDynamic(brandFilter, true, filteredValues);
+      } else if (brandFilter.length > 0) {
+        filteredValues = filterDynamic(brandFilter, false, []);
       }
+
+      let colourFilter = catogExists("Colour");
+      if (
+        (brandFilter.length > 0 || categFilter.length > 0) &&
+        colourFilter.length > 0
+      ) {
+        filteredValues = filterDynamic(colourFilter, true, filteredValues);
+      } else if (colourFilter.length > 0) {
+        filteredValues = filterDynamic(colourFilter, false, []);
+      }
+
+      let styleFilter = catogExists("Style");
+      if (
+        (colourFilter.length > 0 ||
+          brandFilter.length > 0 ||
+          categFilter.length > 0) &&
+        styleFilter.length > 0
+      ) {
+        filteredValues = filterDynamic(styleFilter, true, filteredValues);
+      } else if (styleFilter.length > 0) {
+        filteredValues = filterDynamic(styleFilter, false, []);
+      }
+
+      let patternFilter = catogExists("Pattern");
+      if (
+        (colourFilter.length > 0 ||
+          brandFilter.length > 0 ||
+          categFilter.length > 0 ||
+          styleFilter.length > 0) &&
+        patternFilter.length > 0
+      ) {
+        filteredValues = filterDynamic(patternFilter, true, filteredValues);
+      } else if (patternFilter.length > 0) {
+        filteredValues = filterDynamic(patternFilter, false, []);
+      }
+
+      let materialFilter = catogExists("Material");
+      if (
+        (colourFilter.length > 0 ||
+          brandFilter.length > 0 ||
+          categFilter.length > 0 ||
+          styleFilter.length > 0 ||
+          patternFilter.length > 0) &&
+        materialFilter.length > 0
+      ) {
+        filteredValues = filterDynamic(
+          materialFilter,
+          true,
+          filteredValues,
+          "madewith"
+        );
+      } else if (materialFilter.length > 0) {
+        filteredValues = filterDynamic(materialFilter, false, [], "madewith");
+      }
+      setProducts(filteredValues);
     }
     firstRender.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVals]);
 
   useEffect(() => {
@@ -161,6 +205,25 @@ function Shop() {
               return (
                 <FilterType
                   key={idx}
+                  getPrice={(val) => {
+                    if (selectedVals.length > 0) {
+                      setProducts((prev) => {
+                        return [
+                          ...prev.filter(
+                            (el) => el.prize >= val[0] && el.prize <= val[1]
+                          )
+                        ];
+                      });
+                    } else {
+                      setProducts((_) => {
+                        return [
+                          ...allProducts.current.filter(
+                            (el) => el.prize >= val[0] && el.prize <= val[1]
+                          )
+                        ];
+                      });
+                    }
+                  }}
                   selectedVals={selectedVals}
                   getSelectedVals={getSelectedVals}
                   type={type}
@@ -184,7 +247,6 @@ function Shop() {
           </div>
           {products.length > 0 && (
             <>
-              {" "}
               <div className="grid grid-cols-4 mt-3 gap-3">
                 {products.map((prod) => {
                   return (

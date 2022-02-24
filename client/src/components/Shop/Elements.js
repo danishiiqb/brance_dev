@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 
-function Elements({ children, notifyParent }) {
+function Elements({ children, type, notifyParent }) {
   const [clickedVal, setClicked] = useState(false);
   const isUnmounting = useRef(false);
   useEffect(() => {
@@ -27,9 +27,15 @@ function Elements({ children, notifyParent }) {
       }}
       className={`py-[4px] ${
         clickedVal ? "text-[#FF385C]" : "text-[#000000]"
-      } animplane capitalize font-regular text-sm cursor-pointer`}
+      } animplane flex items-center space-x-1.5 group  capitalize font-regular text-sm cursor-pointer`}
     >
-      {children}
+      {type === "Colour" && (
+        <div
+          style={{ backgroundColor: `${children.toLowerCase()}` }}
+          className={`w-3 h-3 border-[0.5px] group-hover:border-[1px] transition-all duration-150 group-hover:border-black  border-black opacity-70 rounded-sm`}
+        ></div>
+      )}
+      <span>{children}</span>
     </div>
   );
 }

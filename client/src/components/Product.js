@@ -23,14 +23,23 @@ function Product({ prodDesc, expandHeight }) {
     let empty = [];
     if (rating % 1 === 0) {
       empty = [...Array(totalStars - rating)].map((_, idx) => (
-        <BsStarFill className="w-3.5 h-3.5 fill-current text-[#ECEFF1]" />
+        <BsStarFill
+          key={idx}
+          className="w-3.5 h-3.5 fill-current text-[#ECEFF1]"
+        />
       ));
     } else {
       empty = [...Array(totalStars - Math.floor(rating))].map((_, idx) => {
         return idx === 0 ? (
-          <BsStarHalf className="w-3.5 h-3.5 text-[#FFC107]"></BsStarHalf>
+          <BsStarHalf
+            key={idx}
+            className="w-3.5 h-3.5 text-[#FFC107]"
+          ></BsStarHalf>
         ) : (
-          <BsStarFill className="w-3.5 h-3.5 fill-current text-[#ECEFF1]" />
+          <BsStarFill
+            key={idx}
+            className="w-3.5 h-3.5 fill-current text-[#ECEFF1]"
+          />
         );
       });
     }

@@ -10,7 +10,7 @@ import Elements from "./Elements";
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
-function FilterType({ type, selectedVals, getSelectedVals }) {
+function FilterType({ type, selectedVals, getSelectedVals, getPrice }) {
   const [dropdown, setDropdown] = useState(false);
   const [showMore, setShowMore] = useState(false);
   let show = useRef(false);
@@ -81,7 +81,11 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
           expandDeepDropdown(selectedVals.length <= 0 ? "" : selectedVals).map(
             (elem) => {
               return (
-                <Elements key={elem.id} notifyParent={modifyVals}>
+                <Elements
+                  key={elem.id}
+                  type={type.type}
+                  notifyParent={modifyVals}
+                >
                   {elem.element}
                 </Elements>
               );
@@ -94,9 +98,7 @@ function FilterType({ type, selectedVals, getSelectedVals }) {
               min={5}
               max={200}
               defaultValue={[5, 40]}
-              onChange={(val) => {
-                console.log(val);
-              }}
+              onChange={getPrice}
               allowCross={false}
               tipFormatter={(value) => (
                 <span className="tooltip p-1">${value}</span>
