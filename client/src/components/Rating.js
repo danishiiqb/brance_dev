@@ -48,7 +48,7 @@ function Rating({ reviews, big }) {
           big
         )}
       </div>
-      <div className={`text-[${big ? "13px" : "11px"}]`}>
+      <div className={`select-none text-[${big ? "13px" : "11px"}]`}>
         ({reviews.length})
       </div>
     </div>

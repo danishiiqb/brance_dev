@@ -60,7 +60,7 @@ module.exports = {
         dark: "0 0px .4rem rgba(79, 79, 79, 0.6)",
         sm_dark: "0 0px 0.5rem rgb(0 0 0 / 11%)",
         darkest: "0 0 .49rem rgba(231, 231, 231, 0.5)",
-        darker: "1px 0px .7rem rgb(100 100 100 / 40%)"
+        darker: "1px 0px .7rem rgb(121 121 121 / 34%)"
       },
       zIndex: {
         "-1": "-10"
