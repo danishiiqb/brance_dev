@@ -8,8 +8,14 @@ function ImageBox({ product }) {
   const [currSelected, setCurrSelected] = useState(0);
   const img = useRef("");
   const timeline = useRef(gsap.timeline());
+
   useEffect(() => {
-    timeline.current.to(img.current, { top: 0, opacity: 1 });
+    timeline.current.to(img.current, {
+      opacity: 1,
+      scale: 1,
+      ease: "power4.out",
+      duration: ".12"
+    });
   }, [currSelected]);
 
   return (
@@ -39,9 +45,9 @@ function ImageBox({ product }) {
       </div>
       <div className="h-[750px] bg-gray-200 rounded-md cursor-pointer overflow-hidden w-full">
         <img
-          // key={currSelected}
+          key={currSelected}
           ref={img}
-          className="w-full relative opacity-50 top-4 hover:scale-101 transition-all duration-150 rounded-md h-full object-cover"
+          className="w-full relative opacity-70 scale-[1.14]  hover:scale-101 transition-all duration-150 rounded-md h-full object-cover"
           src={product.productImg[currSelected]}
           alt=""
         />

@@ -87,7 +87,7 @@ function ProductDesc({ product }) {
           onMouseLeave={() => {
             setSwitchHeart(false);
           }}
-          className="border-black cursor-pointer border-2 flex items-center justify-center rounded-full hover:bg-[#FF385C]  hover:border-white  w-10 h-10 p-[1.3rem]"
+          className="border-black cursor-pointer border-2 flex items-center justify-center rounded-full hover:bg-[#FF385C] transition-all duration-150  hover:border-white  w-10 h-10 p-[1.3rem]"
         >
           <div>
             {heart ? (
