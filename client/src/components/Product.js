@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as Bag } from "../icons/bag.svg";
-import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import gsap from "gsap";
 import { useHistory } from "react-router-dom";
 import Rating from "./Rating";
@@ -89,7 +88,7 @@ function Product({ prodDesc, expandHeight }) {
         }}
         className={`${
           expandHeight ? "h-[412px]" : "h-prHeight"
-        } rounded-md cursor-pointer overflow-hidden relative`}
+        } rounded-md w-full  cursor-pointer overflow-hidden relative`}
       >
         <img
           onLoad={() => {
@@ -128,7 +127,7 @@ function Product({ prodDesc, expandHeight }) {
                     style={{ backgroundColor: `${prodDesc.colour}` }}
                     className={`w-[9px] h-[9px] rounded-full ${
                       prodDesc.colour === "white" &&
-                      "bg-white border-[1.5px] border-black"
+                      "bg-white border-[1.5px]  border-black"
                     }`}
                   ></div>
                 </div>

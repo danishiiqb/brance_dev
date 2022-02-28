@@ -47,7 +47,7 @@ function ImageBox({ product }) {
         <img
           key={currSelected}
           ref={img}
-          className="w-full relative opacity-70 scale-[1.14]  hover:scale-101 transition-all duration-150 rounded-md h-full object-cover"
+          className="w-full relative opacity-70 scale-[1.14] hover:scale-110 transition-all duration-150 rounded-md h-full object-cover"
           src={product.productImg[currSelected]}
           alt=""
         />
