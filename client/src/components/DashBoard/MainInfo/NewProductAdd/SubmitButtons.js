@@ -1,4 +1,4 @@
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { arrayUnion, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { db, storage } from "../../../../services/firebase";
@@ -36,6 +36,17 @@ function SubmitButtons({ formData, setMssg, clearForm }) {
     await setDoc(doc(db, "users", user.uid, "productsAdminInfo", uniqueId), {
       revenue: 0,
       sold: 0
+    });
+    await setDoc(doc(db, "users", user.uid, "productReviews", uniqueId), {
+      reviews: arrayUnion({
+        title: "",
+        rating: 0,
+        likes: 0,
+        dislikes: 0,
+        comment: "",
+        createdAt: new Date(),
+        user: ""
+      })
     });
   }
   async function uploadImageAddItem(file) {
