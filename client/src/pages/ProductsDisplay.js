@@ -7,6 +7,7 @@ import { db } from "../services/firebase";
 import ImageBox from "../components/ProductDisplay/ImageBox";
 import ProductDesc from "../components/ProductDisplay/ProductDesc";
 import ProductRecomm from "../components/ProductDisplay/ProductRecomm";
+import RatingSection from "../components/ProductDisplay/RatingSection";
 
 function ProductsDisplay() {
   let { brand, name, id } = useParams();
@@ -50,7 +51,8 @@ function ProductsDisplay() {
           throw new Error("Product Not Found");
         }
         let recommendations = product.filter(
-          (recomm) => recomm.brand === foundProduct.brand
+          (recomm) =>
+            recomm.brand === foundProduct.brand && foundProduct.id !== recomm.id
         );
         setRecommendations(recommendations);
         setProduct(foundProduct);
@@ -72,7 +74,11 @@ function ProductsDisplay() {
             </div>
           </div>
           <div className="px-11">
-            <ProductRecomm products={recommendations}></ProductRecomm>{" "}
+            <ProductRecomm
+              title={"YOU MIGHT ALSO LIKE"}
+              products={recommendations}
+            ></ProductRecomm>
+            <RatingSection reviews={product.reviews}></RatingSection>
           </div>
         </>
       )}
