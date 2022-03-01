@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useHistory } from "react-router-dom";
 import Rating from "./Rating";
 
-function Product({ prodDesc, expandHeight }) {
+function Product({ prodDesc, expandHeight, elongate }) {
   const [detailView, showDetailed] = useState(false);
   const [currImg, setCurrImg] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -86,8 +86,8 @@ function Product({ prodDesc, expandHeight }) {
         onMouseLeave={() => {
           showDetailed(false);
         }}
-        className={`${
-          expandHeight ? "h-[412px]" : "h-prHeight"
+        className={`${expandHeight ? "h-[417px]" : "h-prHeight"} ${
+          elongate && "h-[450px]"
         } rounded-md w-full  cursor-pointer overflow-hidden relative`}
       >
         <img
@@ -111,7 +111,9 @@ function Product({ prodDesc, expandHeight }) {
                 {shortenTitle(prodDesc.title)}
               </div>
               <div className="flex items-center space-x-1.5">
-                <div className="font-semibold">${prodDesc.prize}</div>
+                <div className="font-semibold">
+                  ${(Math.round(prodDesc.prize * 100) / 100).toFixed(2)}
+                </div>
                 {detailView && (
                   <div ref={stars} className="opacity-0">
                     <Rating reviews={prodDesc.reviews}></Rating>
