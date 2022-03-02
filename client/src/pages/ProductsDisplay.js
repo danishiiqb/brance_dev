@@ -8,13 +8,22 @@ import ImageBox from "../components/ProductDisplay/ImageBox";
 import ProductDesc from "../components/ProductDisplay/ProductDesc";
 import ProductRecomm from "../components/ProductDisplay/ProductRecomm";
 import RatingSection from "../components/ProductDisplay/RatingSection";
+import Footer from "../components/Footer";
 
 function ProductsDisplay() {
   let { brand, name, id } = useParams();
   const [product, setProduct] = useState("");
   const [err, setErr] = useState("");
   const [recommendations, setRecommendations] = useState([]);
-
+  const [recently, setRecent] = useState([]);
+  useEffect(() => {
+    let recentlyViewed = localStorage.getItem("recentlyViewed");
+    setRecent(
+      JSON.parse(recentlyViewed)
+        .filter((el) => el.id !== id)
+        .reverse()
+    );
+  }, [id]);
   useEffect(() => {
     async function findDocument() {
       try {
@@ -62,7 +71,7 @@ function ProductsDisplay() {
     }
     findDocument();
   }, [id]);
-  console.log(product);
+
   return (
     <div>
       {product && (
@@ -73,13 +82,20 @@ function ProductsDisplay() {
               <ProductDesc product={product}></ProductDesc>
             </div>
           </div>
-          <div className="px-11">
+          <div className="px-11 space-y-24 mt-20">
             <ProductRecomm
               title={"YOU MIGHT ALSO LIKE"}
               products={recommendations}
             ></ProductRecomm>
             <RatingSection reviews={product.reviews}></RatingSection>
+            {recently.length > 0 && (
+              <ProductRecomm
+                title={"Recently Viewed"}
+                products={recently}
+              ></ProductRecomm>
+            )}
           </div>
+          <Footer></Footer>
         </>
       )}
     </div>
