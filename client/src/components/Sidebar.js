@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import useWindow from "../hooks/useWindow";
 import { ReactComponent as Cross } from "../icons/cross.svg";
 import { ReactComponent as BackArrow } from "../icons/back-arrow.svg";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function Sidebar({
   closeSide,
@@ -226,10 +226,13 @@ function Sidebar({
               <>
                 <div
                   onClick={() => {
+                    setClosingState(true);
                     history.push(
-                      `${currSelected.id
+                      `/shop/${currSelected.id
                         .split("#")[1]
-                        .toLowerCase()}s/shop/${item.replace(/\s+/g, "-")}`
+                        .toLowerCase()}s/${showInner.toLowerCase()}/${item
+                        .replace(/\s+/g, "-")
+                        .toLowerCase()}`
                     );
                   }}
                   key={idx}
