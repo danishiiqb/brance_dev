@@ -13,6 +13,7 @@ import Footer from "../components/Footer";
 function ProductsDisplay() {
   let { brand, name, id } = useParams();
   const [product, setProduct] = useState("");
+  const [loader, setLoader] = useState(true);
   const [err, setErr] = useState("");
   const [recommendations, setRecommendations] = useState([]);
   const [recently, setRecent] = useState([]);
@@ -41,7 +42,6 @@ function ProductsDisplay() {
           }
         });
         let response = await Promise.all(productsColl);
-
         let responseRev = await Promise.all(reviewColl);
         let product = [];
         response.forEach((elem, idx1) => {
@@ -56,6 +56,7 @@ function ProductsDisplay() {
           });
         });
         let [foundProduct] = product.filter((pr) => pr.id === id);
+
         if (!foundProduct) {
           throw new Error("Product Not Found");
         }
@@ -65,40 +66,61 @@ function ProductsDisplay() {
         );
         setRecommendations(recommendations);
         setProduct(foundProduct);
+        setLoader(false);
       } catch (err) {
         setErr(err.message);
+        setLoader(false);
       }
     }
     findDocument();
   }, [id]);
 
   return (
-    <div>
-      {product && (
-        <>
-          <div className="px-11">
-            <div className="flex py-8 space-x-12">
-              <ImageBox product={product}></ImageBox>
-              <ProductDesc product={product}></ProductDesc>
+    <>
+      {loader && (
+        <div className="fixed w-full top-0 h-full z-50 bg-[#000000cc]"></div>
+      )}
+      <div>
+        {err && (
+          <div className="h-[90vh]">
+            <div className="w-[35%] relative top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
+              <div className="text-center absolute top-[53%] left-[52%] -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-white">
+                {err}
+              </div>
+              <img
+                src="/img/empty.png"
+                className="w-full h-full object-cover"
+                alt=""
+              />
             </div>
           </div>
-          <div className="px-11 space-y-24 mt-20">
-            <ProductRecomm
-              title={"YOU MIGHT ALSO LIKE"}
-              products={recommendations}
-            ></ProductRecomm>
-            <RatingSection reviews={product.reviews}></RatingSection>
-            {recently.length > 0 && (
+        )}
+        {product && (
+          <>
+            <div className="px-11">
+              <div className="flex py-8 space-x-12">
+                <ImageBox product={product}></ImageBox>
+                <ProductDesc product={product}></ProductDesc>
+              </div>
+            </div>
+            <div className="px-11 space-y-24 mt-20">
               <ProductRecomm
-                title={"Recently Viewed"}
-                products={recently}
+                title={"YOU MIGHT ALSO LIKE"}
+                products={recommendations}
               ></ProductRecomm>
-            )}
-          </div>
-          <Footer></Footer>
-        </>
-      )}
-    </div>
+              <RatingSection reviews={product.reviews}></RatingSection>
+              {recently.length > 0 && (
+                <ProductRecomm
+                  title={"Recently Viewed"}
+                  products={recently}
+                ></ProductRecomm>
+              )}
+            </div>
+            <Footer></Footer>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 
