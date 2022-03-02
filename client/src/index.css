@@ -27,7 +27,9 @@
 .fade {
   animation: fade2 3s ease-in forwards;
 }
-
+.tr {
+  transform: rotateX(180deg);
+}
 @keyframes fade2 {
   0% {
     opacity: 0;
