@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Banner from "../components/Banner";
 import Brands from "../components/Brands";
 import FeatureSec from "../components/FeatureSec";
+import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
 import Section from "../components/Section";
@@ -29,17 +30,7 @@ function Home() {
         <Brands></Brands>
         <Section></Section>
         <FeatureSec></FeatureSec>
-        <footer
-          className=" mt-4"
-          style={{
-            textAlign: "center",
-            marginBottom: "3rem",
-            fontSize: "2rem",
-            fontWeight: "bold"
-          }}
-        >
-          Made By Danish Iqbal
-        </footer>
+        <Footer></Footer>
       </div>
     </>
   );
