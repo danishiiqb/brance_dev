@@ -14,10 +14,13 @@ import Footer from "../components/Footer";
 function Shop() {
   const [products, setProducts] = useState([]);
   const allProducts = useRef([]);
+  const cloned = useRef([]);
   const index = useRef(1);
+  const currVal = useRef("");
   let firstRender = useRef(true);
   let { id, type, navType } = useParams();
   const filterType = useRef(data);
+  const [reset, setReset] = useState("");
   const [loader, setLoader] = useState(true);
   const [selectedVals, setSelectedVals] = useState([]);
 
@@ -35,33 +38,65 @@ function Shop() {
       return [...prev, obj];
     });
   }
+
+  function catogExists(val) {
+    return selectedVals.filter((type) => {
+      return type.type === val;
+    });
+  }
+  function sortPrize(itemClicked) {
+    let sorted = [];
+    if (itemClicked === "Lowest Price") {
+      sorted = allProducts.current.sort((a, b) => {
+        return a.prize - b.prize;
+      });
+    }
+    if (itemClicked === "Highest Price") {
+      sorted = allProducts.current.sort((a, b) => {
+        return b.prize - a.prize;
+      });
+    }
+    if (itemClicked === "Recommended") {
+      sorted = allProducts.current.sort((a, b) => {
+        return b.createdAt.seconds - a.createdAt.seconds;
+      });
+    }
+    return sorted;
+  }
+
+  function filterOnSort(itemClicked) {
+    let sorted = sortPrize(itemClicked);
+    allProducts.current = sorted;
+    setProducts(sorted.slice(0, index.current * 25));
+  }
   function filterDynamic(
     type,
     alreadyFiltered,
     filteredDepend,
     alias = undefined
   ) {
-    let values = (
-      alreadyFiltered ? filteredDepend : allProducts.current
-    ).filter((item) => {
-      let defVal = false;
-      type.forEach((el) => {
-        if (
-          item[alias || el.type.toLowerCase()].toLowerCase() ===
-          el.value.toLowerCase()
-        ) {
-          defVal = true;
-        }
-      });
-      return defVal;
-    });
-
+    let values = (alreadyFiltered ? filteredDepend : cloned.current).filter(
+      (item) => {
+        let defVal = false;
+        type.forEach((el) => {
+          // if (alias === "size") {
+          //   let filtered = item[alias].filter((elem) => elem.elem === el.val);
+          //   if (filtered.length > 0) {
+          //     defVal = true;
+          //   }
+          //   return;
+          // }
+          if (
+            item[alias || el.type.toLowerCase()].toLowerCase() ===
+            el.value.toLowerCase()
+          ) {
+            defVal = true;
+          }
+        });
+        return defVal;
+      }
+    );
     return values;
-  }
-  function catogExists(val) {
-    return selectedVals.filter((type) => {
-      return type.type === val;
-    });
   }
   useEffect(() => {
     if (!firstRender.current) {
@@ -131,6 +166,32 @@ function Shop() {
       } else if (materialFilter.length > 0) {
         filteredValues = filterDynamic(materialFilter, false, [], "madewith");
       }
+      let sizeFilter = catogExists("Size");
+      // if (
+      //   (colourFilter.length > 0 ||
+      //     brandFilter.length > 0 ||
+      //     categFilter.length > 0 ||
+      //     styleFilter.length > 0 ||
+      //     patternFilter.length > 0 ||
+      //     materialFilter.length > 0) &&
+      //   sizeFilter.length > 0
+      // ) {
+      //   // filteredValues = filterDynamic(
+      //     // sizeFilter,
+      //     // true,
+      //     // filteredValues,
+      //     // "size"
+      //   // );
+      // } else if (sizeFilter.length > 0) {
+      //   // filteredValues = filterDynamic(sizeFilter, false, [], "size");
+      // }
+
+      if (selectedVals.length === 0 || sizeFilter.length > 0) {
+        allProducts.current = cloned.current;
+        setProducts(allProducts.current.slice(0, index.current * 25));
+        return;
+      }
+      allProducts.current = filteredValues;
       setProducts(filteredValues);
     }
     firstRender.current = false;
@@ -139,6 +200,7 @@ function Shop() {
 
   useEffect(() => {
     async function getAllProducts() {
+      setLoader(true);
       try {
         const collectionRef = await getDocs(collection(db, "users"));
         let productsColl = [];
@@ -157,7 +219,6 @@ function Shop() {
         let response = await Promise.all(productsColl);
         let responseRev = await Promise.all(reviewColl);
         let productsArr = [];
-
         response.forEach((elem, idx1) => {
           elem.docs.forEach((doc, idx2) => {
             console.log(doc.id === responseRev[idx1].docs[idx2].id);
@@ -181,27 +242,29 @@ function Shop() {
               return b.createdAt.seconds - a.createdAt.seconds;
             });
         } else {
-          filteredProducts = productsArr.filter((prod) => {
-            return (
-              id.split("-").join(" ").toLowerCase() ===
-              prod[
-                navType === "clothing" ? "Category" : navType.toLowerCase()
-              ].toLowerCase()
-            );
-          });
+          filteredProducts = productsArr
+            .filter((prod) => {
+              return (
+                id.split("-").join(" ").toLowerCase() ===
+                prod[
+                  navType === "clothing" ? "category" : navType.toLowerCase()
+                ].toLowerCase()
+              );
+            })
+            .sort((a, b) => {
+              return b.createdAt.seconds - a.createdAt.seconds;
+            });
         }
-
         allProducts.current = filteredProducts;
+        cloned.current = filteredProducts;
         setProducts(filteredProducts.slice(0, 25));
         setLoader(false);
       } catch (err) {
         setLoader(false);
-        return err.message;
       }
     }
     getAllProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id, navType, type]);
 
   return (
     <>
@@ -256,13 +319,13 @@ function Shop() {
                   Home/<span className="capitalize">{type}</span>
                 </span>
                 <span className="font-medium  text-[1.1rem]">
-                  All <span className="capitalize">{type}</span> Clothing{" "}
+                  All <span className="capitalize">{type}</span> Clothing
                   <span>({allProducts.current.length}) items </span>
                 </span>
               </div>
-              <Sort></Sort>
+              <Sort liftDropdownItem={filterOnSort}></Sort>
             </div>
-            {products.length > 0 && (
+            {products.length > 0 && !loader ? (
               <>
                 <div className="grid grid-cols-4 mt-3 gap-3">
                   {products.map((prod) => {
@@ -296,9 +359,8 @@ function Shop() {
                   <button
                     onClick={() => {
                       if (
-                        Math.floor(
-                          allProducts.current.length / products.length
-                        ) > index.current
+                        Math.floor(allProducts.current.length / 25) >
+                        index.current
                       ) {
                         index.current += 1;
                         setProducts(
@@ -323,6 +385,21 @@ function Shop() {
                   </button>
                 </div>
               </>
+            ) : (
+              !loader && (
+                <div className="h-full">
+                  <div className="w-[35%] relative top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
+                    <div className="text-center absolute top-[53%] left-[52%] -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-white">
+                      Products Not found
+                    </div>
+                    <img
+                      src="/img/empty.png"
+                      className="w-full h-full object-cover"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              )
             )}
           </div>
         </div>
