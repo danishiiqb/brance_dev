@@ -6,6 +6,7 @@ import { products } from "./products";
 import thunk from "redux-thunk";
 import { filteredDataReducer } from "./filteredData";
 import { addToBag } from "./addToBag";
+import likedProdReducer from "./likedProductRed";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -15,7 +16,8 @@ const store = createStore(
     user: userAuthentication,
     products: products,
     filteredData: filteredDataReducer,
-    addToBag: addToBag
+    addToBag: addToBag,
+    likedProducts: likedProdReducer
   }),
   composeEnhancers(applyMiddleware(thunk))
 );
