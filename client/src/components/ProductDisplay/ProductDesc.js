@@ -1,13 +1,43 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ReactComponent as Bag } from "../../icons/bagProd.svg";
-import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 import Rating from "../Rating";
 import Qty from "../Qty";
 import Accordian from "../Accordian";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { add, remove, update } from "../../store/addToBag";
+import { useRef } from "react";
+import LikedIcon from "../LikedIcon";
 
 function ProductDesc({ product }) {
   const [selectedSize, setSelectedSize] = useState("");
-  const [heart, setSwitchHeart] = useState(false);
+  const [err, setErr] = useState("");
+  let first = useRef(false);
+  let { addTo, likedProducts } = useSelector((state) => {
+    return { addTo: state.addToBag, likedProducts: state.likedProducts };
+  });
+  let fnd = useMemo(() => {
+    return addTo.find((prod) => prod.id === product.id);
+  }, [addTo]);
+  const [qty, setQty] = useState("");
+  const dispatch = useDispatch();
+
+  let getQuantity = (val) => {
+    setQty(val);
+  };
+
+  useEffect(() => {
+    first.current && fnd && dispatch(update(product, qty, selectedSize));
+  }, [qty, dispatch]);
+
+  useEffect(() => {
+    if (first.current) {
+      fnd && dispatch(update(product, qty, selectedSize));
+      err && setErr("");
+    }
+    first.current = true;
+  }, [selectedSize, dispatch]);
+
   return (
     <div className="w-1/2">
       <div className="">
@@ -19,7 +49,7 @@ function ProductDesc({ product }) {
         </div>
         <div className="font-medium select-none text-[1.76rem] mt-3 ">
           {product.currency === "USD" ? "$" : ""}
-          {product.prize}
+          {(Math.round(product.prize * 100) / 100).toFixed(2)}
         </div>
       </div>
       <div className="space-y-2 my-7">
@@ -64,39 +94,43 @@ function ProductDesc({ product }) {
             );
           })}
         </div>
+        {err && (
+          <div className="text-xs text-[#FF385C] font-semibold">{err}</div>
+        )}
       </div>
-      <div className="space-y-2">
-        <Qty inStock={product.inStock}></Qty>
+      <div>
+        <Qty notify={getQuantity} inStock={product.inStock}></Qty>
       </div>
       <div className="flex  space-x-5 mt-10 items-center w-[85%]">
         <div className="flex-1 relative">
-          <div className="flex cursor-pointer group shadow-sm_dark hover:shadow-darker transition-all duration-300  items-center space-x-1.5 justify-center text-white p-[0.6rem] rounded-md bg-[#FF385C]">
+          <div
+            onClick={() => {
+              if (!selectedSize && !fnd) {
+                setErr("Please Select Size");
+                return;
+              }
+              if (!fnd) {
+                dispatch(add(product, qty, selectedSize));
+              } else {
+                dispatch(remove(product));
+              }
+            }}
+            className="flex cursor-pointer group shadow-sm_dark hover:shadow-darker transition-all duration-300  items-center space-x-1.5 justify-center text-white p-[0.6rem] rounded-md bg-[#FF385C]"
+          >
             <button className="text-lg select-none font-semibold">
               Add To Bag
             </button>
-            <Bag className="w-7 h-7 group-hover:text-white transition-all fill-current stroke-white text-transparent  duration-300 stroke-white"></Bag>
+            <Bag
+              className={`w-7 h-7 ${
+                fnd ? "text-white" : "text-transparent"
+              } group-hover:text-white transition-all fill-current stroke-white   duration-300 stroke-white`}
+            ></Bag>
           </div>
           <div className="absolute select-none text-[12px] text-[#6b6b6b] mt-2 -translate-x-1/2 left-1/2 top-full ">
             Free Delivery Ts&Cs apply
           </div>
         </div>
-        <div
-          onMouseEnter={() => {
-            setSwitchHeart(true);
-          }}
-          onMouseLeave={() => {
-            setSwitchHeart(false);
-          }}
-          className="border-black cursor-pointer border-2 flex items-center justify-center rounded-full hover:bg-[#FF385C] transition-all duration-150  hover:border-white  w-10 h-10 p-[1.3rem]"
-        >
-          <div>
-            {heart ? (
-              <RiHeartFill className="w-6 text-white fill-current h-6" />
-            ) : (
-              <RiHeartLine className="w-7 h-7" />
-            )}
-          </div>
-        </div>
+        <LikedIcon likedProducts={likedProducts} prod={product}></LikedIcon>
       </div>
       <div className="mt-20 space-y-5">
         <Accordian
