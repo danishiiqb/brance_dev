@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { ReactComponent as Menu } from "../icons/menu.svg";
-import {
-  RiHeartFill,
-  RiHeartLine,
-  RiUser3Fill,
-  RiUser3Line
-} from "react-icons/ri";
+import { RiUser3Fill, RiUser3Line } from "react-icons/ri";
 import { IoCart, IoCartOutline } from "react-icons/io5";
 import useWindow from "../hooks/useWindow";
 import Icons from "./Icons";
@@ -14,15 +9,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../store/modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../services/firebase";
+import { useEffect } from "react";
+import BagReview from "./Navbar/BagReview";
+import LikedProduct from "./LikedProduct";
 
 function Nav({ items, openSide, selectTab }) {
   const [width] = useWindow();
   const [enter, setEnter] = useState(false);
-  const { user } = useSelector((state) => {
-    return state.user;
+  const { user, addTo, likedProducts } = useSelector((state) => {
+    return {
+      user: state.user,
+      addTo: state.addToBag,
+      likedProducts: state.likedProducts
+    };
   });
-  const [dropDown, setDropdown] = useState(false);
+
   const dispatch = useDispatch();
+  const [expand, expandCart] = useState(false);
+
+  useEffect(() => {
+    if (addTo.length === 0) expandCart(false);
+  }, [addTo]);
+  const [dropDown, setDropdown] = useState(false);
+
   const triggerDropDown = () => {
     setDropdown((prev) => {
       return !prev;
@@ -92,7 +101,7 @@ function Nav({ items, openSide, selectTab }) {
                   icon={RiUser3Line}
                 ></Icons>
                 <div className="text-sm">
-                  {user ? (
+                  {user.user ? (
                     <div className="cursor-pointer">LogOut</div>
                   ) : (
                     <div className="cursor-pointer">Login/SignUp</div>
@@ -101,7 +110,7 @@ function Nav({ items, openSide, selectTab }) {
               </div>
               {dropDown && (
                 <div className="z-50 absolute w-max  font-semibold overflow-hidden text-sm  left-0 shadow-sm_dark rounded-md top-8  bg-white">
-                  {user ? (
+                  {user.user ? (
                     <div
                       onClick={() => {
                         signOut(auth);
@@ -136,8 +145,25 @@ function Nav({ items, openSide, selectTab }) {
                 </div>
               )}
             </div>
-            <Icons filledicon={RiHeartFill} icon={RiHeartLine}></Icons>
-            <Icons filledicon={IoCart} icon={IoCartOutline}></Icons>
+            <LikedProduct likedProd={likedProducts}></LikedProduct>
+            <div
+              onClick={() => {
+                addTo.length > 0 && expandCart((prev) => !prev);
+              }}
+              className="relative"
+            >
+              <div className="relative">
+                <Icons
+                  expand={expand}
+                  filledicon={IoCart}
+                  icon={IoCartOutline}
+                ></Icons>
+                <div className="absolute -top-0.5 w-4 h-4 flex justify-center items-center text-[10px] font-medium rounded-full text-white bg-[#FF385C] left-[63%] select-none ">
+                  {addTo.length}
+                </div>
+              </div>
+              {expand && <BagReview addToProd={addTo}></BagReview>}
+            </div>
           </ul>
         </div>
       </nav>
