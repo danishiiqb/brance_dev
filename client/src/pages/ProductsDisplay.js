@@ -16,17 +16,20 @@ function ProductsDisplay() {
   const [loader, setLoader] = useState(true);
   const [err, setErr] = useState("");
   const [recommendations, setRecommendations] = useState([]);
+
   const [recently, setRecent] = useState([]);
   useEffect(() => {
     let recentlyViewed = localStorage.getItem("recentlyViewed");
-    setRecent(
-      JSON.parse(recentlyViewed)
-        .filter((el) => el.id !== id)
-        .reverse()
-    );
+    recentlyViewed &&
+      setRecent(
+        JSON.parse(recentlyViewed)
+          .filter((el) => el.id !== id)
+          .reverse()
+      );
   }, [id]);
   useEffect(() => {
     async function findDocument() {
+      setLoader(true);
       try {
         const collectionRef = await getDocs(collection(db, "users"));
         let productsColl = [];
