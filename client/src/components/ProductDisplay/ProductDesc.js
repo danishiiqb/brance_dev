@@ -19,7 +19,7 @@ function ProductDesc({ product }) {
   let fnd = useMemo(() => {
     return addTo.find((prod) => prod.id === product.id);
   }, [addTo]);
-  const [qty, setQty] = useState("");
+  const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
 
   let getQuantity = (val) => {
