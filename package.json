@@ -20,6 +20,9 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "chalk": "^5.0.0",
+    "dotenv": "^10.0.0",
+    "firebase-admin": "^10.0.2",
+    "stripe": "^8.207.0"
   }
 }
