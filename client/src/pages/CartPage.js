@@ -2,11 +2,13 @@ import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cart from "../components/CartPage/Cart";
 import Total from "../components/CartPage/Total";
-import { ReactComponent as Stripe } from "../icons/stripe.svg";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { SiVisa, SiPaypal, SiAmericanexpress } from "react-icons/si";
 import { FaCcMastercard } from "react-icons/fa";
 import { openModal } from "../store/modal";
+import { loadStripe } from "@stripe/stripe-js";
+console.log(process.env);
+const stripePromise = loadStripe(`${process.env.REACT_APP_PUBLIC_KEY}`);
 
 function CartPage() {
   const { addToBag: shoppingBag, user } = useSelector((state) => {
@@ -19,6 +21,24 @@ function CartPage() {
       0
     );
   }, [shoppingBag]);
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+    const sessionId = await (
+      await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ items: shoppingBag, docId: user.user.uid })
+      })
+    ).json();
+    const result = await stripe.redirectToCheckout({
+      sessionId: sessionId.id
+    });
+    if (result.error) {
+    }
+  };
   return (
     <div className="mb-8">
       <div className="flex mt-8 mb-5 px-11 text-xl font-medium space-x-1">
@@ -45,9 +65,13 @@ function CartPage() {
           </div>
           <Total cart={true} totalPrice={totalPrice}></Total>
 
-          <div className="text-md text-white font-medium bg-black cursor-pointer text-center m-2 transition-all duration-300 rounded-sm hover:font-semibold capitalize p-[0.7rem]">
+          <button
+            role="link"
+            onClick={createCheckoutSession}
+            className="text-md w-full text-white font-medium bg-black cursor-pointer text-center m-2 transition-all duration-300 rounded-sm hover:font-semibold capitalize p-[0.7rem]"
+          >
             <span>Continue to Checkout</span>
-          </div>
+          </button>
           <div className="text-xs flex mt-3 space-x-1 items-center justify-center ">
             <div>
               <AiFillCheckCircle className="w-3 h-3" />
