@@ -7,7 +7,6 @@ import { SiVisa, SiPaypal, SiAmericanexpress } from "react-icons/si";
 import { FaCcMastercard } from "react-icons/fa";
 import { openModal } from "../store/modal";
 import { loadStripe } from "@stripe/stripe-js";
-console.log(process.env);
 const stripePromise = loadStripe(`${process.env.REACT_APP_PUBLIC_KEY}`);
 
 function CartPage() {
@@ -21,6 +20,7 @@ function CartPage() {
       0
     );
   }, [shoppingBag]);
+
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
     const sessionId = await (
@@ -39,6 +39,7 @@ function CartPage() {
     if (result.error) {
     }
   };
+
   return (
     <div className="mb-8">
       <div className="flex mt-8 mb-5 px-11 text-xl font-medium space-x-1">
