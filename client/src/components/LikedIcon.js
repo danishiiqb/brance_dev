@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 
-function LikedIcon({ likedProducts, prod }) {
+function LikedIcon({ cart, likedProducts, prod }) {
   const [heart, setSwitchHeart] = useState(false);
   const dispatch = useDispatch();
   let found = likedProducts.find((product) => product.id === prod.id);
@@ -24,15 +24,25 @@ function LikedIcon({ likedProducts, prod }) {
       onMouseLeave={() => {
         setSwitchHeart(false);
       }}
-      className={`border-black ${
-        found && "bg-[#FF385C] border-transparent"
-      } cursor-pointer border-2 flex items-center justify-center rounded-full hover:bg-[#FF385C] transition-all duration-150  hover:border-white  w-10 h-10 p-[1.3rem]`}
+      className={
+        !cart
+          ? `border-2 border-black ${
+              found && "bg-[#FF385C] border-transparent"
+            } cursor-pointer  flex items-center justify-center rounded-full hover:bg-[#FF385C] transition-all duration-150  hover:border-white  w-10 h-10 p-[1.3rem]`
+          : `cursor-pointer `
+      }
     >
       <div>
-        {heart || found ? (
-          <RiHeartFill className="w-6 text-white fill-current h-6" />
+        {!cart ? (
+          heart || found ? (
+            <RiHeartFill className="w-6 text-white fill-current h-6" />
+          ) : (
+            <RiHeartLine className="w-7 h-7" />
+          )
+        ) : heart || found ? (
+          <RiHeartFill className="w-6 text-[#FF385C] fill-current h-6" />
         ) : (
-          <RiHeartLine className="w-7 h-7" />
+          <RiHeartLine className="w-7 h-7 " />
         )}
       </div>
     </div>
