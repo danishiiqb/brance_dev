@@ -14,14 +14,16 @@ function useAuth() {
             const { type } = snap.data();
             if (type === "admin") {
               setUser({ ...userRef, ...snap.data() });
+            } else {
+              setUser({ ...userRef });
             }
-            return;
+          } else {
+            setUser({ ...userRef });
           }
-          setUser({ ...userRef });
         });
-        return;
+      } else {
+        setUser(null);
       }
-      setUser(null);
     });
     return unsubscribe;
   }, []);
