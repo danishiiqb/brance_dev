@@ -2,9 +2,10 @@
   "name": "brance-dev",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@craco/craco": "^6.4.0",
+    "@stripe/stripe-js": "^1.24.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -24,6 +25,7 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
+    "stripe": "^8.207.0",
     "tailwindcss-typography": "^2.2.0",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
