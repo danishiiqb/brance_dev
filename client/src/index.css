@@ -25,16 +25,21 @@
   animation: fade 0.2s ease-in forwards;
 }
 .fade {
-  animation: fade2 3s ease-in forwards;
+  animation: fade2 0.4s ease-in-out forwards;
 }
+
 .tr {
   transform: rotateX(180deg);
 }
 @keyframes fade2 {
   0% {
-    opacity: 0;
+    transform: translateY(-100%);
+  }
+  80% {
+    opacity: 0.3;
   }
   100% {
+    transform: translateY(0);
     opacity: 1;
   }
 }
