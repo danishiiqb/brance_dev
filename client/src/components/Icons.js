@@ -15,7 +15,7 @@ function Icons(props) {
         });
       }}
     >
-      {filledIcon || props.parentHover ? (
+      {filledIcon || props.parentHover || props.expand ? (
         <props.filledicon className="w-3.5 h-3.5 text-[#FF385C] lg:w-7 lg:h-7  cursor-pointer "></props.filledicon>
       ) : (
         <props.icon className="w-3.5 h-3.5 lg:w-7 lg:h-7  cursor-pointer "></props.icon>
