@@ -49,16 +49,8 @@ const getProductsData = (id) => {
       // if (count === 1) {
       //   console.log("ooos");
       //   docsSnap.docs.forEach(async (docu) => {
-      //     await setDoc(doc(db, "users", id, "productReviews", docu.id), {
-      //       reviews: arrayUnion({
-      //         title: "",
-      //         rating: 0,
-      //         likes: 0,
-      //         dislikes: 0,
-      //         comment: "",
-      //         createdAt: new Date(),
-      //         user: ""
-      //       })
+      //     await setDoc(doc(db, "users", id, "products", docu.id), {
+
       //     });
       //   });
       // }
