@@ -16,7 +16,7 @@ function Total({ totalPrice, cart }) {
         </div>
         <div className={`flex ${cart ? "text-sm" : "text-xs"} justify-between`}>
           <div className="text-[#7c7c7c]">Delivery</div>
-          <div>$3.99</div>
+          <div> {totalPrice > 0 ? "$3.99" : "0.00"} </div>
         </div>
       </div>
       <div
@@ -25,7 +25,12 @@ function Total({ totalPrice, cart }) {
         } justify-between`}
       >
         <div>Total</div>
-        <div>${(Math.round(totalPrice * 100) / 100 + 3.99).toFixed(2)}</div>
+        <div>
+          $
+          {totalPrice > 0
+            ? (Math.round(totalPrice * 100) / 100 + 3.99).toFixed(2)
+            : "0.00"}
+        </div>
       </div>
     </div>
   );
