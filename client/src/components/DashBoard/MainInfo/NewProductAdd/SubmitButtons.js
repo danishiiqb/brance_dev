@@ -31,22 +31,15 @@ function SubmitButtons({ formData, setMssg, clearForm }) {
       ...formData.formData,
       productImg: [...link],
       description: formData.desc,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
+      adminId: user.uid
     });
     await setDoc(doc(db, "users", user.uid, "productsAdminInfo", uniqueId), {
       revenue: 0,
       sold: 0
     });
     await setDoc(doc(db, "users", user.uid, "productReviews", uniqueId), {
-      reviews: arrayUnion({
-        title: "",
-        rating: 0,
-        likes: 0,
-        dislikes: 0,
-        comment: "",
-        createdAt: new Date(),
-        user: ""
-      })
+      reviews: arrayUnion()
     });
   }
   async function uploadImageAddItem(file) {
