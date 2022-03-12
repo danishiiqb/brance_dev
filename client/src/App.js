@@ -17,6 +17,8 @@ import { closeModal } from "./store/modal";
 import Modal from "./components/Modal";
 import ProductsDisplay from "./pages/ProductsDisplay";
 import CartPage from "./pages/CartPage";
+import OrderSuccess from "./pages/OrderSuccess";
+import OrderCompleted from "./pages/OrderCompleted";
 
 function Wrapper({ children }) {
   const location = useLocation();
@@ -27,7 +29,6 @@ function App() {
   const [user] = useAuth();
   const dispatch = useDispatch();
   const firstRender = useRef(false);
-
   const modal = useSelector((state) => {
     return state.modal;
   });
@@ -70,8 +71,14 @@ function App() {
               <ProductsDisplay></ProductsDisplay>
             </Wrapper>
           </Route>
-          <Route path="/cart">
+          <Route exact path="/cart">
             <CartPage></CartPage>
+          </Route>
+          <Route exact path="/MyOrders">
+            <OrderSuccess></OrderSuccess>
+          </Route>
+          <Route exact path="/success">
+            <OrderCompleted></OrderCompleted>
           </Route>
           <Route path="/reset-password">
             <ResetPassword></ResetPassword>
