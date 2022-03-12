@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { HiPlus, HiMinus } from "react-icons/hi";
 
-function Qty({ notify = null, selected, navbar, inStock }) {
+function Qty({ notShow, notify = null, selected, navbar, inStock }) {
   const [num, setNum] = useState(1);
   let first = useRef(false);
 
@@ -24,7 +24,7 @@ function Qty({ notify = null, selected, navbar, inStock }) {
       }}
       className={`${notify && "space-y-2"}`}
     >
-      {!navbar ? (
+      {!navbar && !notShow ? (
         <div className="text-md  select-none font-medium">Qty:</div>
       ) : (
         ""
