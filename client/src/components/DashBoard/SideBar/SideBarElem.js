@@ -1,15 +1,21 @@
 import React from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { resetProducts } from "../../../store/products";
+import { resettableHeader } from "../../../store/tableHeaderSortingReducer";
 
 function SideBarElem({ item, activatedElem, activate }) {
   const [hover, setHover] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <div
       onClick={() => {
         activate(item.name);
+        dispatch(resetProducts());
+        dispatch(resettableHeader());
         history.push(`/admin/${item.name.toLowerCase()}`);
       }}
       onMouseEnter={() => {
