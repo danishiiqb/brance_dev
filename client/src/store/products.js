@@ -1,12 +1,4 @@
-import {
-  doc,
-  collection,
-  getDocs,
-  setDoc,
-  serverTimestamp,
-  updateDoc,
-  arrayUnion
-} from "firebase/firestore";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { db } from "../services/firebase";
 
 function products(state = { products: [], message: "" }, action) {
@@ -29,32 +21,40 @@ const updateProduct = (elem) => {
   return { type: "UPDATE_PRODUCT", payload: elem };
 };
 
-const getProductsData = (id) => {
+const getProductsData = (id, sub) => {
   return async (dispatch) => {
     try {
-      const subCollectionRef = await collection(db, "users", id, "products");
-      const subCollectionRefTwo = await collection(
-        db,
-        "users",
-        id,
-        "productsAdminInfo"
-      );
+      const subCollectionRef = await collection(db, "users", id, sub);
       const docsSnap = await getDocs(subCollectionRef);
-      let docSnap2 = await getDocs(subCollectionRefTwo);
-      let docs = docsSnap.docs.map((doc, idx) => ({
-        id: doc.id,
-        ...doc.data(),
-        adminInfo: { ...docSnap2.docs[idx].data(), id: doc.id }
-      }));
-      // if (count === 1) {
-      //   console.log("ooos");
-      //   docsSnap.docs.forEach(async (docu) => {
-      //     await setDoc(doc(db, "users", id, "products", docu.id), {
-
-      //     });
-      //   });
-      // }
-      // count++;
+      let docs;
+      if (sub !== "incomingOrders") {
+        const subCollectionRefTwo = await collection(
+          db,
+          "users",
+          id,
+          "productsAdminInfo"
+        );
+        let docSnap2 = await getDocs(subCollectionRefTwo);
+        docs = docsSnap.docs.map((doc, idx) => ({
+          id: doc.id,
+          ...doc.data(),
+          adminInfo: { ...docSnap2.docs[idx].data(), id: doc.id }
+        }));
+      } else {
+        let promises = [];
+        docsSnap.forEach((docu) => {
+          promises.push(getDoc(doc(db, "users", id, "products", docu.id)));
+        });
+        let fullfiled = await Promise.all(promises);
+        docs = docsSnap.docs.map((doc, idx) => {
+          return {
+            ...doc.data(),
+            id: doc.id,
+            prize: doc.data().qty * fullfiled[idx].data().prize,
+            details: fullfiled[idx].data()
+          };
+        });
+      }
       dispatch({ type: "GET_DATA", payload: docs });
     } catch (err) {
       dispatch({ type: "ERROR", payload: err.message });
