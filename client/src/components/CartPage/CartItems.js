@@ -14,18 +14,17 @@ function CartItems({ item }) {
     return { likedProducts: state.likedProducts };
   });
   return (
-    <div className="flex cursor-pointer space-x-4 border-b-[1px] py-7 first:pt-0 border-[#dfdfdf]">
-      <div className="w-32">
-        <img
-          className="w-full h-full rounded-sm object-cover"
-          src={item.productImg[0]}
-          alt=""
-        />
-      </div>
-      <div className="space-y-1 py-2.5 flex-1 flex flex-col justify-between">
+    <div className="flex cursor-pointer space-x-5 border-b-[1px] py-7 first:pt-0 border-[#dfdfdf]">
+      <img
+        className="w-32 h-40 rounded-sm object-cover"
+        src={item.productImg[0]}
+        alt=""
+      />
+
+      <div className="space-y-1 py-2 flex-1 flex flex-col justify-between">
         <div>
           <div className="text-md capitalize">{item.title.toLowerCase()}</div>
-          <div className="text-md font-medium">
+          <div className="text-md font-medium mt-0.5">
             ${(Math.round(item.prize * 100) / 100).toFixed(2)}
           </div>
         </div>
