@@ -8,15 +8,8 @@ import ProductTableRow from "../../components/DashBoard/MainInfo/ProductTableRow
 import Search from "../../components/DashBoard/MainInfo/Search";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
 import { filterCategory, filterDate } from "../../store/filteredData";
-import {
-  getProductsData,
-  resetProducts,
-  updateProduct
-} from "../../store/products";
-import {
-  resettableHeader,
-  sortByType
-} from "../../store/tableHeaderSortingReducer";
+import { getProductsData, updateProduct } from "../../store/products";
+import { sortByType } from "../../store/tableHeaderSortingReducer";
 
 function Products() {
   const { user, products, tableHeaderSorting, filteredData } = useSelector(
@@ -29,6 +22,7 @@ function Products() {
       };
     }
   );
+
   const referProducts = useRef(null);
   const dispatcher = useDispatch();
 
@@ -51,13 +45,6 @@ function Products() {
   }
 
   useEffect(() => {
-    return () => {
-      dispatcher(resettableHeader());
-      dispatcher(resetProducts());
-    };
-  }, [dispatcher]);
-
-  useEffect(() => {
     if (tableHeaderSorting.modifiedArr.length > 0) {
       dispatcher(updateProduct(tableHeaderSorting.modifiedArr));
     }
@@ -77,7 +64,7 @@ function Products() {
 
   useEffect(() => {
     if (user.user && user.user.type === "admin")
-      dispatcher(getProductsData(user.user.uid));
+      dispatcher(getProductsData(user.user.uid, "products"));
   }, [dispatcher, user.user]);
 
   useEffect(() => {
