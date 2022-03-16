@@ -1,12 +1,14 @@
 import React from "react";
+
 import { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-function Sort() {
+function Sort({ liftDropdownItem }) {
   const [dropDown, setDropDown] = useState({
     open: false,
     clickedItem: "Recommended"
   });
+
   return (
     <div className="flex text-sm space-x-2">
       <div className="font-medium">Sort By</div>
@@ -24,10 +26,9 @@ function Sort() {
             <IoMdArrowDropdown className="w-5 h-5" />
           </div>
         </div>
-
         {dropDown.open && (
           <div className="animplane opacity-0 absolute w-[120%]  top-full rounded-sm -left-2 z-40 bg-white shadow-md">
-            {["Newly Added", "Lowest Price", "Highest Price"].map(
+            {["Recommended", "Lowest Price", "Highest Price"].map(
               (item, idx) => {
                 return (
                   <div
@@ -35,6 +36,7 @@ function Sort() {
                       setDropDown((prev) => {
                         return { ...prev, clickedItem: item, open: !prev.open };
                       });
+                      liftDropdownItem(item);
                     }}
                     key={idx}
                     className="hover:bg-gray-100 hover:font-medium transition-all duration-150 p-2.5 pb-1.5"
