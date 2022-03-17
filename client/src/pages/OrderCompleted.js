@@ -2,7 +2,7 @@ import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
 import { BsBagCheckFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import WrapperOrders from "../components/OrderSucces/WrapperOrders";
 import { db } from "../services/firebase";
 
@@ -10,6 +10,7 @@ function OrderCompleted() {
   const { user } = useSelector((state) => state.user);
   const [compOrder, setCompOrder] = useState("");
   const divBox = useRef("");
+  const history = useHistory();
   useEffect(() => {
     if (user) {
       let { id: sess_Id } = JSON.parse(localStorage.getItem("ids"));
@@ -51,12 +52,15 @@ function OrderCompleted() {
       </div>
 
       <div className="mt-2 text-center">
-        <Redirect
+        <button
+          onClick={() => {
+            history.replace("/MyOrders");
+          }}
           className="text-xs after:bg-black relative after:top-[105%] after:left-0 after:absolute after:w-full after:h-[1px] hover:after:bg-[#FF385C]  hover:text-[#FF385C]"
           to="/MyOrders"
         >
           See all Orders
-        </Redirect>
+        </button>
       </div>
     </div>
   );
