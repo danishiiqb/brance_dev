@@ -25,9 +25,10 @@ function SideBarElem({ item, activatedElem, activate }) {
         setHover(false);
       }}
       className={`flex items-center py-2 space-x-3.5 relative
- after:h-full hover:after:opacity-100 after:opacity-0 after:bg-[#ff385d23] after:transition-all after:rounded-full after:duration-500 after:absolute ${
-   activatedElem === item.name &&
-   "text-[#FF385C] after:w-[270px] after:opacity-100"
+ after:h-full hover:after:opacity-100  after:bg-[#ff385d23] after:transition-all after:rounded-full after:duration-500 after:absolute ${
+   activatedElem === item.name
+     ? "text-[#FF385C] after:opacity-100  after:w-[271px]"
+     : "after:opacity-0"
  } hover:text-[#FF385C] hover:after:w-[270px] after:w-[20px] after:-left-2/3 after:-z-1 z-20 cursor-pointer transition-all duration-200`}
     >
       {hover || activatedElem === item.name ? (
