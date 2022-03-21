@@ -8,6 +8,12 @@ function filteredDataReducer(state = [], action) {
     });
     return [...filteredData];
   }
+  if (action.type === "CATEGORY_STATUS") {
+    const filteredData = action.payload.elementsArr.filter((el) => {
+      return el.status === action.payload.type;
+    });
+    return [...filteredData];
+  }
   if (action.type === "CATEGORY_DATE") {
     const filteredData = action.payload.elementsArr.filter((product) => {
       let d1 =
@@ -33,8 +39,17 @@ const filterCategory = (data) => {
 const filterDate = (data) => {
   return { type: "CATEGORY_DATE", payload: data };
 };
+const filterStatus = (data) => {
+  return { type: "CATEGORY_STATUS", payload: data };
+};
 const resetFilter = () => {
   return { type: "RESET_FILTER" };
 };
 
-export { filterCategory, resetFilter, filterDate, filteredDataReducer };
+export {
+  filterCategory,
+  filterStatus,
+  resetFilter,
+  filterDate,
+  filteredDataReducer
+};
