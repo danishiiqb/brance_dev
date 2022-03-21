@@ -7,6 +7,7 @@ function tableHeaderSortingReducer(
   action
 ) {
   if (action.type === "SORT") {
+    console.log(action.payload);
     const [sortElemName, order] = action.payload;
     return { ...state, sortElemName, order };
   }
@@ -19,26 +20,43 @@ function tableHeaderSortingReducer(
   if (action.type === "STOCK") {
     let sortedProducts = [...action.elements].sort((a, b) => {
       return state.order === "asc"
-        ? a.inStock - b.inStock
-        : b.inStock - a.inStock;
+        ? Number(a.inStock) - Number(b.inStock)
+        : Number(b.inStock) - Number(a.inStock);
     });
     return { ...state, modifiedArr: sortedProducts };
   }
   if (action.type === "SOLD") {
     let sortedProducts = [...action.elements].sort((a, b) => {
-      return state.order === "asc" ? a.sold - b.sold : b.sold - a.sold;
+      return state.order === "asc"
+        ? Number(a.adminInfo.sold) - Number(b.adminInfo.sold)
+        : Number(b.adminInfo.sold) - Number(a.adminInfo.sold);
     });
     return { ...state, modifiedArr: sortedProducts };
   }
-  if (action.type === "DATE") {
+  if (action.type === "REVENUE") {
     let sortedProducts = [...action.elements].sort((a, b) => {
       return state.order === "asc"
-        ? a.createdAt.seconds - b.createdAt.seconds
-        : b.createdAt.seconds - a.createdAt.seconds;
+        ? Number(a.adminInfo.revenue) - Number(b.adminInfo.revenue)
+        : Number(b.adminInfo.revenue) - Number(a.adminInfo.revenue);
     });
     return { ...state, modifiedArr: sortedProducts };
   }
-  if (action.type === "RESET") {
+
+  if (action.type === "DATE") {
+    let sortedProducts = [...action.elements].sort((a, b) => {
+      if (a.createdAt) {
+        return state.order === "asc"
+          ? a.createdAt.seconds - b.createdAt.seconds
+          : b.createdAt.seconds - a.createdAt.seconds;
+      } else {
+        return state.order === "asc"
+          ? a.timestamp.seconds - b.timestamp.seconds
+          : b.timestamp.seconds - a.timestamp.seconds;
+      }
+    });
+    return { ...state, modifiedArr: sortedProducts };
+  }
+  if (action.type === "RESET_TABLE") {
     return { sortElemName: "", order: "", modifiedArr: [] };
   }
   return state;
@@ -52,7 +70,7 @@ const sortByType = (elements, type) => {
 };
 
 function resettableHeader() {
-  return { type: "RESET" };
+  return { type: "RESET_TABLE" };
 }
 function reset() {}
 export {
