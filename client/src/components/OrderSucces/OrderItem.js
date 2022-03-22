@@ -10,7 +10,7 @@ function OrderItem({ item }) {
       <div className="flex border-b-[1.7px] border-[#e0e0e0] last:border-b-[0px] py-7 first:pt-0 last:pb-0 ">
         <div className="self-start mr-3">
           <img
-            className="w-16 h-16 rounded-sm object-cover"
+            className="w-[4.3rem] h-[4.3rem] rounded-sm object-cover"
             src={item.productImg[0]}
             alt=""
           />
@@ -175,7 +175,13 @@ function OrderItem({ item }) {
       </div>
       {review && (
         <div className="text-right">
-          <AddReview />
+          <AddReview
+            notifyToClose={() => {
+              setSideRev(false);
+            }}
+            adminId={item.adminId}
+            productId={item.id}
+          />
         </div>
       )}
     </>
