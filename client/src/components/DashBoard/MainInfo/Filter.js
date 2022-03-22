@@ -10,10 +10,10 @@ import "react-date-range/dist/theme/default.css";
 import gsap from "gsap/all";
 import { DateRangePicker } from "react-date-range";
 import { useDispatch } from "react-redux";
-import { resetFilter } from "../../../store/filteredData";
+import { filterStatus, resetFilter } from "../../../store/filteredData";
 
 let state = false;
-function Filter({ type, filterByDate, filterByCategory }) {
+function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
   const [openFilters, setFilterStatus] = useState(false);
   let firstRender = useRef(false);
   const [dropDownMenuItems, showDropdownMenuItems] = useState({
@@ -23,11 +23,10 @@ function Filter({ type, filterByDate, filterByCategory }) {
   });
   const { current: timeline } = useRef(gsap.timeline());
   const { current: orderStatusDta } = useRef([
-    "Delivered",
-    "Processing",
-    "In Transit",
-    "Rejected",
-    "On Hold"
+    "Pending",
+    "Shipped",
+    "Out for Delivery",
+    "Delivered"
   ]);
   const { current: productTypes } = useRef([
     "Jacket & Coats",
@@ -211,11 +210,16 @@ function Filter({ type, filterByDate, filterByCategory }) {
                     {orderStatusDta.map((type, idx) => {
                       return (
                         <div
-                          // onClick={() => {
-                          //   setfilterData((prev) => {
-                          //     return { ...prev, orderStatus: type };
-                          //   });
-                          // }}
+                          onClick={() => {
+                            filterByStatus(type);
+                            showDropdownMenuItems((prev) => {
+                              return {
+                                date: false,
+                                orderStatus: !prev.orderStatus,
+                                orderType: false
+                              };
+                            });
+                          }}
                           key={idx}
                           className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
                         >
