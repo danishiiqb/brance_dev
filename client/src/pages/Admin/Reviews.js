@@ -1,54 +1,24 @@
-import React, { useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Filter from "../../components/DashBoard/MainInfo/Filter";
 import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
-import ReviewsTableRow from "../../components/DashBoard/MainInfo/ReviewsTableRow";
+import ReviewsTableRowWrapper from "../../components/DashBoard/MainInfo/Reviews/ReviewsTableRowWrapper";
 import Search from "../../components/DashBoard/MainInfo/Search";
-import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow";
+import { db } from "../../services/firebase";
 
 function Reviews() {
-  const [reviews, setReviews] = useState([
-    {
-      id: "89",
-      comments: {
-        name: "Simon",
-        img: "/img/dashboard/profile.jpeg",
-        message:
-          "Very bad experience. Gave money on 17th till date could not use the laptop as we have received lower configuration. Will not buy hereafter from flipkart.will say friends and relatives also. Will file a civil suit on Monday.",
-        time: "9h ago",
-        rating: "4",
-        engageMent: {
-          likes: [{ user: "John" }],
-          dislikes: [{ user: "Jio" }]
-        }
-      },
-      product: {
-        img: "/img/product.png",
-        name: "Air Jordan 5 Retro",
-        category: "Jeans"
-      }
-    },
-    {
-      id: "9",
-      comments: {
-        name: "Simon",
-        img: "/img/dashboard/profile.jpeg",
-        message:
-          "Very bad experience. Gave money on 17th till date could not use the laptop as we have received lower configuration. Will not buy hereafter from flipkart.will say friends and relatives also. Will file a civil suit on Monday.",
-        time: "9h ago",
-        rating: "4",
-        engageMent: {
-          likes: [],
-          dislikes: []
-        }
-      },
-      product: {
-        img: "/img/product.png",
-        name: "Air Jordan 5 Retro",
-        category: "Jeans"
-      }
+  const [reviews, setReviews] = useState([]);
+  const { user, products, tableHeaderSorting, filteredData } = useSelector(
+    (state) => {
+      return {
+        user: state.user,
+        products: state.products,
+        tableHeaderSorting: state.tableHeaderSorting,
+        filteredData: state.filteredData
+      };
     }
-  ]);
-
+  );
   function deleteOwnerReview(objId) {
     setReviews((prev) => {
       const newReview = prev.map((review, _) => {
@@ -69,6 +39,26 @@ function Reviews() {
       return newReview;
     });
   }
+  useEffect(() => {
+    async function getReviews() {
+      let collRev = await collection(
+        db,
+        "users",
+        user.user.uid,
+        "productReviews"
+      );
+      let docs = await getDocs(collRev);
+
+      let reviewsArr = [];
+      docs.forEach((item) => {
+        if (item.data().reviews.length > 0) {
+          reviewsArr.push({ ...item.data(), id: item.id });
+        }
+      });
+      setReviews(reviewsArr);
+    }
+    user.user && getReviews();
+  }, [user.user]);
 
   function setActionWithId(obj) {
     if (obj.type === "Delete") {
@@ -76,99 +66,6 @@ function Reviews() {
       return;
     }
     return;
-  }
-  function setCommentReply(obj) {
-    setReviews((prev) => {
-      let newReviews = prev.map((review) => {
-        if (review.id === obj.id) {
-          return {
-            ...review,
-            product: { ...review.product },
-            comments: { ...review.comments, reply: obj.comment }
-          };
-        }
-        return {
-          ...review,
-          product: { ...review.product },
-          comments: { ...review.comments }
-        };
-      });
-      return newReviews;
-    });
-  }
-  function checkAlreadyClicked(user, array) {
-    let indexFound = array.findIndex((likes) => {
-      return likes.name === user.name;
-    });
-    if (indexFound !== -1) {
-      return array.filter((_, idx) => {
-        return idx !== indexFound;
-      });
-    }
-    return [...array];
-  }
-
-  function checkExisting(user, array) {
-    let indexFound = array.findIndex((likes) => {
-      return likes.name === user.name;
-    });
-    if (indexFound !== -1) {
-      return array.filter((_, idx) => {
-        return idx !== indexFound;
-      });
-    }
-    return [...array, user];
-  }
-  function incDecEngagement(obj) {
-    setReviews((prev) => {
-      let newReviews = prev.map((review) => {
-        if (review.id === obj.id) {
-          return obj.engageInfo.type === "Like"
-            ? {
-                ...review,
-                product: { ...review.product },
-                comments: {
-                  ...review.comments,
-                  engageMent: {
-                    ...review.comments.engageMent,
-                    likes: checkExisting(
-                      obj.engageInfo.user,
-                      review.comments.engageMent.likes
-                    ),
-                    dislikes: checkAlreadyClicked(
-                      obj.engageInfo.user,
-                      review.comments.engageMent.dislikes
-                    )
-                  }
-                }
-              }
-            : {
-                ...review,
-                product: { ...review.product },
-                comments: {
-                  ...review.comments,
-                  engageMent: {
-                    ...review.comments.engageMent,
-                    likes: checkAlreadyClicked(
-                      obj.engageInfo.user,
-                      review.comments.engageMent.likes
-                    ),
-                    dislikes: checkExisting(
-                      obj.engageInfo.user,
-                      review.comments.engageMent.dislikes
-                    )
-                  }
-                }
-              };
-        }
-        return {
-          ...review,
-          product: { ...review.product },
-          comments: { ...review.comments }
-        };
-      });
-      return newReviews;
-    });
   }
 
   return (
@@ -178,23 +75,25 @@ function Reviews() {
           <Filter type="products"></Filter>
           <Search></Search>
         </div>
-        <table className="w-full my-3">
-          <TableHeaderRow
-            headerList={["Comments", "Products"]}
-          ></TableHeaderRow>
-          {reviews.map((tableData, idx) => {
-            return (
-              <ReviewsTableRow
-                setActionWithId={setActionWithId}
-                type="reviews"
-                key={idx}
-                setCommentReply={setCommentReply}
-                tableData={tableData}
-                incDecEngagement={incDecEngagement}
-              ></ReviewsTableRow>
-            );
-          })}
-        </table>
+        <div className="mt-5">
+          {/* <TableHeaderRow
+              headerList={["Comments", "Products"]}
+            ></TableHeaderRow> */}
+
+          <div className=" space-y-4">
+            {reviews.map((tableData, idx) => {
+              return (
+                <ReviewsTableRowWrapper
+                  setActionWithId={setActionWithId}
+                  type="reviews"
+                  key={idx}
+                  admin={{ name: user.user.displayName, uid: user.user.uid }}
+                  tableData={tableData}
+                ></ReviewsTableRowWrapper>
+              );
+            })}
+          </div>
+        </div>
         <PaginationBtns></PaginationBtns>
       </div>
     </div>
