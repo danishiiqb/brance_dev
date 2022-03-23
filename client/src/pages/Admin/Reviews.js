@@ -9,6 +9,7 @@ import { db } from "../../services/firebase";
 
 function Reviews() {
   const [reviews, setReviews] = useState([]);
+  const [reload, setRelaod] = useState(false);
   const { user, products, tableHeaderSorting, filteredData } = useSelector(
     (state) => {
       return {
@@ -19,26 +20,7 @@ function Reviews() {
       };
     }
   );
-  function deleteOwnerReview(objId) {
-    setReviews((prev) => {
-      const newReview = prev.map((review, _) => {
-        if (objId === review.id) {
-          const { reply, ...comments } = review.comments;
-          return {
-            ...review,
-            product: { ...review.product },
-            comments: { ...comments }
-          };
-        }
-        return {
-          ...review,
-          product: { ...review.product },
-          comments: { ...review.comments }
-        };
-      });
-      return newReview;
-    });
-  }
+
   useEffect(() => {
     async function getReviews() {
       let collRev = await collection(
@@ -56,35 +38,24 @@ function Reviews() {
         }
       });
       setReviews(reviewsArr);
+      reload && setRelaod(false);
     }
-    user.user && getReviews();
+    (user.user || reload) && getReviews();
   }, [user.user]);
 
-  function setActionWithId(obj) {
-    if (obj.type === "Delete") {
-      deleteOwnerReview(obj.id);
-      return;
-    }
-    return;
-  }
-
   return (
-    <div className="h-screen">
-      <div className="bg-white shadow-sm_dark rounded-md mt-6 p-small">
+    <div className="">
+      <div className="bg-white h-full shadow-sm_dark rounded-md mt-6 p-small">
         <div className="px-1.5 flex items-center justify-between">
-          <Filter type="products"></Filter>
+          <Filter type="reviews"></Filter>
           <Search></Search>
         </div>
         <div className="mt-5">
-          {/* <TableHeaderRow
-              headerList={["Comments", "Products"]}
-            ></TableHeaderRow> */}
-
           <div className=" space-y-4">
             {reviews.map((tableData, idx) => {
               return (
                 <ReviewsTableRowWrapper
-                  setActionWithId={setActionWithId}
+                  setReload={setRelaod}
                   type="reviews"
                   key={idx}
                   admin={{ name: user.user.displayName, uid: user.user.uid }}
@@ -94,7 +65,6 @@ function Reviews() {
             })}
           </div>
         </div>
-        <PaginationBtns></PaginationBtns>
       </div>
     </div>
   );
