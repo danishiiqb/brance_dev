@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiFillDislike,
   AiFillLike,
   AiOutlineDislike,
   AiOutlineLike
 } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
-function LikeDislike({ setEngagement, engageMent }) {
+function LikeDislike({ idx, setEngagement, engageMent }) {
+  let { user } = useSelector((state) => state.user);
   const [outlineChange, setOutLineChange] = useState({
     like: false,
     dislike: false
   });
+
   const [clicked, setClicked] = useState({
     liked: false,
     disliked: false
   });
+
+  useEffect(() => {
+    let foundLikEl = engageMent.likes.find((el) => el === user.uid);
+    let foundDisEl = engageMent.dislikes.find((el) => el === user.uid);
+    user && setClicked({ liked: foundLikEl, disliked: foundDisEl });
+  }, [user]);
+
   return (
     <div className="flex mt-1 items-center space-x-2">
       <button
@@ -30,7 +40,7 @@ function LikeDislike({ setEngagement, engageMent }) {
           });
         }}
         onClick={() => {
-          setEngagement({ type: "Like" });
+          setEngagement({ type: "Like", idx });
           setClicked((prev) => {
             return {
               ...prev,
@@ -64,7 +74,7 @@ function LikeDislike({ setEngagement, engageMent }) {
           });
         }}
         onClick={() => {
-          setEngagement({ type: "Dislike" });
+          setEngagement({ type: "Dislike", idx });
           setClicked((prev) => {
             return {
               ...prev,
