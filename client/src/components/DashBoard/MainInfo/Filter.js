@@ -148,7 +148,7 @@ function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
                 </div>
               )}
             </div>
-            {type !== "transaction" && (
+            {type !== "transaction" && type !== "reviews" && (
               <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
                 <div
                   onClick={(e) => {
@@ -166,7 +166,7 @@ function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
                   <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
                 </div>
                 {dropDownMenuItems.orderType && (
-                  <div className="absolute w-max overflow-hidden h-0 shadow-sm dropdown bg-gray-100 rounded-b-md top-full -left-1 ">
+                  <div className="absolute w-max overflow-hidden h-0 shadow-sm dropdown bg-gray-100 rounded-b-md  top-full -left-1 ">
                     {productTypes.map((productType, idx) => {
                       return (
                         <div
@@ -188,49 +188,51 @@ function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
               </div>
             )}
 
-            {type !== "products" && type !== "transaction" && (
-              <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
-                <div
-                  onClick={() => {
-                    showDropdownMenuItems((prev) => {
-                      return {
-                        date: false,
-                        orderStatus: !prev.orderStatus,
-                        orderType: false
-                      };
-                    });
-                  }}
-                  className="flex p-2.5 items-center "
-                >
-                  <span>Order Status</span>
-                  <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
-                </div>
-                {dropDownMenuItems.orderStatus && (
-                  <div className="absolute w-full rounded-b-md h-0 overflow-hidden shadow-sm dropdown bg-gray-100  top-full -left-1 ">
-                    {orderStatusDta.map((type, idx) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            filterByStatus(type);
-                            showDropdownMenuItems((prev) => {
-                              return {
-                                date: false,
-                                orderStatus: !prev.orderStatus,
-                                orderType: false
-                              };
-                            });
-                          }}
-                          key={idx}
-                          className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
-                        >
-                          {type}
-                        </div>
-                      );
-                    })}
+            {type !== "products" &&
+              type !== "transaction" &&
+              type !== "reviews" && (
+                <div className="relative -translate-x-28 opacity-0 items-animate border-r-2 space-x-1 ">
+                  <div
+                    onClick={() => {
+                      showDropdownMenuItems((prev) => {
+                        return {
+                          date: false,
+                          orderStatus: !prev.orderStatus,
+                          orderType: false
+                        };
+                      });
+                    }}
+                    className="flex p-2.5 items-center "
+                  >
+                    <span>Order Status</span>
+                    <IoMdArrowDropdown className="w-4 h-4"></IoMdArrowDropdown>
                   </div>
-                )}
-              </div>
-            )}
+                  {dropDownMenuItems.orderStatus && (
+                    <div className="absolute w-full rounded-b-md h-0 overflow-hidden shadow-sm dropdown bg-gray-100  top-full -left-1 ">
+                      {orderStatusDta.map((type, idx) => {
+                        return (
+                          <div
+                            onClick={() => {
+                              filterByStatus(type);
+                              showDropdownMenuItems((prev) => {
+                                return {
+                                  date: false,
+                                  orderStatus: !prev.orderStatus,
+                                  orderType: false
+                                };
+                              });
+                            }}
+                            key={idx}
+                            className="p-2.5 dropdown-items opacity-0 hover:bg-gray-200 transition-all duration-150"
+                          >
+                            {type}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
             <div
               onClick={() => {
                 dispatch(resetFilter());
