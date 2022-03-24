@@ -15,7 +15,7 @@ function AdminHome() {
   return (
     <div>
       <SideBar></SideBar>
-      <div className="bg-[#f6f6f6] ml-marginLeft py-4 px-6">
+      <div className="bg-[#f6f6f6] h-screen ml-marginLeft py-4 px-6">
         <NavBar></NavBar>
         <Route exact path="/admin/create-product">
           <AddNewProduct></AddNewProduct>
