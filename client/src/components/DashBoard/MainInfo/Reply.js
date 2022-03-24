@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-function Reply({ closeReply, setReply, setEdit, editMode, prevValue }) {
+function Reply({ closeReply, setReply, setEdit, editMode, prevValue, idx }) {
   const inputRef = useRef("");
 
   useEffect(() => {
@@ -28,16 +28,16 @@ function Reply({ closeReply, setReply, setEdit, editMode, prevValue }) {
         <button
           onClick={() => {
             closeReply(false);
-            setEdit(false);
+            editMode && setEdit(false);
           }}
         >
           Cancel
         </button>
         <button
           onClick={() => {
-            setReply(inputRef.current.value);
+            setReply({ value: inputRef.current.value, date: +new Date(), idx });
             closeReply(false);
-            setEdit(false);
+            editMode && setEdit(false);
           }}
           className="p-1 text-white rounded-sm bg-[#FF385C]"
         >
