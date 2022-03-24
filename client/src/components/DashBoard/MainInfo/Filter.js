@@ -13,7 +13,14 @@ import { useDispatch } from "react-redux";
 import { filterStatus, resetFilter } from "../../../store/filteredData";
 
 let state = false;
-function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
+function Filter({
+  type,
+  custom,
+  filterResetParent,
+  filterByDate,
+  filterByStatus,
+  filterByCategory
+}) {
   const [openFilters, setFilterStatus] = useState(false);
   let firstRender = useRef(false);
   const [dropDownMenuItems, showDropdownMenuItems] = useState({
@@ -235,7 +242,7 @@ function Filter({ type, filterByDate, filterByStatus, filterByCategory }) {
               )}
             <div
               onClick={() => {
-                dispatch(resetFilter());
+                custom ? filterResetParent() : dispatch(resetFilter());
                 showDropdownMenuItems({
                   date: false,
                   orderStatus: false,
