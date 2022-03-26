@@ -5,7 +5,7 @@ import TableCellSort from "./Table/TableCellSort";
 
 function TableHeaderRow({ headerList }) {
   return (
-    <tr className="text-left text-small last:border-b-0 border-b-2 border-[#f8f8f8] ">
+    <tr className="text-left  text-small last:border-b-0 border-b-2 border-[#f8f8f8] ">
       {headerList.map((elem, idx) => {
         if (typeof elem === "object" && !Array.isArray(elem) && elem !== null) {
           return (
