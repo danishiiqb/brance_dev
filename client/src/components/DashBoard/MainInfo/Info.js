@@ -20,7 +20,7 @@ function Info({
       ></BsThreeDots>
       {info && (
         <div
-          className={`z-50 absolute  font-semibold overflow-hidden ${
+          className={` z-auto absolute  font-semibold overflow-hidden ${
             type === "User Reply" ? "text-xs top-3" : "text-sm top-4"
           } shadow-sm_dark rounded-md right-0 w-32 bg-white`}
         >
@@ -45,14 +45,14 @@ function Info({
                   return !prev;
                 });
               }}
-              className="hover:bg-[#f5f5f5]  py-2 px-4 transition-all"
+              className={`hover:bg-[#f5f5f5]  py-2 px-4 transition-all1`}
             >
               Edit Info
             </div>
           )}
           <div
             onClick={() => {
-              setDelete(true);
+              setDelete();
             }}
             className="hover:bg-[#f5f5f5] text-[#ff385d]  py-2 px-4 transition-all"
           >
