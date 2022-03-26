@@ -28,6 +28,15 @@
   animation: fade2 0.4s ease-in-out forwards;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .tr {
   transform: rotateX(180deg);
 }
