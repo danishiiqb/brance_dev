@@ -13,7 +13,7 @@ import {
   filterDate,
   filterStatus
 } from "../../store/filteredData";
-import InfoModal from "../../components/DashBoard/MainInfo/InfoModal";
+import InfoModal from "../../components/DashBoard/MainInfo/Modals/InfoModal";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 
@@ -46,9 +46,6 @@ function Orders() {
   }
   const dispatcher = useDispatch();
 
-  function setActionWithId(obj) {
-    console.log(obj);
-  }
   useEffect(() => {
     if (productsArr.current && filteredData.length > 0) {
       dispatcher(updateProduct(filteredData));
@@ -140,11 +137,11 @@ function Orders() {
   }
 
   return (
-    <div className={`h-panel space-x-3  flex  relative`}>
+    <div className={`h-panel space-x-2  flex  relative`}>
       <div
         className={`bg-white flex-1  relative  h-full shadow-sm_dark rounded-md mt-6 p-small`}
       >
-        <div className="px-1.5 flex items-center justify-between">
+        <div className="px-1.5 flex relative z-50  items-center justify-between">
           <Filter
             filterByCategory={filterByCategory}
             filterByDate={filterByDate}
@@ -171,7 +168,6 @@ function Orders() {
                 ]}
               ></TableHeaderRow>
             </thead>
-
             <tbody>
               {pagination(currPage).map((order) => {
                 return (
@@ -186,7 +182,6 @@ function Orders() {
                       setModalData(values);
                       setEditMode(true);
                     }}
-                    setActionWithId={setActionWithId}
                     type="order"
                     tableData={order}
                   ></WrapperOrderTableRow>
