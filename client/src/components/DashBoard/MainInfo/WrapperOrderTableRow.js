@@ -1,12 +1,32 @@
 import OrderTableRow from "./OrderTableRow";
 
-function WrapperOrderTableRow({ setActionWithId, tableData, type }) {
+function WrapperOrderTableRow({
+  viewFunc,
+  editFunc,
+  setActionWithId,
+  tableData,
+  type,
+  modal,
+  deleteFunc
+}) {
   return (
-    <OrderTableRow
-      setActionWithId={setActionWithId}
-      type={type}
-      detailedItem={tableData}
-    ></OrderTableRow>
+    <>
+      <OrderTableRow
+        setActionWithId={setActionWithId}
+        type={type}
+        detailedItem={tableData}
+        edit={() => {
+          editFunc(tableData);
+        }}
+        deleteItem={() => {
+          deleteFunc(tableData.id);
+        }}
+        view={() => {
+          viewFunc(tableData);
+        }}
+        modal={modal}
+      ></OrderTableRow>
+    </>
   );
 }
 
