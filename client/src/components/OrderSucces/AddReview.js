@@ -5,13 +5,14 @@ import {
   setDoc,
   updateDoc
 } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 import React, { useState } from "react";
 import { BsStarFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { db } from "../../services/firebase";
 import { ImSpinner2 } from "react-icons/im";
 
-function AddReview({ adminId, productId, notifyToClose }) {
+function AddReview({ adminId, item, notifyToClose }) {
   const [starIdx, setIdx] = useState(-1);
   const [clickedStar, setClickedStar] = useState(-1);
   const { user } = useSelector((state) => {
@@ -93,15 +94,18 @@ function AddReview({ adminId, productId, notifyToClose }) {
             async function postToDb() {
               try {
                 await updateDoc(
-                  doc(db, "users", adminId, "productReviews", productId),
+                  doc(db, "users", adminId, "productReviews", item.productId),
                   {
+                    createdAt: new Date(),
                     reviews: arrayUnion({
                       comment: formVal.desc,
+                      id: uuidv4(),
                       createdAt: new Date(),
                       title: formVal.title,
                       rating: clickedStar + 1,
-                      likes: 0,
-                      dislikes: 0,
+                      likes: [],
+                      dislikes: [],
+                      product: { ...item },
                       user: {
                         uid: user.uid,
                         name: user.displayName.trim()
