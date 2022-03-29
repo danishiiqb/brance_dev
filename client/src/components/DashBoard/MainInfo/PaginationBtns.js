@@ -3,7 +3,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 function PaginationBtns({ navigate, backBtn, currPage, forwardDisable }) {
   return (
-    <div className="flex absolute   right-3 bottom-3  items-center justify-end cursor-pointer">
+    <div className="flex absolute right-3 bottom-4  items-center justify-end cursor-pointer">
       <button
         disabled={backBtn}
         onClick={() => {
