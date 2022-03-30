@@ -3,11 +3,24 @@ import { useDispatch } from "react-redux";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import Qty from "../Qty";
 import { remove, update } from "../../store/addToBag";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
 
 function NavProduct({ liked, prod }) {
   const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState("");
+  const history = useHistory();
+  const [qty, setQty] = useState("");
+  const first = useRef(false);
+  const getQuantity = (val) => {
+    setQty(val);
+  };
+  useEffect(() => {
+    first.current &&
+      qty !== prod.qty &&
+      dispatch(update(prod, qty, prod.sizeSelected));
+    first.current = true;
+  }, [qty, dispatch]);
 
   useEffect(() => {
     prod.sizeSelected !== undefined && setSelectedSize(prod.sizeSelected);
@@ -22,7 +35,21 @@ function NavProduct({ liked, prod }) {
 
   return (
     <div className="cursor-pointer group relative">
-      <div className="flex border-b-[0.5px] relative z-30 p-3  group-hover:w-[87%] group-hover:bg-gray-50 bg-white w-full group-hover:shadow-md  transition-all duration-500 items-center space-x-2">
+      <div
+        onClick={() => {
+          if (liked) {
+            let title = prod.title.split(" ").join("-");
+            title = title.includes("/")
+              ? title.replace("/", "-")
+              : title.includes("%")
+              ? title.replace("%", "-")
+              : title;
+            let brand = prod.brand.split(" ").join("-");
+            history.push(`/product/${brand}/${title}/${prod.id}`);
+          }
+        }}
+        className="flex border-b-[0.5px] relative z-30 p-3  group-hover:w-[87%] group-hover:bg-gray-50 bg-white w-full group-hover:shadow-md  transition-all duration-500 items-center space-x-2"
+      >
         <img
           className={` ${
             !liked ? "w-20 h-full" : "w-10 h-10"
@@ -43,6 +70,7 @@ function NavProduct({ liked, prod }) {
                 <span className="w-16 inline-block">Quantity :</span>
                 <div>
                   <Qty
+                    notify={getQuantity}
                     selected={prod.qty}
                     navbar={true}
                     inStock={prod.inStock}
