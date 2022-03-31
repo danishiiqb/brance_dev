@@ -46,7 +46,11 @@ function DetailCard({ detail }) {
         </div>
         <div className="space-y-1">
           <h4 className="font-normal text-left text-small">{detail.name}</h4>
-          <div className="font-semibold text-4xl">{detail.number}</div>
+          <div className="font-semibold text-4xl">
+            {detail.name === "Total Revenue"
+              ? `$${detail.number}`
+              : detail.number}
+          </div>
         </div>
       </div>
       <div className="text-sm rounded-full p-1">
