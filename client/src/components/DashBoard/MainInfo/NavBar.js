@@ -6,10 +6,14 @@ import Search from "./Search";
 import { useHistory, useLocation } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../services/firebase";
+import { useSelector } from "react-redux";
 
 function NavBar() {
   const location = useLocation();
   const history = useHistory();
+  const { messages, notifications } = useSelector((state) => {
+    return state.navData;
+  });
   const [dropDown, setDropDown] = useState();
   return (
     <div>
@@ -25,12 +29,22 @@ function NavBar() {
           <Search section="nav"></Search>
           <div className="cursor-pointer group relative p-2.5 transition-all duration-300 hover:bg-[#ff385d23]">
             <Message className="w-6 group-hover:fill-[#ff385d]  group-hover:stroke-[#ff385d] transition-all stroke-[2px] stroke-[#4e4e4e] fill-[#4e4e4e00] h-6"></Message>
-            <div className="text-xs rounded-full font-regular absolute top-1 left-5  text-center bg-[#ff385d] group-hover:bg-white group-hover:text-[#ff385d]   text-white w-4 h-4">
-              3
-            </div>
+
+            {messages > 0 ? (
+              <div className="text-xs rounded-full font-regular absolute top-1 left-5  text-center bg-[#ff385d] group-hover:bg-white group-hover:text-[#ff385d]   text-white w-4 h-4">
+                {messages}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-          <div className="cursor-pointer group p-2.5 transition-all duration-200 hover:bg-[#ff385d23] ">
+          <div className="cursor-pointer relative group p-2.5 transition-all duration-200 hover:bg-[#ff385d23] ">
             <Notification className="w-6 group-hover:fill-[#ff385d] group-hover:stroke-[#ff385d] fill-[#4e4e4e00] stroke-[5px] stroke-[#4e4e4e] transition-all  h-6"></Notification>
+            {notifications > 0 && (
+              <div className="text-xs rounded-full font-regular absolute top-1 left-5  text-center bg-[#ff385d] group-hover:bg-white group-hover:text-[#ff385d]   text-white w-4 h-4">
+                {notifications}
+              </div>
+            )}
           </div>
           <div className="relative">
             <div
