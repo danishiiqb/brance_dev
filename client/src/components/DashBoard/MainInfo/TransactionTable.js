@@ -3,7 +3,7 @@ import Info from "./Info";
 import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
 
-function TransactionTable({ filterByDate, setActionWithId, tableData, type }) {
+function TransactionTable({ type, setActionWithId, tableData }) {
   function setAction(type) {
     setActionWithId({ type });
   }
@@ -23,9 +23,6 @@ function TransactionTable({ filterByDate, setActionWithId, tableData, type }) {
       </TableData>
       <TableData>
         <div className=" capitalize">{tableData.payment}</div>
-      </TableData>
-      <TableData className="px-1.5 py-2.5">
-        <Info clickedAction={setAction} type={type}></Info>
       </TableData>
     </TableRow>
   );
