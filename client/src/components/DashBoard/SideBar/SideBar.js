@@ -70,7 +70,7 @@ function SideBar() {
   ]);
 
   const history = useHistory();
-  const [active, setActive] = useState("Dashboard");
+  const [active, setActive] = useState("");
   return (
     <div className="px-8 h-screen fixed top-0 left-0 z-50 bg-white font-medium text-center text-[#4e4e4e] text-ui shadow-lg py-8">
       <div className="font-logo font-bold text-[#000000]  text-3xl">
@@ -87,14 +87,7 @@ function SideBar() {
       </div>
       <div className="space-y-4 relative  inline-block">
         {sideBarItems.map((item, idx) => {
-          return (
-            <SideBarElem
-              key={idx}
-              activatedElem={active}
-              item={item}
-              activate={setActive}
-            />
-          );
+          return <SideBarElem key={idx} item={item} />;
         })}
       </div>
     </div>
