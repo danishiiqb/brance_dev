@@ -44,19 +44,7 @@
       }
     ]
   },
-  {
-    "type": "Sale/New Season",
-    "dropdownItems": [
-      {
-        "id": "e3758212-ea59-4c8d-90b3-32f5d1c32439",
-        "element": "Stratnum Collection"
-      },
-      {
-        "id": "2c13510e-48da-48d9-8944-979da951ecf9",
-        "element": "Diversity Collection"
-      }
-    ]
-  },
+
   {
     "type": "Size",
     "dropdownItems": [
