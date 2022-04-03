@@ -3,7 +3,7 @@ import TableData from "./Table/TableData";
 import TableRow from "./Table/TableRow";
 import Info from "./Info";
 
-function ProductTableRow({ setActionWithId, tableData, type }) {
+function ProductTableRow({ viewFunc, editFunc, tableData, type }) {
   const [load, setLoad] = useState(false);
   function convertDate(sec) {
     let date = new Date(sec * 1000);
@@ -14,9 +14,6 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
     }/${date.getFullYear()}`;
   }
 
-  function setAction(type) {
-    setActionWithId({ type, id: tableData.id });
-  }
   function shortenTitle(title) {
     if (title.length >= 25) {
       return `${title.substr(0, 25)}...`;
@@ -49,10 +46,20 @@ function ProductTableRow({ setActionWithId, tableData, type }) {
       <TableData>{tableData.inStock}</TableData>
       <TableData>{tableData.adminInfo.sold}</TableData>
       <TableData>
-        <div className="font-medium">{tableData.adminInfo.revenue}.00</div>
+        <div className="font-medium">
+          ${(Math.round(tableData.adminInfo.revenue * 100) / 100).toFixed(2)}
+        </div>
       </TableData>
       <TableData className="px-1.5 py-2.5">
-        <Info clickedAction={setAction} type={type}></Info>
+        <Info
+          setViewPhase={() => {
+            viewFunc(tableData);
+          }}
+          setEditPhase={() => {
+            editFunc(tableData);
+          }}
+          type={type}
+        ></Info>
       </TableData>
     </TableRow>
   );
