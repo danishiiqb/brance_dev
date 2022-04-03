@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
@@ -79,13 +79,6 @@ function Shop() {
       (item) => {
         let defVal = false;
         type.forEach((el) => {
-          // if (alias === "size") {
-          //   let filtered = item[alias].filter((elem) => elem.elem === el.val);
-          //   if (filtered.length > 0) {
-          //     defVal = true;
-          //   }
-          //   return;
-          // }
           if (
             item[alias || el.type.toLowerCase()].toLowerCase() ===
             el.value.toLowerCase()
@@ -167,24 +160,6 @@ function Shop() {
         filteredValues = filterDynamic(materialFilter, false, [], "madewith");
       }
       let sizeFilter = catogExists("Size");
-      // if (
-      //   (colourFilter.length > 0 ||
-      //     brandFilter.length > 0 ||
-      //     categFilter.length > 0 ||
-      //     styleFilter.length > 0 ||
-      //     patternFilter.length > 0 ||
-      //     materialFilter.length > 0) &&
-      //   sizeFilter.length > 0
-      // ) {
-      //   // filteredValues = filterDynamic(
-      //     // sizeFilter,
-      //     // true,
-      //     // filteredValues,
-      //     // "size"
-      //   // );
-      // } else if (sizeFilter.length > 0) {
-      //   // filteredValues = filterDynamic(sizeFilter, false, [], "size");
-      // }
 
       if (selectedVals.length === 0 || sizeFilter.length > 0) {
         allProducts.current = cloned.current;
@@ -221,7 +196,6 @@ function Shop() {
         let productsArr = [];
         response.forEach((elem, idx1) => {
           elem.docs.forEach((doc, idx2) => {
-            console.log(doc.id === responseRev[idx1].docs[idx2].id);
             if (doc.id === responseRev[idx1].docs[idx2].id) {
               productsArr.push({
                 id: doc.id,
@@ -269,19 +243,31 @@ function Shop() {
   return (
     <>
       {loader && (
-        <div className="fixed w-full top-0 h-full z-50 bg-[#000000cc]"></div>
+        <div className="fixed w-full  top-0 h-full z-50 bg-[#000000cc]"></div>
       )}
-      <div className={`min-h-[80vh]`}>
+      <div className={`min-h-[80vh] `}>
         <div className={`flex space-x-2.5`}>
-          <div className="w-[18%] p-6">
+          <div className="w-[18%] max-w-[400px] p-6">
             <div className="flex justify-between items-center">
               <div className="text-md font-medium">Filters</div>
-              <div className="text-sm relative transition-all duration-200 hover:after:top-[95%] after:top-[90%] after:left-0 after:absolute after:bg-gray-700 after:w-full after:h-[1px] cursor-pointer text-gray-700">
+              <div
+                onClick={() => {
+                  setSelectedVals([]);
+                }}
+                className="text-xs relative transition-all duration-200 hover:after:top-[95%] after:top-[90%] after:left-0 after:absolute after:bg-gray-700 after:w-full after:h-[1px] cursor-pointer text-gray-700"
+              >
                 Clear Filters
               </div>
             </div>
             <div className="mt-4">
               {filterType.current.map((type, idx) => {
+                if (
+                  id !== "all-clothing" &&
+                  navType === "brand" &&
+                  type.type === "Brand"
+                ) {
+                  return null;
+                }
                 return (
                   <FilterType
                     key={idx}
@@ -328,10 +314,10 @@ function Shop() {
             {products.length > 0 && !loader ? (
               <>
                 <div className="grid grid-cols-4 mt-3 gap-3">
-                  {products.map((prod) => {
+                  {products.map((prod, idx) => {
                     return (
                       <Product
-                        key={prod.id}
+                        key={idx}
                         expandHeight={true}
                         prodDesc={prod}
                       ></Product>
