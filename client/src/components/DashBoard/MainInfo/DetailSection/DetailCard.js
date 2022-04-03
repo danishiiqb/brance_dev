@@ -21,7 +21,7 @@ function DetailCard({ detail }) {
       } else if (choice === "bg") {
         return `bg-purple-100`;
       }
-    } else if (category === "Today Visitors") {
+    } else if (category === "Total Visitors") {
       if (choice === "text") {
         return `text-blue-500`;
       } else if (choice === "bg") {
