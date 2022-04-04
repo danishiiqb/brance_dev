@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 
-function Elements({ children, type, notifyParent }) {
+function Elements({ children, type, notifyParent, selectedVals }) {
   const [clickedVal, setClicked] = useState(false);
   const isUnmounting = useRef(false);
+  useEffect(() => {
+    if (selectedVals.length === 0) {
+      setClicked(false);
+    }
+  }, [selectedVals]);
   useEffect(() => {
     return () => {
       isUnmounting.current = true;
