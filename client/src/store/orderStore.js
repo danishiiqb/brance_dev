@@ -30,6 +30,13 @@ const getOrderData = (id) => {
       const ordersCollection = await getDocs(
         collection(db, "users", id, "incomingOrders")
       );
+      if (ordersCollection.size === 0) {
+        dispatch({
+          type: "ORDER_ERROR",
+          payload: "No Orders found"
+        });
+        return;
+      }
       let promisesProd = [];
       ordersCollection.forEach((document) => {
         promisesProd.push(
