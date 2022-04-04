@@ -33,6 +33,13 @@ const getProductsData = (id) => {
       const productsCollection = await getDocs(
         collection(db, "users", id, "products")
       );
+      if (productsCollection.size === 0) {
+        dispatch({
+          type: "PROD_ERROR",
+          payload: "No Products found"
+        });
+        return;
+      }
       let productsArr = [];
       productsCollection.docs.forEach((document, idx) => {
         productsArr.push({
