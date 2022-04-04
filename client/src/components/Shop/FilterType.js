@@ -84,6 +84,7 @@ function FilterType({ type, selectedVals, getSelectedVals, getPrice }) {
                 <Elements
                   key={elem.id}
                   type={type.type}
+                  selectedVals={selectedVals}
                   notifyParent={modifyVals}
                 >
                   {elem.element}
