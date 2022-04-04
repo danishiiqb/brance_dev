@@ -15,7 +15,7 @@ function Home() {
   });
   return (
     <>
-      <div className={`relative overflow-hidden`}>
+      <div className={`relative  max-w-screen-2xl m-auto overflow-hidden`}>
         <Hero modalOpen={modal.modal}></Hero>
         <Banner></Banner>
         <ProductSection
