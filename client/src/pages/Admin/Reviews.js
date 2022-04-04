@@ -31,7 +31,10 @@ function Reviews() {
         "productReviews"
       );
       let docs = await getDocs(collRev);
-
+      if (docs.size === 0) {
+        setMessage("No Reviews found");
+        return;
+      }
       let reviewsArr = [];
       docs.forEach((item) => {
         if (item.data().reviews.length > 0) {
@@ -90,7 +93,7 @@ function Reviews() {
                 );
               })
             ) : message ? (
-              <div className="flex absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+              <div className="flex font-medium text-lg absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
                 <div className="text-[#FF385C]">{message}</div>
               </div>
             ) : (
