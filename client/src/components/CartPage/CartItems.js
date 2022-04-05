@@ -1,8 +1,9 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import LikedIcon from "../LikedIcon";
 import Qty from "../Qty";
 import { RiDeleteBin6Fill } from "react-icons/ri";
+import { remove, update } from "../../store/addToBag";
 
 function WrapperItem({ children }) {
   return <div className="flex w-44 justify-between text-sm">{children}</div>;
@@ -10,6 +11,19 @@ function WrapperItem({ children }) {
 
 function CartItems({ item }) {
   let size = item.size[item.sizeSelected || 0].elem;
+  const dispatch = useDispatch();
+  const [qty, setQty] = useState("");
+  const first = useRef(false);
+  const getQuantity = (val) => {
+    setQty(val);
+  };
+  useEffect(() => {
+    first.current &&
+      qty !== item.qty &&
+      dispatch(update(item, qty, item.sizeSelected));
+    first.current = true;
+  }, [qty, dispatch]);
+
   const { likedProducts } = useSelector((state) => {
     return { likedProducts: state.likedProducts };
   });
@@ -75,11 +89,21 @@ function CartItems({ item }) {
             ></LikedIcon>
           </div>
           <div>
-            <Qty notShow={true}></Qty>
+            <Qty
+              inStock={item.inStock}
+              selected={item.qty}
+              notify={getQuantity}
+              notShow={true}
+            ></Qty>
           </div>
         </div>
       </div>
-      <div className="pt-2.5">
+      <div
+        onClick={() => {
+          dispatch(remove(item));
+        }}
+        className="pt-2.5"
+      >
         <RiDeleteBin6Fill className="w-5  transition-all duration-300 hover:text-[#FF385C] fill-current h-5" />
       </div>
     </div>
