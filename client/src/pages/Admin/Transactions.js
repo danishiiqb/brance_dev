@@ -4,26 +4,31 @@ import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow.js";
 import TransactionTable from "../../components/DashBoard/MainInfo/TransactionTable";
 import Filter from "../../components/DashBoard/MainInfo/Filter";
-import { getProductsData, updateProduct } from "../../store/products";
+
 import { useDispatch, useSelector } from "react-redux";
 import { ImSpinner2 } from "react-icons/im";
 import { filterDate } from "../../store/filteredData";
+import {
+  getTransactionData,
+  updateTransaction
+} from "../../store/transactionsStore";
 
 function Transactions() {
   const dispatcher = useDispatch();
-  const productsArr = useRef(null);
+  const transactionsArr = useRef(null);
+  const firstRender = useRef(false);
   const [currPage, setCurrPage] = useState(1);
-  const { user, products, filteredData } = useSelector((state) => {
+  const { user, transaction, filteredData } = useSelector((state) => {
     return {
       user: state.user,
-      products: state.products,
+      transaction: state.transaction,
       filteredData: state.filteredData
     };
   });
   function pagination(page) {
     let start = (page - 1) * 10;
     let end = 10 * page;
-    return products.products.slice(start, end);
+    return transaction.transaction.slice(start, end);
   }
 
   function filterByDate(start, end) {
@@ -31,37 +36,43 @@ function Transactions() {
       filterDate({
         start,
         end,
-        elementsArr: productsArr.current,
+        elementsArr: transactionsArr.current,
         typeDta: "orders"
       })
     );
   }
   useEffect(() => {
-    if (productsArr.current && filteredData.length > 0) {
-      dispatcher(updateProduct(filteredData));
-      setCurrPage(1);
-      return;
+    if (firstRender.current) {
+      if (transactionsArr.current && filteredData.length > 0) {
+        dispatcher(updateTransaction(filteredData));
+        setCurrPage(1);
+        return;
+      }
+      if (
+        !Array.isArray(filteredData) &&
+        filteredData !== null &&
+        typeof filteredData === "object"
+      ) {
+        dispatcher(updateTransaction(transactionsArr.current));
+        setCurrPage(1);
+        return;
+      }
+      if (filteredData.length === 0 && transactionsArr.current) {
+        dispatcher({
+          type: "TRANSACTION_ERROR",
+          payload: "No transactions found"
+        });
+        return;
+      }
     }
-    if (
-      !Array.isArray(filteredData) &&
-      filteredData !== null &&
-      typeof filteredData === "object"
-    ) {
-      dispatcher(updateProduct(productsArr.current));
-      setCurrPage(1);
-      return;
-    }
-    if (filteredData.length === 0 && productsArr.current) {
-      dispatcher({ type: "ERROR", payload: "No Products found" });
-      return;
-    }
+    firstRender.current = true;
   }, [filteredData, dispatcher]);
 
   useEffect(() => {
-    if (products.products.length > 0 && !productsArr.current) {
-      productsArr.current = [...products.products];
+    if (transaction.transaction.length > 0 && !transactionsArr.current) {
+      transactionsArr.current = [...transaction.transaction];
     }
-  }, [products.products]);
+  }, [transaction.transaction]);
 
   function convertDate(sec) {
     let date = new Date(sec * 1000);
@@ -85,11 +96,11 @@ function Transactions() {
   }
   useEffect(() => {
     if (user.user) {
-      dispatcher(getProductsData(user.user.uid, "incomingOrders"));
+      dispatcher(getTransactionData(user.user.uid));
     }
   }, [user.user, dispatcher]);
   return (
-    <div className={`h-panel  relative`}>
+    <div className={`h-panel relative`}>
       <div
         className={`bg-white flex-1  relative  h-full shadow-sm_dark rounded-md mt-6 p-small`}
       >
@@ -98,7 +109,7 @@ function Transactions() {
           <Search></Search>
         </div>
         <table className="w-full my-3">
-          {products.products.length > 0 ? (
+          {transaction.transaction.length > 0 ? (
             <table className="w-full my-3">
               <thead>
                 <TableHeaderRow
@@ -135,9 +146,9 @@ function Transactions() {
                 })}
               </tbody>
             </table>
-          ) : products.message !== "" ? (
-            <div className="flex absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-              <div className="text-[#FF385C]">{products.message}</div>
+          ) : transaction.message !== "" ? (
+            <div className="flex absolute  font-medium text-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+              <div className="text-[#FF385C]">{transaction.message}</div>
             </div>
           ) : (
             <div className="flex absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
@@ -146,7 +157,7 @@ function Transactions() {
           )}
           <div>
             <PaginationBtns
-              forwardDisable={10 * currPage >= products.products.length}
+              forwardDisable={10 * currPage >= transaction.transaction.length}
               backBtn={currPage === 1 ? true : false}
               currPage={currPage}
               navigate={navigate}
