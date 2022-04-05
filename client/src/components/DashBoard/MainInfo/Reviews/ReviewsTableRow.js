@@ -1,63 +1,64 @@
 import React from "react";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 import Info from "../Info";
 import Review from "../Review";
-import TableData from "../Table/TableData";
-import TableRow from "../Table/TableRow";
 
 function ReviewsTableRow({
   tableData,
+  setEngagement,
   setReply,
-  setActionWithId,
-
-  type,
-  idx
+  setDelete,
+  type
 }) {
-  function setAction(type) {
-    setActionWithId({ type, id: tableData.id });
+  function setDeleteIdx(full) {
+    setDelete(tableData.id, full);
   }
 
-  // function setEngagement({ type }) {
-  //   incDecEngagement({
-  //     engageInfo: { type, user: { name: "Simon" } },
-  //     id: tableData.id
-  //   });
-  // }
   return (
-    <TableRow>
-      <TableData type={type}>
-        <Review
-          idx={idx}
-          data={tableData}
-          setAction={setAction}
-          setReply={setReply}
-          // setEngagement={setEngagement}
-        ></Review>
-      </TableData>
-      {/* <TableData>
-        <div className="flex space-x-2 duration-300 rounded-md ">
-          <div className="w-14 h-14 rounded-md overflow-hidden">
-            <img
-              src={tableData.product.img}
-              className="w-full h-full object-cover"
-              alt=""
-            />
-          </div>
-          <div className="flex flex-1 items-center justify-between">
-            <div className="font-normal">
-              <div className="font-normal  capitalize">
-                {tableData.product.name}
+    <div className="relative group">
+      <div className="absolute top-0 flex items-center justify-end p-4  z-0 left-0  right-0 bg-gray-50 w-full h-full">
+        <div
+          onClick={() => {
+            setDeleteIdx(true);
+          }}
+        >
+          <RiDeleteBin6Fill className="w-5 h-5 text-[#ff385dd3] fill-current cursor-pointer"></RiDeleteBin6Fill>
+        </div>
+      </div>
+      <div className="flex relative z-20 bg-white transition-all duration-200 group-hover:shadow-sm_dark  group-hover:bg-gray-50 space-x-14 rounded-md cursor-pointer p-3 space-between w-full  group-hover:w-[95%]">
+        <div type={type} className="flex-1">
+          <Review
+            data={tableData}
+            setReply={setReply}
+            setDelete={setDeleteIdx}
+            setEngagement={setEngagement}
+          ></Review>
+        </div>
+        <div className="flex w-[30%] items-center">
+          <div className="">
+            <div className="flex space-x-3  duration-300 rounded-md ">
+              <div className="w-14 h-14 rounded-md overflow-hidden">
+                <img
+                  src={tableData.product.img}
+                  className="w-full h-full bg-gray-100 object-cover"
+                  alt=""
+                />
               </div>
-              <div className="text-sm text-[#4e4e4e] capitalize">
-                {tableData.product.category}
+              <div className="flex flex-shrink-0 flex-1 items-center justify-between">
+                <div className="font-normal">
+                  <div className="font-normal text-sm  capitalize">
+                    {tableData.product.name}
+                  </div>
+                  <div className="text-xs  text-[#727272] capitalize">
+                    {tableData.product.category}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </TableData>
-      <TableData className="px-1.5 py-2.5">
-        <Info clickedAction={setAction} type={type}></Info>
-      </TableData> */}
-    </TableRow>
+      </div>
+    </div>
   );
 }
 
