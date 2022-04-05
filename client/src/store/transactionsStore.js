@@ -30,6 +30,14 @@ const getTransactionData = (id) => {
       const ordersCollection = await getDocs(
         collection(db, "users", id, "incomingOrders")
       );
+      if (ordersCollection.size === 0) {
+        dispatch({
+          type: "TRANSACTION_ERROR",
+          payload: "No transactions found"
+        });
+        return;
+      }
+
       let promisesProd = [];
       ordersCollection.forEach((document) => {
         promisesProd.push(
@@ -49,7 +57,7 @@ const getTransactionData = (id) => {
       ordersArr = ordersArr.sort((a, b) => {
         return b.timestamp.seconds - a.timestamp.seconds;
       });
-      console.log(ordersArr);
+
       dispatch({ type: "GET_TRANSACTION", payload: ordersArr });
     } catch (err) {
       dispatch({ type: "TRANSACTION_ERROR", payload: err.message });
