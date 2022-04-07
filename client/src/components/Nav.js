@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { ReactComponent as Menu } from "../icons/menu.svg";
-import { RiUser3Fill, RiUser3Line } from "react-icons/ri";
+import { RiUser3Fill, RiUser3Line, RiArrowDropDownFill } from "react-icons/ri";
 import { IoCart, IoCartOutline } from "react-icons/io5";
 import useWindow from "../hooks/useWindow";
 import Icons from "./Icons";
@@ -12,8 +12,10 @@ import { auth } from "../services/firebase";
 import { useEffect } from "react";
 import BagReview from "./Navbar/BagReview";
 import LikedProduct from "./LikedProduct";
+import { useHistory } from "react-router-dom";
 
 function Nav({ items, openSide, selectTab }) {
+  const history = useHistory();
   const [width] = useWindow();
   const [enter, setEnter] = useState(false);
   const { user, addTo, likedProducts } = useSelector((state) => {
@@ -39,7 +41,7 @@ function Nav({ items, openSide, selectTab }) {
   };
   return (
     <>
-      <nav className="flex items-center px-4 lg:px-11 py-3 lg:py-5 shadow-md justify-between relative">
+      <nav className="flex  items-center px-4 lg:px-11 py-3 lg:py-5 shadow-md justify-between relative">
         <ul className="flex  space-x-5 lg:space-x-10  font-medium text-xs lg:text-base cursor-pointer">
           {width > 700 ? (
             items.map((item, idx) => {
@@ -69,21 +71,17 @@ function Nav({ items, openSide, selectTab }) {
           )}
         </ul>
 
-        <div className="font-logo m-auto cursor-pointer absolute top-1/2  left-1/2  transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-[#000000] ">
+        <div
+          onClick={() => {
+            history.push("/");
+          }}
+          className="font-logo m-auto cursor-pointer absolute top-1/2  left-1/2  transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-[#000000] "
+        >
           Brance.
         </div>
         <div className="">
           <ul className="flex items-center space-x-4  lg:space-x-10 ">
-            <li className="flex items-center before:absolute before:border-b-2  hover:before:opacity-100  before:-bottom-1 before:w-7 before:opacity-0  before:transition-all before:duration-300 hover:before:w-full  cursor-pointer before:border-[#FF385C] relative">
-              <IoSearch className="w-3.5 h-3.5 lg:w-6 lg:h-6 -mr-5"></IoSearch>
-              <input
-                className={` placeholder-gray-300 text-[8px] lg:text-base font-regular pl-6 lg:pl-7 top-10  outline-none bg-transparent `}
-                type="text"
-                name="search"
-                placeholder="Search Products"
-                id=""
-              />
-            </li>
+            <div></div>
             <div className="relative ">
               <div
                 onMouseEnter={() => {
@@ -102,24 +100,54 @@ function Nav({ items, openSide, selectTab }) {
                 ></Icons>
                 <div className="text-sm">
                   {user.user ? (
-                    <div className="cursor-pointer">LogOut</div>
+                    <div className="flex">
+                      <div className="cursor-pointer font-medium text-md">
+                        {user.user.displayName}
+                      </div>
+                    </div>
                   ) : (
-                    <div className="cursor-pointer">Login/SignUp</div>
+                    <>
+                      <div className="cursor-pointer">Login/SignUp</div>
+                    </>
                   )}
                 </div>
               </div>
               {dropDown && (
                 <div className="z-50 absolute w-max  font-semibold overflow-hidden text-sm  left-0 shadow-sm_dark rounded-md top-8  bg-white">
                   {user.user ? (
-                    <div
-                      onClick={() => {
-                        signOut(auth);
-                        triggerDropDown();
-                      }}
-                      className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
-                    >
-                      LogOut
-                    </div>
+                    <>
+                      <div
+                        onClick={() => {
+                          history.push("/MyOrders");
+                          triggerDropDown();
+                        }}
+                        className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                      >
+                        My Orders
+                      </div>
+
+                      {user.user.type === "admin" && (
+                        <div
+                          onClick={() => {
+                            history.push("/admin/dashboard");
+                            triggerDropDown();
+                          }}
+                          className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                        >
+                          Admin Panel
+                        </div>
+                      )}
+                      <div
+                        onClick={() => {
+                          signOut(auth);
+                          triggerDropDown();
+                          history.push("/");
+                        }}
+                        className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
+                      >
+                        LogOut
+                      </div>
+                    </>
                   ) : (
                     <>
                       <div
