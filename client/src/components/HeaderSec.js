@@ -7,7 +7,7 @@ import Sidebar from "./Sidebar";
 let NavItems = {
   Men: {
     id: "#MEN",
-    Img: "/img/nav.jpeg",
+    Img: ["/img/nav.jpeg", "/img/nav2.jpeg"],
     Clothing: [
       "All Clothing",
       "Jacket & Coats",
@@ -23,15 +23,17 @@ let NavItems = {
     Accessories: ["All Accessories", "Bags", "Sunglasses", "Watches", "Wallet"],
     Brand: [
       "Nike",
-      "Verasce",
+      "Tommy Hilfiger",
       "H&M",
       "Adidas",
-      "Calvin Klein",
+      "Gap",
       "North Face",
       "Levis",
-      "ZARA",
-      "Burrberry",
-      "Hugo Boss"
+      "Zara",
+      "Next",
+      "Urban Outfitters",
+      "Vans",
+      "Champion"
     ],
     Trending: "Trending"
   },
@@ -54,11 +56,14 @@ let NavItems = {
       "Tommy Hilfiger",
       "H&M",
       "Adidas",
-      "Hype",
+      "Gap",
       "North Face",
       "Levis",
-      "Lego",
-      "Next"
+      "Zara",
+      "Next",
+      "Urban Outfitters",
+      "Vans",
+      "Champion"
     ]
   },
   Collections: ["Diversity Collection", "Stratnum Collection"],
@@ -101,7 +106,7 @@ function HeaderSec() {
           onClick={() => {
             setShSide(false);
           }}
-          className="w-full absolute h-screen z-10 bg-opacity-40 bg-black"
+          className="w-full fixed h-[240%] -top-40  z-10 bg-opacity-40 bg-black"
         ></div>
       )}
     </>
