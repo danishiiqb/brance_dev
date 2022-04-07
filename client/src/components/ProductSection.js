@@ -6,13 +6,13 @@ function ProductSection({ type, ImgAlignment }) {
   return (
     <>
       <div
-        className={`flex  h-full items-center my-20 space-x-12 ${
+        className={`flex h-[60vw]   items-center my-20 space-x-14 ${
           ImgAlignment === "right"
-            ? "flex-row-reverse pl-11 space-x-reverse"
-            : "pr-11"
+            ? "flex-row-reverse lg:pl-11 space-x-reverse"
+            : "lg:pr-11"
         }`}
       >
-        <div className="w-[26%] h-[600px] shadow-darker overflow-hidden relative rounded-lg">
+        <div className="w-[25%] h-[70%] hidden lg:block shadow-darker overflow-hidden relative rounded-lg">
           <img
             src={`/img/${
               ImgAlignment === "right" ? "Productside2.png" : `Productside1.png`
@@ -45,7 +45,7 @@ function ProductSection({ type, ImgAlignment }) {
           <div
             className={`absolute top-3 ${
               ImgAlignment === "right" ? "right-5/6" : "left-5/6 "
-            } space-y-2`}
+            } space-y-1`}
           >
             <Arrow className="w-4 h-4 fill-current text-[#FF385C]"></Arrow>
             <Arrow
