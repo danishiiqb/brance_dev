@@ -11,7 +11,9 @@ function Info({
   return (
     <div className="relative flex items-center justify-center">
       <BsThreeDots
-        className={`${type === "User Reply" ? "w-4 h-4" : "w-6 h-6"}`}
+        className={`z-20  relative ${
+          type === "User Reply" ? "w-4 h-4" : "w-6 h-6"
+        }`}
         onClick={() => {
           showInfo((prev) => {
             return !prev;
@@ -20,7 +22,7 @@ function Info({
       ></BsThreeDots>
       {info && (
         <div
-          className={` z-auto absolute  font-semibold overflow-hidden ${
+          className={` z-50 absolute   font-semibold overflow-hidden ${
             type === "User Reply" ? "text-xs top-3" : "text-sm top-4"
           } shadow-sm_dark rounded-md right-0 w-32 bg-white`}
         >
