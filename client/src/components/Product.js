@@ -1,14 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as Bag } from "../icons/bag.svg";
+import { ReactComponent as Bag2 } from "../icons/bag2.svg";
 import gsap from "gsap";
 import { useHistory } from "react-router-dom";
 import Rating from "./Rating";
+import { useDispatch, useSelector } from "react-redux";
+import { add, remove } from "../store/addToBag";
 
 function Product({ prodDesc, expandHeight, elongate }) {
   const [detailView, showDetailed] = useState(false);
   const [currImg, setCurrImg] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [initLoad, setinitLoad] = useState(false);
+  const dispatch = useDispatch();
   const history = useHistory();
   const { current: imgLength } = useRef(prodDesc.productImg.length);
   let { current: timeline } = useRef(gsap.timeline());
@@ -16,6 +20,12 @@ function Product({ prodDesc, expandHeight, elongate }) {
   let box = useRef(null);
   let stars = useRef(null);
   let colorPallete = useRef(null);
+  let addTo = useSelector((state) => {
+    return state.addToBag;
+  });
+  let fnd = useMemo(() => {
+    return addTo.find((prod) => prod.id === prodDesc.id);
+  }, [addTo]);
 
   useEffect(() => {
     if (detailView) {
@@ -52,7 +62,6 @@ function Product({ prodDesc, expandHeight, elongate }) {
     let timer;
     if (detailView && imgLoaded) {
       timer = setTimeout(() => {
-        console.log("oooo");
         setImgLoaded(false);
         setCurrImg((prev) => {
           return prev >= imgLength - 1 ? 0 : prev + 1;
@@ -66,19 +75,38 @@ function Product({ prodDesc, expandHeight, elongate }) {
 
   function shortenTitle(title) {
     if (title.length > 31) {
-      return `${title.substr(0, 32)}..`;
+      return `${title.substr(0, 32)}..`.toLowerCase();
     }
-    return title;
+    return title.toLowerCase();
   }
-
+  function setLocalStorage() {
+    let exists = localStorage.getItem("recentlyViewed");
+    if (exists) {
+      let prodExists = JSON.parse(exists).find(
+        (prod) => prod.id === prodDesc.id
+      );
+      if (prodExists) {
+        return;
+      }
+      let newArr = [...JSON.parse(exists), prodDesc];
+      localStorage.setItem("recentlyViewed", JSON.stringify(newArr));
+    } else {
+      localStorage.setItem("recentlyViewed", JSON.stringify([prodDesc]));
+    }
+  }
   return (
     <>
       <div
         onClick={() => {
           let title = prodDesc.title.split(" ").join("-");
-          title = title.includes("/") ? title.replace("/", "-") : title;
+          title = title.includes("/")
+            ? title.replace("/", "-")
+            : title.includes("%")
+            ? title.replace("%", "-")
+            : title;
           let brand = prodDesc.brand.split(" ").join("-");
-          history.push(`/${brand}/${title}/${prodDesc.id}`);
+          setLocalStorage();
+          history.push(`/product/${brand}/${title}/${prodDesc.id}`);
         }}
         onMouseEnter={() => {
           showDetailed(true);
@@ -86,8 +114,8 @@ function Product({ prodDesc, expandHeight, elongate }) {
         onMouseLeave={() => {
           showDetailed(false);
         }}
-        className={`${expandHeight ? "h-[417px]" : "h-prHeight"} ${
-          elongate && "h-[450px]"
+        className={` ${expandHeight ? "h-[417px]" : "min-h-[370px] "} ${
+          elongate ? "h-[450px]" : ""
         } rounded-md w-full  cursor-pointer overflow-hidden relative`}
       >
         <img
@@ -135,8 +163,24 @@ function Product({ prodDesc, expandHeight, elongate }) {
                 </div>
               )}
             </div>
-            <div className="">
-              <Bag className="w-7 h-7 fill-current text-transparent transition-all duration-200 hover:fill-current hover:text-black"></Bag>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!fnd) {
+                  dispatch(add(prodDesc, 1));
+                } else {
+                  dispatch(remove(prodDesc));
+                }
+              }}
+            >
+              {fnd ? (
+                <Bag2 className="w-7 text-[#FF385C] h-7 fill-current  transition-all duration-200  "></Bag2>
+              ) : (
+                <Bag
+                  className={`w-7 text-transparent  hover:text-black hover:fill-current
+                 h-7 fill-current  transition-all duration-200  `}
+                ></Bag>
+              )}
             </div>
           </div>
         </div>
