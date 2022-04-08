@@ -1,4 +1,12 @@
-import { collection, getDocs } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  serverTimestamp,
+  updateDoc
+} from "firebase/firestore";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -9,6 +17,7 @@ import ProductDesc from "../components/ProductDisplay/ProductDesc";
 import ProductRecomm from "../components/ProductDisplay/ProductRecomm";
 import RatingSection from "../components/ProductDisplay/RatingSection";
 import Footer from "../components/Footer";
+import { useSelector } from "react-redux";
 
 function ProductsDisplay() {
   let { brand, name, id } = useParams();
@@ -16,7 +25,7 @@ function ProductsDisplay() {
   const [loader, setLoader] = useState(true);
   const [err, setErr] = useState("");
   const [recommendations, setRecommendations] = useState([]);
-
+  const { user } = useSelector((state) => state.user);
   const [recently, setRecent] = useState([]);
   useEffect(() => {
     let recentlyViewed = localStorage.getItem("recentlyViewed");
@@ -67,25 +76,37 @@ function ProductsDisplay() {
           (recomm) =>
             recomm.brand === foundProduct.brand && foundProduct.id !== recomm.id
         );
+
+        let docData = await getDoc(doc(db, "users", foundProduct.adminId));
+        if (user) {
+          let visitors = docData.data().visitors;
+          if (!visitors.find((item) => item.id === user.uid)) {
+            await updateDoc(doc(db, "users", foundProduct.adminId), {
+              visitors: arrayUnion({ id: user.uid, timestamp: new Date() })
+            });
+          }
+        }
+
         setRecommendations(recommendations);
         setProduct(foundProduct);
+
         setLoader(false);
       } catch (err) {
         setErr(err.message);
         setLoader(false);
       }
     }
-    findDocument();
-  }, [id]);
+    id && findDocument();
+  }, [id, user]);
 
   return (
     <>
       {loader && (
-        <div className="fixed w-full top-0 h-full z-50 bg-[#000000cc]"></div>
+        <div className="fixed w-full  top-0 h-full z-50 bg-[#000000cc]"></div>
       )}
       <div>
         {err && (
-          <div className="h-[90vh]">
+          <div className="h-[90vh] max-w-screen-2xl m-auto">
             <div className="w-[35%] relative top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
               <div className="text-center absolute top-[53%] left-[52%] -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-white">
                 {err}
@@ -106,7 +127,8 @@ function ProductsDisplay() {
                 <ProductDesc product={product}></ProductDesc>
               </div>
             </div>
-            <div className="px-11 space-y-24 mt-20">
+
+            <div className="px-11 space-y-24  mt-20">
               <ProductRecomm
                 title={"YOU MIGHT ALSO LIKE"}
                 products={recommendations}
