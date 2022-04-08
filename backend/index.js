@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import * as admin from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 dotenv.config();
-// firebase connect from backend
+// firebase connect from backend to frontend
 import { serviceAccount } from './permissions.js';
 const app = express();
 
