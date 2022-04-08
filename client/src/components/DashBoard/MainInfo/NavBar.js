@@ -27,9 +27,13 @@ function NavBar() {
         </div>
         <div className="flex items-center text-[#4e4e4e] space-x-3">
           <Search section="nav"></Search>
-          <div className="cursor-pointer group relative p-2.5 transition-all duration-300 hover:bg-[#ff385d23]">
+          <div
+            onClick={() => {
+              history.push("/admin/customers");
+            }}
+            className="cursor-pointer group relative p-2.5 transition-all duration-300 hover:bg-[#ff385d23]"
+          >
             <Message className="w-6 group-hover:fill-[#ff385d]  group-hover:stroke-[#ff385d] transition-all stroke-[2px] stroke-[#4e4e4e] fill-[#4e4e4e00] h-6"></Message>
-
             {messages > 0 ? (
               <div className="text-xs rounded-full font-regular absolute top-1 left-5  text-center bg-[#ff385d] group-hover:bg-white group-hover:text-[#ff385d]   text-white w-4 h-4">
                 {messages}
@@ -71,7 +75,7 @@ function NavBar() {
                 <div
                   className="hover:bg-[#f5f5f5] cursor-pointer  py-2 px-4 transition-all"
                   onClick={() => {
-                    history.push("/admin/settings");
+                    history.push("/admin/profile");
                     setDropDown(false);
                   }}
                 >

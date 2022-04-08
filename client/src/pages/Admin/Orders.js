@@ -5,8 +5,10 @@ import Filter from "../../components/DashBoard/MainInfo/Filter";
 import PaginationBtns from "../../components/DashBoard/MainInfo/PaginationBtns";
 import TableHeaderRow from "../../components/DashBoard/MainInfo/TableHeaderRow.js";
 import { useDispatch, useSelector } from "react-redux";
-import { sortByType } from "../../store/tableHeaderSortingReducer";
-import { getProductsData, updateProduct } from "../../store/products";
+import {
+  resettableHeader,
+  sortByType
+} from "../../store/tableHeaderSortingReducer";
 import WrapperOrderTableRow from "../../components/DashBoard/MainInfo/WrapperOrderTableRow";
 import {
   filterCategory,
@@ -16,22 +18,23 @@ import {
 import InfoModal from "../../components/DashBoard/MainInfo/Modals/InfoModal";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../services/firebase";
+import { getOrderData, updateOrder } from "../../store/orderStore";
 
 function Orders() {
   const [modalDta, setModalData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-
-  const { user, products, tableHeaderSorting, filteredData } = useSelector(
+  const firstRender = useRef(false);
+  const { user, orders, tableHeaderSorting, filteredData } = useSelector(
     (state) => {
       return {
         user: state.user,
-        products: state.products,
+        orders: state.orders,
         tableHeaderSorting: state.tableHeaderSorting,
         filteredData: state.filteredData
       };
     }
   );
-  const productsArr = useRef(null);
+  const ordersArr = useRef(null);
   const [currPage, setCurrPage] = useState(1);
   function navigate(type) {
     setCurrPage((prev) => {
@@ -42,64 +45,69 @@ function Orders() {
   function pagination(page) {
     let start = (page - 1) * 10;
     let end = 10 * page;
-    return products.products.slice(start, end);
+    return orders.orders.slice(start, end);
   }
   const dispatcher = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatcher(resettableHeader());
+    };
+  }, []);
+  useEffect(() => {
+    if (orders.orders.length > 0 && !ordersArr.current) {
+      ordersArr.current = [...orders.orders];
+    }
+  }, [orders.orders]);
 
   useEffect(() => {
-    if (productsArr.current && filteredData.length > 0) {
-      dispatcher(updateProduct(filteredData));
-      setCurrPage(1);
-      return;
-    }
-    if (
-      !Array.isArray(filteredData) &&
-      filteredData !== null &&
-      typeof filteredData === "object"
-    ) {
-      dispatcher(updateProduct(productsArr.current));
-      setCurrPage(1);
-      return;
-    }
-    if (filteredData.length === 0 && productsArr.current) {
-      dispatcher({ type: "ERROR", payload: "No Products found" });
-      return;
-    }
-  }, [filteredData, dispatcher]);
-
-  useEffect(() => {
-    if (products.products.length > 0 && !productsArr.current) {
-      productsArr.current = [...products.products];
-    }
-  }, [products.products]);
-
-  useEffect(() => {
-    if (tableHeaderSorting.modifiedArr.length > 0) {
-      dispatcher(updateProduct(tableHeaderSorting.modifiedArr));
+    if (tableHeaderSorting.modifiedArr.length > 0 && firstRender.current) {
+      dispatcher(updateOrder(tableHeaderSorting.modifiedArr));
     }
   }, [tableHeaderSorting.modifiedArr, dispatcher]);
   useEffect(() => {
-    if (tableHeaderSorting.order) {
+    if (tableHeaderSorting.order && firstRender.current) {
       dispatcher(
-        sortByType(
-          products.products,
-          tableHeaderSorting.sortElemName.toUpperCase()
-        )
+        sortByType(orders.orders, tableHeaderSorting.sortElemName.toUpperCase())
       );
     }
   }, [tableHeaderSorting.sortElemName, tableHeaderSorting.order, dispatcher]);
 
   useEffect(() => {
+    if (firstRender.current) {
+      if (filteredData.length > 0) {
+        dispatcher(updateOrder(filteredData));
+        setCurrPage(1);
+        return;
+      }
+      if (
+        !Array.isArray(filteredData) &&
+        filteredData !== null &&
+        typeof filteredData === "object"
+      ) {
+        dispatcher(updateOrder(ordersArr.current));
+        setCurrPage(1);
+        return;
+      }
+      if (filteredData.length === 0) {
+        dispatcher({ type: "ORDER_ERROR", payload: "No orders found" });
+        return;
+      }
+    }
+    firstRender.current = true;
+  }, [filteredData, dispatcher]);
+
+  useEffect(() => {
     if (user.user && !editMode) {
-      dispatcher(getProductsData(user.user.uid, "incomingOrders"));
+      dispatcher(getOrderData(user.user.uid));
     }
   }, [user.user, dispatcher, editMode]);
+
   function filterByDate(start, end) {
     dispatcher(
       filterDate({
         start,
         end,
-        elementsArr: productsArr.current,
+        elementsArr: ordersArr.current,
         typeDta: "orders"
       })
     );
@@ -109,26 +117,27 @@ function Orders() {
     dispatcher(
       filterCategory({
         type,
-        elementsArr: productsArr.current,
+        elementsArr: ordersArr.current,
         typeDta: "orders"
       })
     );
   }
+
   function filterByStatus(type) {
     dispatcher(
       filterStatus({
         type,
-        elementsArr: productsArr.current,
+        elementsArr: ordersArr.current,
         typeDta: "orders"
       })
     );
   }
   async function deleteOrders(id) {
-    let nwProd = products.products.filter((item, idx) => {
+    let nwProd = orders.orders.filter((item, idx) => {
       return item.id !== id;
     });
-    dispatcher(updateProduct(nwProd));
-    productsArr.current = nwProd;
+    dispatcher(updateOrder(nwProd));
+    ordersArr.current = nwProd;
     try {
       await deleteDoc(doc(db, "users", user.user.uid, "incomingOrders", id));
     } catch (err) {
@@ -149,7 +158,7 @@ function Orders() {
           ></Filter>
           <Search></Search>
         </div>
-        {products.products.length > 0 ? (
+        {orders.orders.length > 0 ? (
           <table className="w-full my-3">
             <thead>
               <TableHeaderRow
@@ -189,9 +198,9 @@ function Orders() {
               })}
             </tbody>
           </table>
-        ) : products.message !== "" ? (
-          <div className="flex absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-            <div className="text-[#FF385C]">{products.message}</div>
+        ) : orders.message !== "" ? (
+          <div className="flex absolute font-medium text-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+            <div className="text-[#FF385C]">{orders.message}</div>
           </div>
         ) : (
           <div className="flex absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
@@ -200,7 +209,7 @@ function Orders() {
         )}
         <div>
           <PaginationBtns
-            forwardDisable={10 * currPage >= products.products.length}
+            forwardDisable={10 * currPage >= orders.orders.length}
             backBtn={currPage === 1 ? true : false}
             currPage={currPage}
             navigate={navigate}
