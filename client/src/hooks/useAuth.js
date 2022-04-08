@@ -5,6 +5,7 @@ import { auth, db } from "../services/firebase";
 
 function useAuth() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     let unsubscribe = onAuthStateChanged(auth, (userRef) => {
       if (userRef) {
@@ -20,13 +21,15 @@ function useAuth() {
           } else {
             setUser({ ...userRef });
           }
+          setLoading(true);
         });
       } else {
         setUser(null);
+        setLoading(true);
       }
     });
     return unsubscribe;
   }, []);
-  return [user];
+  return [user, loading];
 }
 export default useAuth;
