@@ -1,23 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GiReceiveMoney } from "react-icons/gi";
 import DetailCard from "./DetailCard";
 import { FaBoxOpen, FaTruck, FaUsers } from "react-icons/fa";
-function DetailCardBox() {
+function DetailCardBox({ products, visitors, revenue, order }) {
   const prInfo = [
     {
       name: "Total Revenue",
       icon: GiReceiveMoney,
-      number: "$45,000"
+      number: (Math.round(revenue * 100) / 100).toFixed(2)
     },
-    { name: "Total Order", icon: FaTruck, number: "1,000" },
+    { name: "Total Order", icon: FaTruck, number: order },
     {
       name: "Total Products",
       icon: FaBoxOpen,
 
-      number: "3,500"
+      number: products
     },
-    { name: "Today Visitors", icon: FaUsers, number: "12,000" }
+    { name: "Total Visitors", icon: FaUsers, number: visitors }
   ];
+
   return (
     <div>
       <div className="grid grid-cols-4 gap-6">
