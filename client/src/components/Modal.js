@@ -40,7 +40,7 @@ function Modal({ asAdmin }) {
           <div className="absolute w-full h-full bg-[#0000001c]"></div>
 
           <img
-            src="/img/login.jpeg"
+            src="/img/login.webp"
             className="w-full  h-full object-cover"
             alt=""
           />

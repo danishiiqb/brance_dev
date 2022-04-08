@@ -54,8 +54,8 @@ app.post('/api/create-checkout-session', express.json(), async (req, res) => {
         allowed_countries: ['GB', 'US', 'CA'],
       },
       mode: 'payment',
-      success_url: `http://localhost:3000/success`,
-      cancel_url: `http://localhost:3000/checkout`,
+      success_url: `https://brance-dev.web.app/success`,
+      cancel_url: `https://brance-dev.web.app/checkout`,
       metadata: {
         docId,
         itemOwnerIds: JSON.stringify(

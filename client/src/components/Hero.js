@@ -12,28 +12,28 @@ function Hero({ modalOpen }) {
       heading: "Stratnum/Collection",
       logo: "/img/logos/levis.png",
       para: "New Collection for Winters",
-      img: "/img/banner1.png",
+      img: "/img/banner1.webp",
       link: "/shop/mens/brand/levis"
     },
     {
       heading: "Diversity/Collection",
       logo: "/img/logos/vans.png",
       para: "Be diverse with Vans diversity collection",
-      img: "/img/banner2.png",
+      img: "/img/banner2.webp",
       link: "/shop/mens/brand/vans"
     },
     {
       heading: "AIR JORDAN/BUCKS-23",
       logo: "/img/logos/nike.png",
       para: "Be a force with bucks-23 by nike",
-      img: "/img/banner3.png",
+      img: "/img/banner3.webp",
       link: "/shop/mens/brand/nike"
     },
     {
       heading: "COLLUSION/BEANIE- 45",
       logo: "/img/logos/collusion.png",
       para: "Wear with style in winters",
-      img: "/img/banner4.png",
+      img: "/img/banner4.webp",
       link: "/shop/mens/brand/champion"
     }
   ]);

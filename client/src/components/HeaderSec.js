@@ -7,7 +7,7 @@ import Sidebar from "./Sidebar";
 let NavItems = {
   Men: {
     id: "#MEN",
-    Img: ["/img/nav.jpeg", "/img/nav2.jpeg"],
+    Img: ["/img/nav.webp", "/img/nav2.jpeg"],
     Clothing: [
       "All Clothing",
       "Jacket & Coats",

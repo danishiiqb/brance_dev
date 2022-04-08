@@ -5,7 +5,7 @@ function EditPhoto() {
   return (
     <div className="flex flex-col items-center space-y-4">
       <img
-        src="/img/dashboard/dummypic.jpg"
+        src="https://d.newsweek.com/en/full/822411/pikachu-640x360-pokemon-anime.jpg?w=1600&h=1600&q=88&f=b65592079ef009b8b80897ddb8660b29"
         className="w-52 rounded-full object-cover"
         alt=""
       />

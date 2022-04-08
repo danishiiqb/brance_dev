@@ -15,7 +15,9 @@ function ProductSection({ type, ImgAlignment }) {
         <div className="w-[25%] h-[70%] hidden lg:block shadow-darker overflow-hidden relative rounded-lg">
           <img
             src={`/img/${
-              ImgAlignment === "right" ? "Productside2.png" : `Productside1.png`
+              ImgAlignment === "right"
+                ? "Productside2.webp"
+                : `Productside1.webp`
             }`}
             className="w-full h-full object-cover"
             alt=""

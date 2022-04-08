@@ -187,6 +187,7 @@ function Sidebar({
                       <h2
                         onClick={() => {
                           if (item === "Trending") {
+                            setClosingState(true);
                             history.push("/shop/mens/clothing/all-clothing");
                             return;
                           }

@@ -21,6 +21,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import OrderCompleted from "./pages/OrderCompleted";
 import MyChats from "./pages/MyChats";
 import RoutesProtected from "./helper/RoutesProtected";
+import AdminAuth from "./components/AdminAuth";
 
 function Wrapper({ children }) {
   const location = useLocation();
@@ -114,6 +115,9 @@ function App() {
                 <HeaderSec></HeaderSec>
                 <ResetPassword></ResetPassword>
               </>
+            </Route>
+            <Route path="/adminAuth">
+              <AdminAuth></AdminAuth>
             </Route>
             <RoutesProtected
               component={AdminHome}

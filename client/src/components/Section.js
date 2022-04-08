@@ -11,7 +11,7 @@ export default function Section() {
         className="w-1/2 group overflow-hidden relative cursor-pointer"
       >
         <img
-          src="/img/menSec.png"
+          src="/img/menSec.webp"
           className="w-full h-full object-cover object-right-top group-hover:scale-101 transition-all duration-200"
           alt=""
         />
@@ -27,7 +27,7 @@ export default function Section() {
         className="w-1/2 group relative overflow-hidden  cursor-pointer"
       >
         <img
-          src="/img/kidsSec.png"
+          src="/img/kidssec.webp"
           className="w-full h-full object-cover object-right-top  group-hover:scale-101 transition-all duration-200"
           alt=""
         />
