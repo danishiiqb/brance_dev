@@ -11,7 +11,6 @@ const app = express();
 app.use(
   cors({
     origin: '*',
-    // 'https://brance-dev.web.app/',
   })
 );
 
@@ -22,7 +21,9 @@ const initApp = !admin.getApps().length
   : admin.getApp();
 
 const db = getFirestore();
-const stripePay = stripe(process.env.STRIPE_KEY);
+const stripePay = stripe(
+  'sk_test_51KahDwSD9jCLwCZ0c23mbxcfJEl22zhZEw6YbKMWfMiGzSXHvqpzWiwBxluuBmPKwNyqM3AqgyTiECs14idAg2EI00hnGEVv5V'
+);
 app.get('/', (req, res) => {
   res.send('Started');
 });
