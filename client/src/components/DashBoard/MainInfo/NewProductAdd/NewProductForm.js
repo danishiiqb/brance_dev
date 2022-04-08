@@ -106,7 +106,8 @@ function NewProductForm({ collectValues, clear }) {
             "Zara",
             "Next",
             "Urban Outfitters",
-            "Custom"
+            "Vans",
+            "Champion"
           ]}
         ></DropDown>
       </div>

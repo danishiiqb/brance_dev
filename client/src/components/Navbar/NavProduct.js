@@ -53,7 +53,7 @@ function NavProduct({ liked, prod }) {
         <img
           className={` ${
             !liked ? "w-20 h-full" : "w-10 h-10"
-          } flex-shrink-0  rounded-sm  object-cover`}
+          } flex-shrink-0  bg-gray-200 rounded-sm  object-cover`}
           src={prod.productImg[0]}
           alt=""
         />
