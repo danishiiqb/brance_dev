@@ -24,20 +24,24 @@ function CartPage() {
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
     const sessionId = await (
-      await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          items: shoppingBag,
-          docId: user.user.uid,
-          email: user.user.email,
-          name: user.user.displayName
-        })
-      })
+      await fetch(
+        "https://brancecom.herokuapp.com/api/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            items: shoppingBag,
+            docId: user.user.uid,
+            email: user.user.email,
+            name: user.user.displayName
+          })
+        }
+      )
     ).json();
+    console.log(sessionId);
     localStorage.setItem("ids", JSON.stringify(sessionId));
     const result = await stripe.redirectToCheckout({
       sessionId: sessionId.id
