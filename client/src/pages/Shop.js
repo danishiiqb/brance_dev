@@ -245,7 +245,7 @@ function Shop() {
       {loader && (
         <div className="fixed w-full  top-0 h-full z-50 bg-[#000000cc]"></div>
       )}
-      <div className={`min-h-[80vh] `}>
+      <div className={`min-h-[80vh] max-w-screen-2xl m-auto `}>
         <div className={`flex space-x-2.5`}>
           <div className="w-[18%] max-w-[400px] p-6">
             <div className="flex justify-between items-center">
