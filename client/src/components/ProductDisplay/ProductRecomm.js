@@ -48,12 +48,12 @@ function ProductRecomm({ products, title }) {
               }
               setIdx((prev) => prev + 1);
             }}
-            className="absolute transition-all duration-150  hover:shadow-sm_dark flex justify-center items-center bg-white group w-12 h-12 rounded-full top-1/2 -translate-y-1/2 shadow-sm cursor-pointer"
+            className="absolute group hover:border-[1px] hover:border-[#FF385C] transition-all duration-150  hover:shadow-sm_dark flex justify-center items-center bg-white group w-12 h-12 rounded-full top-1/2 -translate-y-1/2 shadow-2xl cursor-pointer"
             style={{
               right: `-24px`
             }}
           >
-            <IoIosArrowForward className="w-6 group-hover:fill-black h-6"></IoIosArrowForward>
+            <IoIosArrowForward className="w-6 group-hover:fill-current group-hover:text-[#FF385C]  h-6"></IoIosArrowForward>
           </div>
         )}
         {idx > 0 && (
@@ -64,10 +64,10 @@ function ProductRecomm({ products, title }) {
               }
               setIdx((prev) => prev - 1);
             }}
-            className="absolute hover:shadow-sm_dark flex justify-center items-center bg-white w-12 h-12 rounded-full transition-all duration-150 top-1/2 -translate-y-1/2 shadow-sm cursor-pointer"
+            className="absolute group hover:border-[1px] hover:border-[#FF385C] hover:shadow-sm_dark flex justify-center items-center bg-white w-12 h-12 rounded-full transition-all duration-150 top-1/2 -translate-y-1/2 shadow-2xl cursor-pointer"
             style={{ left: `-24px` }}
           >
-            <IoIosArrowBack className="w-6 h-6"></IoIosArrowBack>
+            <IoIosArrowBack className="w-6 group-hover:fill-current group-hover:text-[#FF385C]  h-6"></IoIosArrowBack>
           </div>
         )}
       </div>
