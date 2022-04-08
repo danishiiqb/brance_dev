@@ -30,9 +30,15 @@ function CartPage() {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ items: shoppingBag, docId: user.user.uid })
+        body: JSON.stringify({
+          items: shoppingBag,
+          docId: user.user.uid,
+          email: user.user.email,
+          name: user.user.displayName
+        })
       })
     ).json();
+    localStorage.setItem("ids", JSON.stringify(sessionId));
     const result = await stripe.redirectToCheckout({
       sessionId: sessionId.id
     });
@@ -41,7 +47,7 @@ function CartPage() {
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-8  max-w-screen-2xl mx-auto">
       <div className="flex mt-8 mb-5 px-11 text-xl font-medium space-x-1">
         <div>My Cart</div>
         <div>({shoppingBag.length})</div>
@@ -68,8 +74,11 @@ function CartPage() {
 
           <button
             role="link"
+            disabled={!user.user}
             onClick={createCheckoutSession}
-            className="text-md w-full text-white font-medium bg-black cursor-pointer text-center m-2 transition-all duration-300 rounded-sm hover:font-semibold capitalize p-[0.7rem]"
+            className={` text-md w-full text-white font-medium ${
+              user.user ? "bg-black hover:font-semibold " : " bg-[#3e3e3e]"
+            } cursor-pointer text-center m-2 transition-all duration-300 rounded-sm capitalize p-[0.7rem]`}
           >
             <span>Continue to Checkout</span>
           </button>
