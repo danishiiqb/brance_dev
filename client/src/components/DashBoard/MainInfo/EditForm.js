@@ -1,24 +1,33 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import EditInputField from "./EditInputField";
 import EditPhoto from "./EditPhoto";
 
 function EditForm() {
+  const { user } = useSelector((state) => state.user);
+
   return (
     <div className="flex pl-small flex-col h-full justify-between">
       <div className="flex py-4 items-start ">
         <div className="flex-1 grid grid-cols-2 mr-8 gap-x-8 gap-y-8">
-          <EditInputField label="First Name" value="Danish"></EditInputField>
-          <EditInputField label="Last Name" value="Iqbal"></EditInputField>
           <EditInputField
-            label="Email"
-            value="danishiq933@gmail.com"
+            label="First Name"
+            value={user.displayName.split(" ")[0]}
           ></EditInputField>
+          <EditInputField
+            label="Last Name"
+            value={user.displayName.split(" ")[1]}
+          ></EditInputField>
+          <EditInputField label="Email" value={user.email}></EditInputField>
           <EditInputField label="Phone" value="+91678996654"></EditInputField>
           <EditInputField
-            label="Address"
-            value="30 Mcloed Street "
+            label="Store Name"
+            value={user.storeName}
           ></EditInputField>
-          <EditInputField label="Location" value="India"></EditInputField>{" "}
+          <EditInputField
+            label="Location"
+            value="United States"
+          ></EditInputField>{" "}
           <EditInputField label="Currency" value="US Dollar"></EditInputField>
           <EditInputField label="Password" value="*******"></EditInputField>
         </div>

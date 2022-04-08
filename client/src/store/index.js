@@ -2,11 +2,14 @@ import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { tableHeaderSortingReducer } from "./tableHeaderSortingReducer";
 import { modal } from "./modal";
 import { userAuthentication } from "./userAuth";
-import { products } from "./products";
 import thunk from "redux-thunk";
 import { filteredDataReducer } from "./filteredData";
 import { addToBag } from "./addToBag";
 import likedProdReducer from "./likedProductRed";
+import NavReducer from "./navData";
+import { productsStore } from "./productStore";
+import { ordersStore } from "./orderStore";
+import { transactionsStore } from "./transactionsStore";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -14,10 +17,13 @@ const store = createStore(
     tableHeaderSorting: tableHeaderSortingReducer,
     modal,
     user: userAuthentication,
-    products: products,
+    products: productsStore,
+    orders: ordersStore,
+    transaction: transactionsStore,
     filteredData: filteredDataReducer,
     addToBag: addToBag,
-    likedProducts: likedProdReducer
+    likedProducts: likedProdReducer,
+    navData: NavReducer
   }),
   composeEnhancers(applyMiddleware(thunk))
 );
