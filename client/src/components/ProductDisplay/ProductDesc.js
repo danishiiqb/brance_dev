@@ -10,7 +10,7 @@ import { useRef } from "react";
 import LikedIcon from "../LikedIcon";
 
 function ProductDesc({ product }) {
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null);
   const [err, setErr] = useState("");
   let first = useRef(false);
   let { addTo, likedProducts } = useSelector((state) => {
@@ -105,7 +105,7 @@ function ProductDesc({ product }) {
         <div className="flex-1 relative">
           <div
             onClick={() => {
-              if (!selectedSize && !fnd) {
+              if (selectedSize === null && !fnd) {
                 setErr("Please Select Size");
                 return;
               }
