@@ -58,7 +58,7 @@ function SideBar() {
       hover: RiUserSharedFill
     },
     {
-      name: "Settings",
+      name: "Profile",
       icon: AiOutlineSetting,
       hover: AiFillSetting
     },
