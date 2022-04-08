@@ -13,7 +13,7 @@ import AddNewProduct from "./AddNewProduct";
 
 function AdminHome() {
   return (
-    <div>
+    <div className="max-w-screen-2xl mx-auto">
       <SideBar></SideBar>
       <div className="bg-[#f6f6f6] min-h-screen ml-marginLeft py-4 px-6">
         <NavBar></NavBar>
@@ -38,7 +38,7 @@ function AdminHome() {
         <Route exact path="/admin/customers">
           <Customers></Customers>
         </Route>
-        <Route exact path="/admin/settings">
+        <Route exact path="/admin/profile">
           <Settings></Settings>
         </Route>
       </div>
