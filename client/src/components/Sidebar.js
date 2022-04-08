@@ -122,7 +122,7 @@ function Sidebar({
 
   return (
     <div
-      className={`absolute  slide top-0 transform -translate-x-full ${
+      className={` fixed   slide top-0 transform -translate-x-full ${
         width > 700 && "flex"
       } 	 opacity-0  h-screen px-11  py-8 ${
         width > 700 ? " w-4/12 " : "w-full"
@@ -184,7 +184,15 @@ function Sidebar({
                       }}
                       className="mb-8 cursor-pointer inline-block"
                     >
-                      <h2 className="list opacity-0 hover-list-2 text-4xl uppercase font-extrabold">
+                      <h2
+                        onClick={() => {
+                          if (item === "Trending") {
+                            history.push("/shop/mens/clothing/all-clothing");
+                            return;
+                          }
+                        }}
+                        className="list opacity-0 hover-list-2 text-4xl uppercase font-extrabold"
+                      >
                         {item}
                       </h2>
                     </div>
@@ -196,6 +204,17 @@ function Sidebar({
                 return (
                   <>
                     <div
+                      onClick={() => {
+                        if (selectedTab === "Collections") {
+                          if (el === "Diversity Collection") {
+                            history.push("/shop/mens/brand/vans");
+                          }
+                          if (el === "Stratnum Collection") {
+                            history.push("/shop/mens/brand/levis");
+                          }
+                          setClosingState(true);
+                        }
+                      }}
                       className="list mb-8 cursor-pointer opacity-0 font-extrabold hover-list-2 text-4xl uppercase inline-block"
                       key={idx + el}
                     >
@@ -205,6 +224,13 @@ function Sidebar({
                   </>
                 );
               })}
+          {(selectedTab === "Sale" ||
+            selectedTab === "Gifts" ||
+            selectedTab === "Boys") && (
+            <div className=" bg-[#FF385C] text-xl mt-4 -skew-y-2 w-max p-2 text-white font-semibold ">
+              Coming Soon
+            </div>
+          )}
         </div>
       </div>
       {width < 700 && showInner && (
@@ -226,6 +252,12 @@ function Sidebar({
               <>
                 <div
                   onClick={() => {
+                    if (showInner === "Accessories" && selectedTab === "Mens") {
+                      return;
+                    }
+                    if (selectedTab === "Boys") {
+                      return;
+                    }
                     setClosingState(true);
                     history.push(
                       `/shop/${currSelected.id
@@ -244,13 +276,24 @@ function Sidebar({
               </>
             );
           })}
+        {showInner === "Accessories" && (
+          <div className=" bg-[#FF385C] text-xl mt-4 -skew-y-2 w-max p-2 text-white font-semibold ">
+            Coming Soon
+          </div>
+        )}
       </div>
       {currSelected.Img && showInner && width > 700 && (
-        <div className="cursor-pointer group relative ">
+        <div
+          onClick={() => {
+            setClosingState(true);
+            history.push("/shop/mens/clothing/all-clothing");
+          }}
+          className="cursor-pointer group relative "
+        >
           <div className="img w-full h-5/6 -translate-x-3 relative opacity-0  -translate-y-1/2 transform top-1/2 overflow-hidden ">
             <img
               alt=""
-              src={currSelected.Img}
+              src={currSelected.Img[showInner === "Brand" ? 1 : 0]}
               className="transition-transform duration-500 group-hover:!scale-101 w-full h-full object-cover
          "
             />

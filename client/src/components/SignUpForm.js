@@ -38,7 +38,8 @@ function SignUpForm({ asAdmin }) {
       await setDoc(doc(db, "users", user.uid), {
         type: "admin",
         storeName: formData.storeName,
-        address: formData.address
+        address: formData.address,
+        visitors: []
       });
     } else {
       await setDoc(doc(db, "users", user.uid), {
