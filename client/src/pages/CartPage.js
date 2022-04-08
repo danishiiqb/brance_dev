@@ -22,13 +22,6 @@ function CartPage() {
   }, [shoppingBag]);
 
   const createCheckoutSession = async () => {
-    let gh = {
-      items: shoppingBag,
-      docId: user.user.uid,
-      email: user.user.email,
-      name: user.user.displayName
-    };
-    console.log(gh, "jhhhjh");
     const stripe = await stripePromise;
     const sessionId = await (
       await fetch(
@@ -48,7 +41,7 @@ function CartPage() {
         }
       )
     ).json();
-    console.log(sessionId);
+
     localStorage.setItem("ids", JSON.stringify(sessionId));
     const result = await stripe.redirectToCheckout({
       sessionId: sessionId.id

@@ -151,7 +151,7 @@ app.post(
       event = stripe.webhooks.constructEvent(
         req.body,
         sign,
-        process.env.WEBHOOK_CONN
+        `whsec_rp6OeZnRlI2ULcJ6Xh0VpRG7MJSxwjn1`
       );
     } catch (err) {
       return res.status(400).send(`Webhook err : ${err.message}`);
