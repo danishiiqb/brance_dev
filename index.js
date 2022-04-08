@@ -10,7 +10,7 @@ import { serviceAccount } from './permissions.js';
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
     // 'https://brance-dev.web.app/',
   })
 );

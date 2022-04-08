@@ -32,7 +32,7 @@ function CartPage() {
     const stripe = await stripePromise;
     const sessionId = await (
       await fetch(
-        "https://brancecom.herokuapp.com/api/create-checkout-session",
+        "https://brancecom.herokuapp.com/api/create-checkout-session/",
         {
           method: "POST",
           headers: {
@@ -40,7 +40,7 @@ function CartPage() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            items: JSON.stringify([...shoppingBag]),
+            items: [...shoppingBag],
             docId: user.user.uid,
             email: user.user.email,
             name: user.user.displayName
