@@ -16,7 +16,7 @@ const initApp = !admin.getApps().length
 
 const db = getFirestore();
 const stripePay = stripe(process.env.STRIPE_KEY);
-app.get('/', () => {
+app.get('/', (req, res) => {
   res.send('Started');
 });
 app.post('/api/create-checkout-session', express.json(), async (req, res) => {
