@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { GoStar } from "react-icons/go";
 import { BiDetail } from "react-icons/bi";
+import { AiOutlineMessage } from "react-icons/ai";
 import AddReview from "./AddReview";
+import { useHistory } from "react-router-dom";
 
 function OrderItem({ item }) {
   const [review, setSideRev] = useState(false);
+  const history = useHistory();
+
   return (
     <>
       <div className="flex border-b-[1.7px] border-[#e0e0e0] last:border-b-[0px] py-7 first:pt-0 last:pb-0 ">
         <div className="self-start mr-3">
           <img
-            className="w-[4.3rem] h-[4.3rem] rounded-sm object-cover"
+            className="w-[4.3rem] h-[4.3rem] bg-gray-200 rounded-sm object-cover"
             src={item.productImg[0]}
             alt=""
           />
@@ -171,6 +175,17 @@ function OrderItem({ item }) {
             </div>
             <div> Show Detail</div>
           </div>
+          <div
+            onClick={() => {
+              history.push(`/myChats/${item.adminId}/${item.id}`);
+            }}
+            className="text-xs flex items-center space-x-1  cursor-pointer hover:text-[#FF385C] transition-all duration-200  font-medium"
+          >
+            <div>
+              <AiOutlineMessage></AiOutlineMessage>
+            </div>
+            <div>Message</div>
+          </div>
         </div>
       </div>
       {review && (
@@ -179,8 +194,13 @@ function OrderItem({ item }) {
             notifyToClose={() => {
               setSideRev(false);
             }}
+            item={{
+              name: item.title,
+              img: item.productImg[0],
+              productId: item.id,
+              category: item.category
+            }}
             adminId={item.adminId}
-            productId={item.id}
           />
         </div>
       )}
