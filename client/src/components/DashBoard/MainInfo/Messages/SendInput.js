@@ -4,12 +4,14 @@ import Picker from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiSmileFill } from "react-icons/bs";
 import { MdAttachFile, MdCancel } from "react-icons/md";
 import { IoMdPaperPlane, IoIosPaperPlane } from "react-icons/io";
+import { v4 as uuidv4 } from "uuid";
 
-function SendInput({ messageSubmit }) {
+function SendInput({ messageSubmit, user }) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [hoverBtn, setHoverBtn] = useState(false);
   const [message, setMessageInp] = useState("");
   const [tooltip, setToolTip] = useState("");
+  const [filestoSubmit, setFilesToSubmit] = useState([]);
   const [selectedFile, setSelectedFile] = useState([]);
 
   function getSelectedEmoji(_, emojiObj) {
@@ -32,19 +34,34 @@ function SendInput({ messageSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!message && selectedFile.length === 0) {
+    if (!message && filestoSubmit.length === 0) {
       setToolTip("Type a Message");
       return;
     }
-    messageSubmit({
-      user: "John Doe",
-      time: "4:45 PM",
-      message: {
-        text: message.trim(),
-        images: selectedFile
-      }
-    });
+    if (filestoSubmit.length > 0) {
+      messageSubmit(
+        {
+          name: user.displayName,
+          userId: user.uid,
+          text: message,
+          message: [...filestoSubmit],
+          timestamp: new Date(),
+          messageId: uuidv4()
+        },
+        [...selectedFile]
+      );
+    } else {
+      messageSubmit({
+        name: user.displayName,
+        userId: user.uid,
+        message,
+        timestamp: new Date(),
+        messageId: uuidv4()
+      });
+    }
+
     setSelectedFile([]);
+    setFilesToSubmit([]);
     setMessageInp("");
     showEmoji && setShowEmoji(!showEmoji);
   };
@@ -62,16 +79,21 @@ function SendInput({ messageSubmit }) {
     if (!files || files.length === 0 || files.size > 12312654) {
       return;
     }
-    const previewFile = [...files].map((file) => {
-      return {
-        url: URL.createObjectURL(file),
-        type: file.type,
-        name: file.name,
-        size: bytesToSize(file.size)
-      };
+    const previewFile = {
+      url: URL.createObjectURL(files[0]),
+      type: files[0].type,
+      name: files[0].name,
+      size: bytesToSize(files[0].size)
+    };
+
+    setFilesToSubmit((prev) => {
+      return [
+        ...prev,
+        new File([files[0]], files[0].name, { type: files[0].type })
+      ];
     });
     setSelectedFile((prev) => {
-      return [...prev, ...previewFile];
+      return [...prev, { ...previewFile }];
     });
     tooltip && setToolTip("");
     showEmoji && setShowEmoji(!showEmoji);
