@@ -3,10 +3,16 @@ import stripe from 'stripe';
 import dotenv from 'dotenv';
 import * as admin from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import cors from 'cors';
 dotenv.config();
 // firebase connect from backend to frontend
 import { serviceAccount } from './permissions.js';
 const app = express();
+app.use(
+  cors({
+    origin: 'https://brance-dev.web.app/',
+  })
+);
 
 const initApp = !admin.getApps().length
   ? admin.initializeApp({

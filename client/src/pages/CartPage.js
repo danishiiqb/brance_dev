@@ -22,6 +22,13 @@ function CartPage() {
   }, [shoppingBag]);
 
   const createCheckoutSession = async () => {
+    let gh = {
+      items: shoppingBag,
+      docId: user.user.uid,
+      email: user.user.email,
+      name: user.user.displayName
+    };
+    console.log(gh);
     const stripe = await stripePromise;
     const sessionId = await (
       await fetch(
