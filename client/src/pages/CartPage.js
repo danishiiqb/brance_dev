@@ -28,7 +28,7 @@ function CartPage() {
       email: user.user.email,
       name: user.user.displayName
     };
-    console.log(gh);
+    console.log(gh, "jhhhjh");
     const stripe = await stripePromise;
     const sessionId = await (
       await fetch(
@@ -40,7 +40,7 @@ function CartPage() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            items: shoppingBag,
+            items: JSON.stringify([...shoppingBag]),
             docId: user.user.uid,
             email: user.user.email,
             name: user.user.displayName
@@ -54,6 +54,7 @@ function CartPage() {
       sessionId: sessionId.id
     });
     if (result.error) {
+      console.log(result.error);
     }
   };
 
